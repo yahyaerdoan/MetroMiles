@@ -3,7 +3,43 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetroMiles.WebApiLayer", "MetroMiles.WebApiLayer\MetroMiles.WebApiLayer.csproj", "{BF65A7C6-2DD5-4317-B6C6-DF86531B0F61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetroMiles.PersistenceLayer", "MetroMiles.PersistenceLayer\MetroMiles.PersistenceLayer.csproj", "{B39886BC-4DB3-4FCF-A79C-49B2120A2246}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetroMiles.DomainLayer", "MetroMiles.DomainLayer\MetroMiles.DomainLayer.csproj", "{7DEA4404-CDA9-44C3-B51E-27B5783ECB19}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetroMiles.ApplicationLayer", "MetroMiles.ApplicationLayer\MetroMiles.ApplicationLayer.csproj", "{1F463925-A2DA-4F00-B72F-BF9F080C647A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetroMiles.InfrastructureLayer", "MetroMiles.InfrastructureLater\MetroMiles.InfrastructureLayer.csproj", "{EF67E17A-2DB8-4AD2-AE78-C299AD607603}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BF65A7C6-2DD5-4317-B6C6-DF86531B0F61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF65A7C6-2DD5-4317-B6C6-DF86531B0F61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF65A7C6-2DD5-4317-B6C6-DF86531B0F61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF65A7C6-2DD5-4317-B6C6-DF86531B0F61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B39886BC-4DB3-4FCF-A79C-49B2120A2246}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B39886BC-4DB3-4FCF-A79C-49B2120A2246}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B39886BC-4DB3-4FCF-A79C-49B2120A2246}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B39886BC-4DB3-4FCF-A79C-49B2120A2246}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DEA4404-CDA9-44C3-B51E-27B5783ECB19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DEA4404-CDA9-44C3-B51E-27B5783ECB19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DEA4404-CDA9-44C3-B51E-27B5783ECB19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DEA4404-CDA9-44C3-B51E-27B5783ECB19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F463925-A2DA-4F00-B72F-BF9F080C647A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F463925-A2DA-4F00-B72F-BF9F080C647A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F463925-A2DA-4F00-B72F-BF9F080C647A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F463925-A2DA-4F00-B72F-BF9F080C647A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF67E17A-2DB8-4AD2-AE78-C299AD607603}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF67E17A-2DB8-4AD2-AE78-C299AD607603}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF67E17A-2DB8-4AD2-AE78-C299AD607603}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF67E17A-2DB8-4AD2-AE78-C299AD607603}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
