@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\MetroMiles.ApplicationLayer\MetroMiles.ApplicationLayer.csproj" />
   </ItemGroup>
 
 </Project>
