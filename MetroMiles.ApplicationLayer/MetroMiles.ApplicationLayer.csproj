@@ -19,4 +19,14 @@
     <PackageReference Include="MediatR" Version="12.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MetroMiles.DomainLayer\MetroMiles.DomainLayer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Core.PersistenceLayer">
+      <HintPath>..\..\..\CorePackages\Core.Packages\Core.PersistenceLayer\bin\Debug\net7.0\Core.PersistenceLayer.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

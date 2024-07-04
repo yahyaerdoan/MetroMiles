@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MetroMiles.ApplicationLayer\MetroMiles.ApplicationLayer.csproj" />
+    <ProjectReference Include="..\MetroMiles.PersistenceLayer\MetroMiles.PersistenceLayer.csproj" />
   </ItemGroup>
 
 </Project>

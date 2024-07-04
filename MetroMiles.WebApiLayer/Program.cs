@@ -1,9 +1,12 @@
 using MetroMiles.ApplicationLayer.Extensions;
+using MetroMiles.PersistenceLayer.Extensions;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddApplicationServices();
+builder.Services.AddPersistanceService(builder.Configuration);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
