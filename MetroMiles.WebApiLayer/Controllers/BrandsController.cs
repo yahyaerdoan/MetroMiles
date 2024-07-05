@@ -1,6 +1,7 @@
 ﻿using Core.ApplicationLayer.Requests.Page;
 using Core.ApplicationLayer.Responses.GetList;
 using MetroMiles.ApplicationLayer.Features.Brands.Commands.Create;
+using MetroMiles.ApplicationLayer.Features.Brands.Commands.Delete;
 using MetroMiles.ApplicationLayer.Features.Brands.Commands.Update;
 using MetroMiles.ApplicationLayer.Features.Brands.Queries.GetById;
 using MetroMiles.ApplicationLayer.Features.Brands.Queries.GetList;
@@ -38,6 +39,12 @@ public class BrandsController : BaseController
     public async Task<IActionResult> Update([FromBody] UpdateBrandCommand updateBrandCommand)
     {
         UpdatedBrandResponse response = await Mediator.Send(updateBrandCommand);
+        return Ok(response);
+    }
+    [HttpDelete]
+    public async  Task<IActionResult> Delete([FromQuery] DeleteBrandCommand deleteBrandCommand)
+    {
+        DeletedBrandResponse response = await Mediator.Send(deleteBrandCommand);
         return Ok(response);
     }
 }
