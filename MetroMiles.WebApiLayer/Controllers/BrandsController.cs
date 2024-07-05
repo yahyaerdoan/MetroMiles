@@ -1,6 +1,7 @@
 ﻿using Core.ApplicationLayer.Requests.Page;
 using Core.ApplicationLayer.Responses.GetList;
 using MetroMiles.ApplicationLayer.Features.Brands.Commands.Create;
+using MetroMiles.ApplicationLayer.Features.Brands.Queries.GetById;
 using MetroMiles.ApplicationLayer.Features.Brands.Queries.GetList;
 using MetroMiles.WebApiLayer.Controllers.BaseControllers;
 using Microsoft.AspNetCore.Http;
@@ -15,7 +16,7 @@ public class BrandsController : BaseController
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] CreateBrandCommand createBrandCommand)
     {
-       CreatedBrandResponse response = await Mediator.Send(createBrandCommand);
+        CreatedBrandResponse response = await Mediator.Send(createBrandCommand);
         return Ok(response);
     }
     [HttpGet]
@@ -23,6 +24,13 @@ public class BrandsController : BaseController
     {
         GetListBrandQuery getListBrandQuery = new() { PageRequest = pageRequest };
         GetListResponse<GetListBrandListItemDto> response = await Mediator.Send(getListBrandQuery);
+        return Ok(response);
+    }
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById([FromRoute] Guid id)
+    {
+        GetByIdBrandQuery getByIdBrandQuery = new() { Id = id };
+        GetByIdBrandResponse response = await Mediator.Send(getByIdBrandQuery);
         return Ok(response);
     }
 }

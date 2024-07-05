@@ -2,6 +2,7 @@
 using Core.ApplicationLayer.Responses.GetList;
 using Core.PersistenceLayer.Pagings.Paging;
 using MetroMiles.ApplicationLayer.Features.Brands.Commands.Create;
+using MetroMiles.ApplicationLayer.Features.Brands.Queries.GetById;
 using MetroMiles.ApplicationLayer.Features.Brands.Queries.GetList;
 using MetroMiles.DomainLayer.Entities;
 using System;
@@ -20,6 +21,9 @@ namespace MetroMiles.ApplicationLayer.Features.Brands.Profiles
             CreateMap<Brand, CreatedBrandResponse>().ReverseMap();
             CreateMap<Brand, GetListBrandListItemDto>().ReverseMap();
             CreateMap<Paginate<Brand>, GetListResponse<GetListBrandListItemDto>>().ReverseMap();
+            CreateMap<Brand, GetByIdBrandResponse>().ReverseMap();
+
+
         }
     }
 }
