@@ -28,17 +28,10 @@ public class CreateBrandCommand : IRequest<CreatedBrandResponse>
 
         public async Task<CreatedBrandResponse> Handle(CreateBrandCommand request, CancellationToken cancellationToken)
         {
-            Brand brand = new();
-            brand.Id = new Guid(Guid.NewGuid().ToString());
-            brand.Name = request.Name;
-            brand.Description = request.Description;
-            var result = await _brandRepository.AddAsync(brand);
-
-            CreatedBrandResponse createdBrandResponse = new(); 
-            createdBrandResponse.Id = result.Id; 
-            createdBrandResponse.Name = request.Name; 
-            createdBrandResponse.Description = request.Description;
-       
+            var brand = _mapper.Map<Brand>(request);
+            brand.Id = Guid.NewGuid();
+            await _brandRepository.AddAsync(brand);
+            CreatedBrandResponse createdBrandResponse = _mapper.Map<CreatedBrandResponse>(brand);
             return createdBrandResponse;
         }
     }

@@ -16,4 +16,10 @@
     <ProjectReference Include="..\MetroMiles.PersistenceLayer\MetroMiles.PersistenceLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Core.ApplicationLayer">
+      <HintPath>..\..\..\CorePackages\Core.Packages\Core.ApplicationLayer\bin\Debug\net7.0\Core.ApplicationLayer.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
