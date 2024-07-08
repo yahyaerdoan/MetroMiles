@@ -11,6 +11,7 @@ public class CarConfiguration : IEntityTypeConfiguration<Car>
         builder.ToTable("Cars").HasKey(c=> c.Id);
 
         builder.Property(c => c.Id).HasColumnName("Id").IsRequired();
+
         builder.Property(c => c.Kilometer).HasColumnName("Kilometer").IsRequired();
         builder.Property(c => c.Mile).HasColumnName("Mile").IsRequired();
         builder.Property(c => c.ModelYear).HasColumnName("ModelYear").IsRequired();
@@ -23,6 +24,10 @@ public class CarConfiguration : IEntityTypeConfiguration<Car>
         builder.Property(c => c.CreatedDate).HasColumnName("CreatedDate").IsRequired();
         builder.Property(c => c.UpdatedDate).HasColumnName("UpdatedDate");
         builder.Property(c => c.DeletedDate).HasColumnName("DeletedDate");
+
+        builder.HasOne(c => c.Model)
+            .WithMany(m => m.Cars)
+            .HasForeignKey(c => c.ModelId);
 
         builder.HasQueryFilter(b => !b.DeletedDate.HasValue);
     }

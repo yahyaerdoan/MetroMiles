@@ -17,7 +17,7 @@ public class Brand : Entity<Guid>
     {
         Models = new HashSet<Model>();
     }
-    public Brand(Guid id, string name, string description):this()
+    public Brand(Guid id, string name, string description) : this()
     {
         Id = id;
         Name = name;

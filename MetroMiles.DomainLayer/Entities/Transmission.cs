@@ -11,7 +11,7 @@ public class Transmission : Entity<Guid>
         Models = new HashSet<Model>();
     }
 
-    public Transmission(Guid id, string name) : base(id)
+    public Transmission(Guid id, string name) : this()
     {
         Id = id;
         Name = name;
