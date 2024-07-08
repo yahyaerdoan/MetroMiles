@@ -10,28 +10,29 @@ namespace MetroMiles.DomainLayer.Entities;
 public class Model :  Entity<Guid>
 {
     public Guid BrandId { get; set; }
+    public Guid FuelId { get; set; }
+    public Guid TransmissionId { get; set; }
     public string Name { get; set; }
     public decimal DailyPrice { get; set; }
     public string ImageUrl   { get; set; }
-}
 
-public class Transmission : Entity<Guid>
-{
-    public string Name { get; set; }
-}
+    public virtual Brand? Brand { get; set; }
+    public virtual Fuel? Fuel { get; set; }
+    public virtual Transmission? Transmission { get; set; }
+    public virtual ICollection<Car> Cars { get; set; }
 
-public class Fuel : Entity<Guid>
-{
-    public string Name { get; set; }
-}
+    public Model()
+    {
+        Cars = new HashSet<Car>();
+    }
 
-public class Car : Entity<Guid>
-{
-    public Guid ModelId { get; set; }
-    public int Kilometer { get; set; }
-    public int Mile { get; set; }
-    public short ModelYear { get; set; }
-    public string Plate { get; set; }
-    public short MinFindexScore { get; set; }
-    public  CarStatus Status { get;set; }
+    public Model(Guid brandId, Guid fuelId, Guid transmissionId, string name, decimal dailyPrice, string imageUrl):this()
+    {
+        BrandId = brandId;
+        FuelId = fuelId;
+        TransmissionId = transmissionId;
+        Name = name;
+        DailyPrice = dailyPrice;
+        ImageUrl = imageUrl;      
+    }
 }
