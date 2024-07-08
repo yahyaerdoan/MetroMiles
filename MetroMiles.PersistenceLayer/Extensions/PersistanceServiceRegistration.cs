@@ -19,6 +19,7 @@ namespace MetroMiles.PersistenceLayer.Extensions
             //services.AddDbContext<BaseDbContext>(options => options.UseInMemoryDatabase("DatabaseName"));
             services.AddDbContext<BaseDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("FakeDatabaseName")));
             services.AddScoped<IBrandRepository, BrandRepository>();
+            services.AddScoped<IModelRepository, ModelRepository>();
             return services;
         }
     }
