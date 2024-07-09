@@ -1,3 +1,4 @@
+using Core.CrossCuttingConcernLayer.ExceptionHandlings.Extensions;
 using MetroMiles.ApplicationLayer.Extensions;
 using MetroMiles.PersistenceLayer.Extensions;
 
@@ -21,6 +22,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+if (app.Environment.IsDevelopment())
+app.UseConfigureCustomExceptionMiddleware();
 
 app.UseHttpsRedirection();
 
