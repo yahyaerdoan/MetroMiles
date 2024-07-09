@@ -1,6 +1,5 @@
-﻿using Core.CrossCuttingConcernLayer.ExceptionHandlings.Types;
-using Core.PersistenceLayer.Repositories.IRepositories;
-using MetroMiles.ApplicationLayer.Extensions.Rules;
+﻿using Core.CrossCuttingConcernLayer.ExceptionHandlings.Types.Businesses;
+using MetroMiles.ApplicationLayer.Extensions.RuleRegistrations;
 using MetroMiles.ApplicationLayer.Features.Brands.Constants;
 using MetroMiles.ApplicationLayer.Services.Repositories;
 using MetroMiles.DomainLayer.Entities;

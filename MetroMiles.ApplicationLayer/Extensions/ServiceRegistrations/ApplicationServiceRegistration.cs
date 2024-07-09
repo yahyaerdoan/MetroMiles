@@ -1,4 +1,6 @@
-﻿using MetroMiles.ApplicationLayer.Extensions.Rules;
+﻿using Core.ApplicationLayer.Pipelines.Validations;
+using FluentValidation;
+using MetroMiles.ApplicationLayer.Extensions.RuleRegistrations;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -7,7 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MetroMiles.ApplicationLayer.Extensions;
+namespace MetroMiles.ApplicationLayer.Extensions.ServiceRegistrations;
 
 public static class ApplicationServiceRegistration
 {
@@ -16,9 +18,11 @@ public static class ApplicationServiceRegistration
         services.AddMediatR(configuration =>
         {
             configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            configuration.AddOpenBehavior(typeof(RequestValidationBehavior<,>));
         });
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddSubClassesOfType(Assembly.GetExecutingAssembly(), typeof(BaseBusinessRules));
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         return services;
     }
 
