@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MetroMiles.ApplicationLayer.Features.Models.Queries.GetList;
+namespace MetroMiles.ApplicationLayer.Features.Models.Queries.GetListByDynamicQuery;
 
-public class GetListModelListItemDto
+public class GetListByDynamicModelListItemDto
 {
     public Guid Id { get; set; }
     public string BrandName { get; set; }
