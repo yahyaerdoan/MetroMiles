@@ -25,6 +25,9 @@
     <Reference Include="Core.ApplicationLayer">
       <HintPath>..\..\..\CorePackages\Core.Packages\Core.ApplicationLayer\bin\Debug\net7.0\Core.ApplicationLayer.dll</HintPath>
     </Reference>
+    <Reference Include="Core.CrossCuttingConcernLayer">
+      <HintPath>..\..\..\CorePackages\Core.Packages\Core.CrossCuttingConcernLayer\bin\Debug\net7.0\Core.CrossCuttingConcernLayer.dll</HintPath>
+    </Reference>
     <Reference Include="Core.PersistenceLayer">
       <HintPath>..\..\..\CorePackages\Core.Packages\Core.PersistenceLayer\bin\Debug\net7.0\Core.PersistenceLayer.dll</HintPath>
     </Reference>
