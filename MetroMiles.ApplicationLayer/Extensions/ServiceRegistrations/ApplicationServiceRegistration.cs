@@ -1,4 +1,6 @@
-﻿using Core.ApplicationLayer.Pipelines.Validations;
+﻿using Core.ApplicationLayer.Pipelines.Transactions.Abstractions;
+using Core.ApplicationLayer.Pipelines.Transactions.Concretions;
+using Core.ApplicationLayer.Pipelines.Validations;
 using FluentValidation;
 using MetroMiles.ApplicationLayer.Extensions.RuleRegistrations;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +20,8 @@ public static class ApplicationServiceRegistration
         services.AddMediatR(configuration =>
         {
             configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-            configuration.AddOpenBehavior(typeof(RequestValidationBehavior<,>));
+            configuration.AddOpenBehavior(typeof(RequestValidationBehavior< , >));
+            configuration.AddOpenBehavior(typeof(TransactionScopeBehavior< , >));
         });
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddSubClassesOfType(Assembly.GetExecutingAssembly(), typeof(BaseBusinessRules));

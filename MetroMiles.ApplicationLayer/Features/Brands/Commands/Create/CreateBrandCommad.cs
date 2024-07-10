@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.ApplicationLayer.Pipelines.Transactions.Abstractions;
 using MediatR;
 using MetroMiles.ApplicationLayer.Features.Brands.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Create;
 
-public class CreateBrandCommand : IRequest<CreatedBrandResponse>
+public class CreateBrandCommand : IRequest<CreatedBrandResponse>, ITransactionalRequest
 {
     public string Name { get; set; }
     public string Description { get; set; }
@@ -34,7 +35,7 @@ public class CreateBrandCommand : IRequest<CreatedBrandResponse>
             await _brandBusinessRules.BrandNameCannotBeDuplicatedWhenInserted(request.Name);
             var brand = _mapper.Map<Brand>(request);
             brand.Id = Guid.NewGuid();
-            await _brandRepository.AddAsync(brand);
+            await _brandRepository.AddAsync(brand);            
             CreatedBrandResponse createdBrandResponse = _mapper.Map<CreatedBrandResponse>(brand);
             return createdBrandResponse;
         }
