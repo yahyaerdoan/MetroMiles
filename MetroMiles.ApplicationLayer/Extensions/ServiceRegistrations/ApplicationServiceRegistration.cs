@@ -1,4 +1,5 @@
-﻿using Core.ApplicationLayer.Pipelines.Transactions.Abstractions;
+﻿using Core.ApplicationLayer.Pipelines.Cachings.Concretions;
+using Core.ApplicationLayer.Pipelines.Transactions.Abstractions;
 using Core.ApplicationLayer.Pipelines.Transactions.Concretions;
 using Core.ApplicationLayer.Pipelines.Validations;
 using FluentValidation;
@@ -22,6 +23,7 @@ public static class ApplicationServiceRegistration
             configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
             configuration.AddOpenBehavior(typeof(RequestValidationBehavior< , >));
             configuration.AddOpenBehavior(typeof(TransactionScopeBehavior< , >));
+            configuration.AddOpenBehavior(typeof(CachingBehavior< , >));
         });
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddSubClassesOfType(Assembly.GetExecutingAssembly(), typeof(BaseBusinessRules));
