@@ -16,15 +16,13 @@ namespace MetroMiles.ApplicationLayer.Features.Brands.Queries.GetList;
 
 public class GetListBrandQuery : IRequest<GetListResponse<GetListBrandListItemDto>>, ICacheAddRequest
 {
+    #region GetListBrandQuery & ICacheAddRequest Properties
     public PageRequest PageRequest { get; set; }
-
     public string CacheKey => $"GetListBrandQuery({PageRequest.PageSize},{PageRequest.PageIndex})";
-
     public bool ByPassCache { get; }
-
     public TimeSpan? SlidingExpiration {get;}
-
     public string? CacheGroupKey => "GetBrands";
+    #endregion
 
     public class GetListBrandQueryHandler : IRequestHandler<GetListBrandQuery, GetListResponse<GetListBrandListItemDto>>
     {

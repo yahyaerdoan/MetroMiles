@@ -15,14 +15,13 @@ namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Create;
 
 public class CreateBrandCommand : IRequest<CreatedBrandResponse>, ITransactionalRequest, ICacheRemoveRequest
 {
+    #region CreateBrandCommand & ICacheRemoveRequest Properties  
     public string Name { get; set; }
     public string Description { get; set; }
-
     public string CacheKey => "";
-
     public bool ByPassCache => false;
-
     public string? CacheGroupKey => "GetBrands";
+    #endregion
 
     public class CreateBrandCommandHandler : IRequestHandler<CreateBrandCommand, CreatedBrandResponse>
     {

@@ -13,14 +13,12 @@ namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Delete;
 
 public class DeleteBrandCommand : IRequest<DeletedBrandResponse>,ICacheRemoveRequest
 {
+    #region DeleteBrandCommand & ICacheRemoveRequest Properties   
     public Guid Id { get; set; }
-
     public string CacheKey => "";
-
     public bool ByPassCache => false;
-
     public string? CacheGroupKey => "GetBrands";
-
+    #endregion
 
     public class DeleteBrandCommandHandler : IRequestHandler<DeleteBrandCommand, DeletedBrandResponse>
     {

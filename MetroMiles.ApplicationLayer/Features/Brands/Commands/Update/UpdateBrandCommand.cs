@@ -13,15 +13,14 @@ namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Update;
 
 public class UpdateBrandCommand : IRequest<UpdatedBrandResponse>, ICacheRemoveRequest
 {
+    #region UpdateBrandCommand & ICacheRemoveRequest Properties
     public Guid Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
-
     public string CacheKey => "";
-
     public bool ByPassCache => false;
-
     public string? CacheGroupKey => "GetBrands";
+    #endregion
 
     public class UpdateBrandCommandHandler : IRequestHandler<UpdateBrandCommand, UpdatedBrandResponse>
     {
