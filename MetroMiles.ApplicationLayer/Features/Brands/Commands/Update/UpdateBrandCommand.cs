@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Update;
 
-public class UpdateBrandCommand : IRequest<UpdatedBrandResponse>, ICacheRemoverRequest
+public class UpdateBrandCommand : IRequest<UpdatedBrandResponse>, ICacheRemoveRequest
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

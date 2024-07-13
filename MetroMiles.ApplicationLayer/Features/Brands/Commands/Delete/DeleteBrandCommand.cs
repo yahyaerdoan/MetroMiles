@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Delete;
 
-public class DeleteBrandCommand : IRequest<DeletedBrandResponse>,ICacheRemoverRequest
+public class DeleteBrandCommand : IRequest<DeletedBrandResponse>,ICacheRemoveRequest
 {
     public Guid Id { get; set; }
 

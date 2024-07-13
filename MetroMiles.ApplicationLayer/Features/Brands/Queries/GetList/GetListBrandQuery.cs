@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace MetroMiles.ApplicationLayer.Features.Brands.Queries.GetList;
 
-public class GetListBrandQuery : IRequest<GetListResponse<GetListBrandListItemDto>>, ICachableRequest
+public class GetListBrandQuery : IRequest<GetListResponse<GetListBrandListItemDto>>, ICacheAddRequest
 {
     public PageRequest PageRequest { get; set; }
 

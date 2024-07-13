@@ -23,7 +23,7 @@ public static class ApplicationServiceRegistration
             configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
             configuration.AddOpenBehavior(typeof(RequestValidationBehavior< , >));
             configuration.AddOpenBehavior(typeof(TransactionScopeBehavior< , >));
-            configuration.AddOpenBehavior(typeof(CachingBehavior< , >));
+            configuration.AddOpenBehavior(typeof(CacheAddingBehavior< , >));
             configuration.AddOpenBehavior(typeof(CacheRemovingBehavior< , >));
         });
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
