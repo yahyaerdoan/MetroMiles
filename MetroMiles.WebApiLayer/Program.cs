@@ -8,7 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddApplicationServices();
 builder.Services.AddPersistanceServices(builder.Configuration);
-builder.Services.AddDistributedMemoryCache();
+
+//builder.Services.AddDistributedMemoryCache();
+builder.Services.AddStackExchangeRedisCache(opt => opt.Configuration = "localhost:6379");
 
 
 builder.Services.AddControllers();
