@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.ApplicationLayer.Pipelines.Cachings.Abstractions;
 using MediatR;
 using MetroMiles.ApplicationLayer.Services.Repositories;
 using MetroMiles.DomainLayer.Entities;
@@ -10,9 +11,16 @@ using System.Threading.Tasks;
 
 namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Delete;
 
-public class DeleteBrandCommand : IRequest<DeletedBrandResponse>
+public class DeleteBrandCommand : IRequest<DeletedBrandResponse>,ICacheRemoverRequest
 {
     public Guid Id { get; set; }
+
+    public string CacheKey => "";
+
+    public bool ByPassCache => false;
+
+    public string? CacheGroupKey => "GetBrands";
+
 
     public class DeleteBrandCommandHandler : IRequestHandler<DeleteBrandCommand, DeletedBrandResponse>
     {

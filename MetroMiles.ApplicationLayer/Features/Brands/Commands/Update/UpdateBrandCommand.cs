@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.ApplicationLayer.Pipelines.Cachings.Abstractions;
 using MediatR;
 using MetroMiles.ApplicationLayer.Services.Repositories;
 using MetroMiles.DomainLayer.Entities;
@@ -10,11 +11,17 @@ using System.Threading.Tasks;
 
 namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Update;
 
-public class UpdateBrandCommand : IRequest<UpdatedBrandResponse>
+public class UpdateBrandCommand : IRequest<UpdatedBrandResponse>, ICacheRemoverRequest
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
+
+    public string CacheKey => "";
+
+    public bool ByPassCache => false;
+
+    public string? CacheGroupKey => "GetBrands";
 
     public class UpdateBrandCommandHandler : IRequestHandler<UpdateBrandCommand, UpdatedBrandResponse>
     {
