@@ -1,7 +1,7 @@
-﻿using Core.ApplicationLayer.Pipelines.Cachings.Concretions;
-using Core.ApplicationLayer.Pipelines.Transactions.Abstractions;
+﻿using Core.ApplicationLayer.Pipelines.Cachings.Concretions.CacheBehaviors;
 using Core.ApplicationLayer.Pipelines.Transactions.Concretions;
 using Core.ApplicationLayer.Pipelines.Validations;
+using Core.ApplicationLayer.Pipelines.Validations.Concretions;
 using FluentValidation;
 using MetroMiles.ApplicationLayer.Extensions.RuleRegistrations;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +22,7 @@ public static class ApplicationServiceRegistration
         {
             configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
             configuration.AddOpenBehavior(typeof(RequestValidationBehavior< , >));
-            configuration.AddOpenBehavior(typeof(TransactionScopeBehavior< , >));
+            configuration.AddOpenBehavior(typeof(TransactionAddingBehavior< , >));
             configuration.AddOpenBehavior(typeof(CacheAddingBehavior< , >));
             configuration.AddOpenBehavior(typeof(CacheRemovingBehavior< , >));
         });

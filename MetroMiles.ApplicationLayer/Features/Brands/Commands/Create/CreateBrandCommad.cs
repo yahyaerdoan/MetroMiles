@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Create;
 
-public class CreateBrandCommand : IRequest<CreatedBrandResponse>, ITransactionalRequest, ICacheRemoveRequest
+public class CreateBrandCommand : IRequest<CreatedBrandResponse>, ITransactionAddRequest, ICacheRemoveRequest
 {
     #region CreateBrandCommand & ICacheRemoveRequest Properties  
     public string Name { get; set; }
