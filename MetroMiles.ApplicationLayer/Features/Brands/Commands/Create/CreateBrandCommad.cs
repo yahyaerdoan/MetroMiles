@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.ApplicationLayer.Pipelines.Cachings.Abstractions;
+using Core.ApplicationLayer.Pipelines.Loggings.Abstractions;
 using Core.ApplicationLayer.Pipelines.Transactions.Abstractions;
 using MediatR;
 using MetroMiles.ApplicationLayer.Features.Brands.Rules;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Create;
 
-public class CreateBrandCommand : IRequest<CreatedBrandResponse>, ITransactionAddRequest, ICacheRemoveRequest
+public class CreateBrandCommand : IRequest<CreatedBrandResponse>, ITransactionAddRequest, ICacheRemoveRequest, ILogAddRequest
 {
     #region CreateBrandCommand & ICacheRemoveRequest Properties  
     public string Name { get; set; }

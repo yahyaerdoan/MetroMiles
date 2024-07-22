@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddApplicationServices();
 builder.Services.AddPersistanceServices(builder.Configuration);
+builder.Services.AddHttpContextAccessor();
 
 //builder.Services.AddDistributedMemoryCache();
 builder.Services.AddStackExchangeRedisCache(opt => opt.Configuration = "localhost:6379");
@@ -28,7 +29,7 @@ if (app.Environment.IsDevelopment())
 }
 
 //if (app.Environment.IsDevelopment())
-app.UseConfigureCustomExceptionMiddleware();
+//app.UseConfigureCustomExceptionMiddleware();
 
 app.UseHttpsRedirection();
 

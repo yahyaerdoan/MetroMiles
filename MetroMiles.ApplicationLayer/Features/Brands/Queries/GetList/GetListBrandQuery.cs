@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.ApplicationLayer.Pipelines.Cachings.Abstractions;
+using Core.ApplicationLayer.Pipelines.Loggings.Abstractions;
 using Core.ApplicationLayer.Requests.Page;
 using Core.ApplicationLayer.Responses.GetList;
 using Core.PersistenceLayer.Pagings.Paging;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace MetroMiles.ApplicationLayer.Features.Brands.Queries.GetList;
 
-public class GetListBrandQuery : IRequest<GetListResponse<GetListBrandListItemDto>>, ICacheAddRequest
+public class GetListBrandQuery : IRequest<GetListResponse<GetListBrandListItemDto>>, ICacheAddRequest, ILogAddRequest
 {
     #region GetListBrandQuery & ICacheAddRequest Properties
     public PageRequest PageRequest { get; set; }

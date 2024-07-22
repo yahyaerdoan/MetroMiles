@@ -1,7 +1,9 @@
 ﻿using Core.ApplicationLayer.Pipelines.Cachings.Concretions.CacheBehaviors;
+using Core.ApplicationLayer.Pipelines.Loggings.Concretions;
 using Core.ApplicationLayer.Pipelines.Transactions.Concretions;
-using Core.ApplicationLayer.Pipelines.Validations;
 using Core.ApplicationLayer.Pipelines.Validations.Concretions;
+using Core.CrossCuttingConcernLayer.Loggings.Serilogs.Loggers;
+using Core.CrossCuttingConcernLayer.Loggings.Serilogs.Services;
 using FluentValidation;
 using MetroMiles.ApplicationLayer.Extensions.RuleRegistrations;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,10 +27,13 @@ public static class ApplicationServiceRegistration
             configuration.AddOpenBehavior(typeof(TransactionAddingBehavior< , >));
             configuration.AddOpenBehavior(typeof(CacheAddingBehavior< , >));
             configuration.AddOpenBehavior(typeof(CacheRemovingBehavior< , >));
+            configuration.AddOpenBehavior(typeof(LogAddingBehavior< , >));
         });
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddSubClassesOfType(Assembly.GetExecutingAssembly(), typeof(BaseBusinessRules));
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+        services.AddSingleton<BaseLoggerService, FileLogger>();
         return services;
     }
 
