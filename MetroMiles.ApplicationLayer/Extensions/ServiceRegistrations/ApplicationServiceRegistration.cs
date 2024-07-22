@@ -23,7 +23,7 @@ public static class ApplicationServiceRegistration
         services.AddMediatR(configuration =>
         {
             configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-            configuration.AddOpenBehavior(typeof(RequestValidationBehavior< , >));
+            configuration.AddOpenBehavior(typeof(ValidationAddingBehavior< , >));
             configuration.AddOpenBehavior(typeof(TransactionAddingBehavior< , >));
             configuration.AddOpenBehavior(typeof(CacheAddingBehavior< , >));
             configuration.AddOpenBehavior(typeof(CacheRemovingBehavior< , >));
