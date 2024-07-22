@@ -33,7 +33,7 @@ public static class ApplicationServiceRegistration
         services.AddSubClassesOfType(Assembly.GetExecutingAssembly(), typeof(BaseBusinessRules));
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
-        services.AddSingleton<BaseLoggerService, FileLogger>();
+        services.AddSingleton<BaseLoggerService, MsSqlLogger>();
         return services;
     }
 
