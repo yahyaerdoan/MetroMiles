@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MetroMiles.ApplicationLayer.Extensions.RuleRegistrations
+namespace MetroMiles.ApplicationLayer.Extensions.RuleRegistrations;
+
+public class BaseBusinessRules
 {
-    public class BaseBusinessRules
-    {
-    }
 }

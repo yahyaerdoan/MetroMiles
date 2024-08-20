@@ -7,9 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Auths\Commands\Create\" />
+    <Folder Include="Features\Auths\Commands\Delete\" />
+    <Folder Include="Features\Auths\Commands\Update\" />
+    <Folder Include="Features\Auths\Queries\GetById\" />
+    <Folder Include="Features\Auths\Queries\GetList\" />
+    <Folder Include="Features\Auths\Rules\" />
+    <Folder Include="Features\Auths\Profiles\" />
     <Folder Include="Features\Models\Commands\" />
     <Folder Include="Features\Models\Constants\" />
     <Folder Include="Features\Models\Rules\" />
+    <Folder Include="Features\Users\Commands\Delete\" />
+    <Folder Include="Features\Users\Commands\Update\" />
+    <Folder Include="Features\Users\Queries\GetById\" />
+    <Folder Include="Features\Users\Queries\GetList\" />
   </ItemGroup>
 
   <ItemGroup>
