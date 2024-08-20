@@ -20,6 +20,13 @@ namespace MetroMiles.PersistenceLayer.Extensions
             services.AddDbContext<BaseDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("FakeDatabaseName")));
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<IModelRepository, ModelRepository>();
+
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+            services.AddScoped<IOperationClaimRepository, OperationClaimRepository>();
+            services.AddScoped<IUserOperationClaimRepository, UserOperationClaimRepository>();
+            services.AddScoped<IEmailAuthenticatorRepository, EmailAuthenticatorRepository>();
+            services.AddScoped<IOneTimePasswordAuthenticatorRepository, OneTimePasswordAuthenticatorRepository>(); 
             return services;
         }
     }
