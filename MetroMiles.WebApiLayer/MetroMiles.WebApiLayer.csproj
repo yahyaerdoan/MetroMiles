@@ -18,9 +18,9 @@
     <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="9.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.7.1" />
-    <PackageReference Include="Core.ApplicationLayer" Version="1.0.0" />
-    <PackageReference Include="Core.CrossCuttingConcernLayer" Version="1.0.0" />
-    <PackageReference Include="Core.PersistenceLayer" Version="1.0.0" />
+    <PackageReference Include="Core.ApplicationLayer" Version="1.0.*" />
+    <PackageReference Include="Core.CrossCuttingConcernLayer" Version="1.0.*" />
+    <PackageReference Include="Core.PersistenceLayer" Version="1.0.*" />
   </ItemGroup>
 
   <ItemGroup>
