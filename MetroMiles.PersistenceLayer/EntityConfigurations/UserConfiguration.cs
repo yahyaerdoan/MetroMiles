@@ -38,7 +38,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasData(getSeeds());
     }
 
-    private IEnumerable<User> getSeeds()
+    private static User[] getSeeds()
     {
         List<User> users = new();
 

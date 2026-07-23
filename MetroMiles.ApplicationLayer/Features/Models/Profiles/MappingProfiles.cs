@@ -17,16 +17,16 @@ public class MappingProfiles : Profile
     public MappingProfiles()
     {
         CreateMap<Model, GetListModelListItemDto>()
-            .ForMember(destinationMember: b => b.BrandName, memberOptions: opt => opt.MapFrom(b => b.Brand.Name))
-            .ForMember(destinationMember: f => f.FuelName, memberOptions: opt => opt.MapFrom(f => f.Fuel.Name))
-            .ForMember(destinationMember: t => t.TransmissionName, memberOptions: opt => opt.MapFrom(t => t.Transmission.Name))
+            .ForMember(destinationMember: b => b.BrandName, memberOptions: opt => opt.MapFrom(b => b.Brand!.Name))
+            .ForMember(destinationMember: f => f.FuelName, memberOptions: opt => opt.MapFrom(f => f.Fuel!.Name))
+            .ForMember(destinationMember: t => t.TransmissionName, memberOptions: opt => opt.MapFrom(t => t.Transmission!.Name))
             .ReverseMap();
         CreateMap<Paginate<Model>, GetListResponse<GetListByDynamicModelListItemDto>>().ReverseMap();
 
         CreateMap<Model, GetListByDynamicModelListItemDto>()
-          .ForMember(destinationMember: b => b.BrandName, memberOptions: opt => opt.MapFrom(b => b.Brand.Name))
-          .ForMember(destinationMember: f => f.FuelName, memberOptions: opt => opt.MapFrom(f => f.Fuel.Name))
-          .ForMember(destinationMember: t => t.TransmissionName, memberOptions: opt => opt.MapFrom(t => t.Transmission.Name))
+          .ForMember(destinationMember: b => b.BrandName, memberOptions: opt => opt.MapFrom(b => b.Brand!.Name))
+          .ForMember(destinationMember: f => f.FuelName, memberOptions: opt => opt.MapFrom(f => f.Fuel!.Name))
+          .ForMember(destinationMember: t => t.TransmissionName, memberOptions: opt => opt.MapFrom(t => t.Transmission!.Name))
           .ReverseMap();
         CreateMap<Paginate<Model>, GetListResponse<GetListByDynamicModelListItemDto>>().ReverseMap();
     }

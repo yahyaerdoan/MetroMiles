@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.ApplicationLayer.Pipelines.Cachings.Abstractions;
 using MediatR;
+using MetroMiles.ApplicationLayer.Features.Brands.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
 using MetroMiles.DomainLayer.Entities;
 using System;
@@ -35,7 +36,8 @@ public class UpdateBrandCommand : IRequest<UpdatedBrandResponse>, ICacheRemoveRe
 
         public async Task<UpdatedBrandResponse> Handle(UpdateBrandCommand request, CancellationToken cancellationToken)
         {
-            Brand? brand = await _brandRepository.GetAsync(predicate: b => b.Id == request.Id, cancellationToken: cancellationToken);
+            Brand? existingBrand = await _brandRepository.GetAsync(predicate: b => b.Id == request.Id, cancellationToken: cancellationToken);
+            Brand brand = BrandBusinessRules.BrandShouldExistWhenSelected(existingBrand);
             brand = _mapper.Map(request, brand);
             await _brandRepository.UpdateAsync(brand);
             UpdatedBrandResponse response = _mapper.Map<UpdatedBrandResponse>(brand);

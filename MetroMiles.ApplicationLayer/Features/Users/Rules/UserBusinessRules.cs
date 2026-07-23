@@ -21,7 +21,7 @@ public class UserBusinessRules : BaseBusinessRules
         _userRepository = userRepository;
     }
 
-    public Task UserShouldBeExistsWhenSelected(User? user)
+    public static Task UserShouldBeExistsWhenSelected(User? user)
     {
         if (user == null)
             throw new BusinessException(AuthMessages.UserDontExists);
@@ -35,7 +35,7 @@ public class UserBusinessRules : BaseBusinessRules
             throw new BusinessException(AuthMessages.UserDontExists);
     }
 
-    public Task UserPasswordShouldBeMatched(User user, string password)
+    public static Task UserPasswordShouldBeMatched(User user, string password)
     {
         if (!HashingHelper.VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
             throw new BusinessException(AuthMessages.PasswordDontMatch);

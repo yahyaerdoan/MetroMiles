@@ -29,7 +29,7 @@ public static class ApplicationServiceRegistration
             configuration.AddOpenBehavior(typeof(CacheRemovingBehavior< , >));
             configuration.AddOpenBehavior(typeof(LogAddingBehavior< , >));
         });
-        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        services.AddAutoMapper(cfg => { }, Assembly.GetExecutingAssembly());
         services.AddSubClassesOfType(Assembly.GetExecutingAssembly(), typeof(BaseBusinessRules));
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 

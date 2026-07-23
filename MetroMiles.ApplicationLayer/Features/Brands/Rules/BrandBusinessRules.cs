@@ -22,10 +22,17 @@ public class BrandBusinessRules : BaseBusinessRules
 
     public async Task BrandNameCannotBeDuplicatedWhenInserted(string name)
     {
-        Brand? result = await _brandRepository.GetAsync(predicate: b=> b.Name.ToLower() == name.ToLower());
-        if (result != null) 
+        Brand? result = await _brandRepository.GetAsync(predicate: b => string.Equals(b.Name, name, StringComparison.OrdinalIgnoreCase));
+        if (result != null)
         {
             throw new BusinessException(BrandMessages.BrandNameExists);
         }
+    }
+
+    public static Brand BrandShouldExistWhenSelected(Brand? brand)
+    {
+        if (brand == null)
+            throw new BusinessException(BrandMessages.BrandNotExists);
+        return brand;
     }
 }

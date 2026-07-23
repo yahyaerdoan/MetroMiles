@@ -30,7 +30,7 @@ public class UserOperationClaimConfiguration : IEntityTypeConfiguration<UserOper
         builder.HasData(getSeeds());
     }
 
-    private IEnumerable<UserOperationClaim> getSeeds()
+    private static List<UserOperationClaim> getSeeds()
     {
         List<UserOperationClaim> userOperationClaims = new();
 

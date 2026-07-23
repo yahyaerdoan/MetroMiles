@@ -18,7 +18,7 @@ namespace MetroMiles.ApplicationLayer.Features.Models.Queries.GetListByDynamicQu
 public class GetListByDynamicModelQuery : IRequest<GetListResponse<GetListByDynamicModelListItemDto>>
 {
     public PageRequest PageRequest { get; set; }
-    public DynamicQuery DynamicQuery { get; set; }
+    public DynamicQuery? DynamicQuery { get; set; }
 
     public class GetListByDynamicModelQueryHandler : IRequestHandler<GetListByDynamicModelQuery, GetListResponse<GetListByDynamicModelListItemDto>>
     {
@@ -34,10 +34,11 @@ public class GetListByDynamicModelQuery : IRequest<GetListResponse<GetListByDyna
         public async Task<GetListResponse<GetListByDynamicModelListItemDto>> Handle(GetListByDynamicModelQuery request, CancellationToken cancellationToken)
         {
             Paginate<Model> models = await _modelRepository.GetListByDynamicAsync(
-                 request.DynamicQuery,
-                 include: m => m.Include(m => m.Brand).Include(m => m.Fuel).Include(m => m.Transmission),
+                 request.DynamicQuery ?? new DynamicQuery(),
+                 include: m => m.Include(m => m.Brand).Include(m => m.Fuel).Include(m => m.Transmission!),
                  index: request.PageRequest.PageIndex,
-                 size: request.PageRequest.PageSize
+                 size: request.PageRequest.PageSize,
+                 cancellationToken: cancellationToken
                  );
             var response = _mapper.Map<GetListResponse<GetListByDynamicModelListItemDto>>(models);
             return response;
