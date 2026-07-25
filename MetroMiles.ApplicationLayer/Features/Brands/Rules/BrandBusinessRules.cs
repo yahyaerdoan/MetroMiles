@@ -1,13 +1,8 @@
-﻿using Core.CrossCuttingConcernLayer.ExceptionHandlings.Types.Businesses;
+using Core.CrossCuttingConcernLayer.ExceptionHandlings.Types.Businesses;
 using MetroMiles.ApplicationLayer.Extensions.RuleRegistrations;
 using MetroMiles.ApplicationLayer.Features.Brands.Constants;
 using MetroMiles.ApplicationLayer.Services.Repositories;
 using MetroMiles.DomainLayer.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MetroMiles.ApplicationLayer.Features.Brands.Rules;
 
@@ -22,7 +17,7 @@ public class BrandBusinessRules : BaseBusinessRules
 
     public async Task BrandNameCannotBeDuplicatedWhenInserted(string name)
     {
-        Brand? result = await _brandRepository.GetAsync(predicate: b => string.Equals(b.Name, name, StringComparison.OrdinalIgnoreCase));
+        var result = await _brandRepository.GetAsync(predicate: b => b.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         if (result != null)
         {
             throw new BusinessException(BrandMessages.BrandNameExists);
@@ -32,7 +27,10 @@ public class BrandBusinessRules : BaseBusinessRules
     public static Brand BrandShouldExistWhenSelected(Brand? brand)
     {
         if (brand == null)
+        {
             throw new BusinessException(BrandMessages.BrandNotExists);
+        }
+
         return brand;
     }
 }
