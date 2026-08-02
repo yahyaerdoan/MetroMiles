@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
 using Core.ApplicationLayer.Pipelines.Cachings.Abstractions;
 using MediatR;
 using MetroMiles.ApplicationLayer.Features.Brands.Rules;
@@ -10,9 +11,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using ResultHandler.Core.Base;
+using ResultHandler.Facade;
+using ResultHandler.Functional;
+
+using MetroMiles.ApplicationLayer.Features.Brands.Constants;
+
 namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Update;
 
-public class UpdateBrandCommand : IRequest<UpdatedBrandResponse>, ICacheRemoveRequest
+public class UpdateBrandCommand : IRequest<OperationDataResult<UpdatedBrandResponse>>, ICacheRemoveRequest, ISecureAddRequest
 {
     #region UpdateBrandCommand & ICacheRemoveRequest Properties
     public Guid Id { get; set; }
@@ -21,9 +28,10 @@ public class UpdateBrandCommand : IRequest<UpdatedBrandResponse>, ICacheRemoveRe
     public string CacheKey => "";
     public bool ByPassCache => false;
     public string? CacheGroupKey => "GetBrands";
+    public string[] Roles => [BrandsOperationClaims.Admin, BrandsOperationClaims.Write, BrandsOperationClaims.Update];
     #endregion
 
-    public class UpdateBrandCommandHandler : IRequestHandler<UpdateBrandCommand, UpdatedBrandResponse>
+    public class UpdateBrandCommandHandler : IRequestHandler<UpdateBrandCommand, OperationDataResult<UpdatedBrandResponse>>
     {
         private readonly IBrandRepository _brandRepository;
         private readonly IMapper _mapper;
@@ -34,14 +42,16 @@ public class UpdateBrandCommand : IRequest<UpdatedBrandResponse>, ICacheRemoveRe
             _mapper = mapper;
         }
 
-        public async Task<UpdatedBrandResponse> Handle(UpdateBrandCommand request, CancellationToken cancellationToken)
+        public async Task<OperationDataResult<UpdatedBrandResponse>> Handle(UpdateBrandCommand request, CancellationToken cancellationToken)
         {
             Brand? existingBrand = await _brandRepository.GetAsync(predicate: b => b.Id == request.Id, cancellationToken: cancellationToken);
-            Brand brand = BrandBusinessRules.BrandShouldExistWhenSelected(existingBrand);
-            brand = _mapper.Map(request, brand);
+            var existenceCheck = BrandBusinessRules.BrandShouldExistWhenSelected(existingBrand);
+            if (!existenceCheck.IsSuccessful)
+                return existenceCheck.ToErrorDataResult<UpdatedBrandResponse>();
+
+            Brand brand = _mapper.Map(request, existenceCheck.Data);
             await _brandRepository.UpdateAsync(brand);
-            UpdatedBrandResponse response = _mapper.Map<UpdatedBrandResponse>(brand);
-            return response;
+            return Result.Success(_mapper.Map<UpdatedBrandResponse>(brand));
         }
     }
 }

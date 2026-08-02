@@ -1,4 +1,5 @@
-﻿using Core.ApplicationLayer.Pipelines.Cachings.Concretions.CacheBehaviors;
+﻿using Core.ApplicationLayer.Pipelines.Authorizations.Concretions;
+using Core.ApplicationLayer.Pipelines.Cachings.Concretions.CacheBehaviors;
 using Core.ApplicationLayer.Pipelines.Loggings.Concretions;
 using Core.ApplicationLayer.Pipelines.Transactions.Concretions;
 using Core.ApplicationLayer.Pipelines.Validations.Concretions;
@@ -23,6 +24,7 @@ public static class ApplicationServiceRegistration
         services.AddMediatR(configuration =>
         {
             configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            configuration.AddOpenBehavior(typeof(AuthorizationAddingBehavior< , >));
             configuration.AddOpenBehavior(typeof(ValidationAddingBehavior< , >));
             configuration.AddOpenBehavior(typeof(TransactionAddingBehavior< , >));
             configuration.AddOpenBehavior(typeof(CacheAddingBehavior< , >));

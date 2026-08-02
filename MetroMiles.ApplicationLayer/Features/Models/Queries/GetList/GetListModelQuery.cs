@@ -12,13 +12,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using ResultHandler.Core.Base;
+using ResultHandler.Facade;
+
 namespace MetroMiles.ApplicationLayer.Features.Models.Queries.GetList;
 
-public class GetListModelQuery : IRequest<GetListResponse<GetListModelListItemDto>>
+public class GetListModelQuery : IRequest<OperationDataResult<GetListResponse<GetListModelListItemDto>>>
 {
     public PageRequest PageRequest { get; set; }
 
-    public class GetListModelQueryHandler : IRequestHandler<GetListModelQuery, GetListResponse<GetListModelListItemDto>>
+    public class GetListModelQueryHandler : IRequestHandler<GetListModelQuery, OperationDataResult<GetListResponse<GetListModelListItemDto>>>
     {
         private readonly IModelRepository _modelRepository;
         private readonly IMapper _mapper;
@@ -29,7 +32,7 @@ public class GetListModelQuery : IRequest<GetListResponse<GetListModelListItemDt
             _mapper = mapper;
         }
 
-        public async Task<GetListResponse<GetListModelListItemDto>> Handle(GetListModelQuery request, CancellationToken cancellationToken)
+        public async Task<OperationDataResult<GetListResponse<GetListModelListItemDto>>> Handle(GetListModelQuery request, CancellationToken cancellationToken)
         {
             Paginate<Model> models = await _modelRepository.GetListAsync(
                 include: m => m.Include(m => m.Brand).Include(m => m.Fuel).Include(m => m.Transmission!),
@@ -38,7 +41,7 @@ public class GetListModelQuery : IRequest<GetListResponse<GetListModelListItemDt
                 cancellationToken: cancellationToken
                 );
             var response = _mapper.Map<GetListResponse<GetListModelListItemDto>>(models);
-            return response;
+            return Result.Success(response);
         }
     }
 }

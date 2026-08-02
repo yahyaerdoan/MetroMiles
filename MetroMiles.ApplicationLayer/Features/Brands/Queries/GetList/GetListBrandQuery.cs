@@ -13,9 +13,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using ResultHandler.Core.Base;
+using ResultHandler.Facade;
+
 namespace MetroMiles.ApplicationLayer.Features.Brands.Queries.GetList;
 
-public class GetListBrandQuery : IRequest<GetListResponse<GetListBrandListItemDto>>, ICacheAddRequest, ILogAddRequest
+public class GetListBrandQuery : IRequest<OperationDataResult<GetListResponse<GetListBrandListItemDto>>>, ICacheAddRequest, ILogAddRequest
 {
     #region GetListBrandQuery & ICacheAddRequest Properties
     public PageRequest PageRequest { get; set; }
@@ -25,7 +28,7 @@ public class GetListBrandQuery : IRequest<GetListResponse<GetListBrandListItemDt
     public string? CacheGroupKey => "GetBrands";
     #endregion
 
-    public class GetListBrandQueryHandler : IRequestHandler<GetListBrandQuery, GetListResponse<GetListBrandListItemDto>>
+    public class GetListBrandQueryHandler : IRequestHandler<GetListBrandQuery, OperationDataResult<GetListResponse<GetListBrandListItemDto>>>
     {
         private readonly IBrandRepository _brandRepository;
         private readonly IMapper _mapper;
@@ -36,14 +39,14 @@ public class GetListBrandQuery : IRequest<GetListResponse<GetListBrandListItemDt
             _mapper = mapper;
         }
 
-        public async Task<GetListResponse<GetListBrandListItemDto>> Handle(GetListBrandQuery request, CancellationToken cancellationToken)
+        public async Task<OperationDataResult<GetListResponse<GetListBrandListItemDto>>> Handle(GetListBrandQuery request, CancellationToken cancellationToken)
         {
             Paginate<Brand> brands = await _brandRepository.GetListAsync(
-                index: request.PageRequest.PageIndex, 
-                size: request.PageRequest.PageSize, 
+                index: request.PageRequest.PageIndex,
+                size: request.PageRequest.PageSize,
                 cancellationToken: cancellationToken);
             GetListResponse<GetListBrandListItemDto> response = _mapper.Map<GetListResponse<GetListBrandListItemDto>>(brands);
-            return response;
+            return Result.Success(response);
         }
     }
 }

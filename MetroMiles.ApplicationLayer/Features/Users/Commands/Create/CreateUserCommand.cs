@@ -13,9 +13,13 @@ using System.Text;
 using System.Threading.Tasks;
 using MetroMiles.ApplicationLayer.Features.Users.Rules;
 
+using ResultHandler.Core.Base;
+using ResultHandler.Facade;
+using ResultHandler.Functional;
+
 namespace MetroMiles.ApplicationLayer.Features.Users.Commands.Create;
 
-public class CreateUserCommand : IRequest<CreatedUserResponse>, ISecureAddRequest
+public class CreateUserCommand : IRequest<OperationDataResult<CreatedUserResponse>>, ISecureAddRequest
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
@@ -38,7 +42,7 @@ public class CreateUserCommand : IRequest<CreatedUserResponse>, ISecureAddReques
     }
     public string[] Roles => new[] { Admin, Write, Add };
 
-    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, CreatedUserResponse>
+    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, OperationDataResult<CreatedUserResponse>>
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
@@ -51,10 +55,14 @@ public class CreateUserCommand : IRequest<CreatedUserResponse>, ISecureAddReques
             _userBusinessRules = userBusinessRules;
         }
 
-        public async Task<CreatedUserResponse> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+        public async Task<OperationDataResult<CreatedUserResponse>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            await _userBusinessRules.UserEmailShouldNotExistsWhenInsert(request.Email);
+            var emailCheck = await _userBusinessRules.UserEmailShouldNotExistsWhenInsert(request.Email);
+            if (!emailCheck.IsSuccessful)
+                return emailCheck.ToErrorDataResult<CreatedUserResponse>();
+
             User user = _mapper.Map<User>(request);
+            user.Status = true;
 
             HashingHelper.CreatePasswordHash(
                 request.Password,
@@ -65,8 +73,7 @@ public class CreateUserCommand : IRequest<CreatedUserResponse>, ISecureAddReques
             user.PasswordSalt = passwordSalt;
             User createdUser = await _userRepository.AddAsync(user);
 
-            CreatedUserResponse response = _mapper.Map<CreatedUserResponse>(createdUser);
-            return response;
+            return Result.Success(_mapper.Map<CreatedUserResponse>(createdUser));
         }
     }
 }
