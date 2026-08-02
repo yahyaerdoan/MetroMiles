@@ -1,18 +1,14 @@
+using System.Threading.RateLimiting;
 using Core.CrossCuttingConcernLayer.ExceptionHandlings.Extensions;
 using Core.SecurityLayer.Encryptions;
 using Core.SecurityLayer.Extensions;
 using Core.SecurityLayer.JsonWebTokens.Concretions;
 using MetroMiles.ApplicationLayer.Extensions.ServiceRegistrations;
 using MetroMiles.PersistenceLayer.Extensions;
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
-
 using Scalar.AspNetCore;
-
-using System.Threading.RateLimiting;
 
 const string DevelopmentCorsPolicy = "DevelopmentCorsPolicy";
 const string AuthRateLimiterPolicy = "AuthRateLimiterPolicy";

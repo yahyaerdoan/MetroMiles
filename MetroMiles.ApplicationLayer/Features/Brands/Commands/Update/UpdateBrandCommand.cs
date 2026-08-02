@@ -1,21 +1,14 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
 using Core.ApplicationLayer.Pipelines.Cachings.Abstractions;
 using MediatR;
+using MetroMiles.ApplicationLayer.Features.Brands.Constants;
 using MetroMiles.ApplicationLayer.Features.Brands.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
 using MetroMiles.DomainLayer.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;
 using ResultHandler.Functional;
-
-using MetroMiles.ApplicationLayer.Features.Brands.Constants;
 
 namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Update;
 

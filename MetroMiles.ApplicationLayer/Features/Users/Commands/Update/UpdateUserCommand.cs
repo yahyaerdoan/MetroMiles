@@ -1,18 +1,13 @@
 using AutoMapper;
-
 using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
 using Core.SecurityLayer.Entities;
-
 using MediatR;
-
+using MetroMiles.ApplicationLayer.Features.Users.Constants;
 using MetroMiles.ApplicationLayer.Features.Users.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
-
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;
 using ResultHandler.Functional;
-
-using MetroMiles.ApplicationLayer.Features.Users.Constants;
 
 namespace MetroMiles.ApplicationLayer.Features.Users.Commands.Update;
 

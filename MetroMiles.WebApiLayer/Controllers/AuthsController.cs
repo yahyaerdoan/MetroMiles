@@ -7,7 +7,6 @@ using MetroMiles.ApplicationLayer.Features.Auths.Commands.RevokeToken;
 using MetroMiles.WebApiLayer.Controllers.BaseControllers;
 
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 

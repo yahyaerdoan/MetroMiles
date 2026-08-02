@@ -1,4 +1,4 @@
-﻿using MetroMiles.DomainLayer.Entities;
+using MetroMiles.DomainLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -25,5 +25,5 @@ public class FuelConfiguration : IEntityTypeConfiguration<Fuel>
             .HasForeignKey(m => m.FuelId);
 
         builder.HasQueryFilter(b => !b.DeletedDate.HasValue);
-    } 
+    }
 }

@@ -1,14 +1,9 @@
-﻿using Core.SecurityLayer.Constants;
+using System.Reflection;
+using Core.SecurityLayer.Constants;
 using Core.SecurityLayer.Entities;
 using MetroMiles.ApplicationLayer.Extensions.ServiceRegistrations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MetroMiles.PersistenceLayer.EntityConfigurations;
 

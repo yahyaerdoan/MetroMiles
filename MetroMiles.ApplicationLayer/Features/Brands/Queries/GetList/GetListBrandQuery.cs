@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Core.ApplicationLayer.Pipelines.Cachings.Abstractions;
 using Core.ApplicationLayer.Pipelines.Loggings.Abstractions;
 using Core.ApplicationLayer.Requests.Page;
@@ -7,11 +7,6 @@ using Core.PersistenceLayer.Pagings.Paging;
 using MediatR;
 using MetroMiles.ApplicationLayer.Services.Repositories;
 using MetroMiles.DomainLayer.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;
@@ -24,7 +19,7 @@ public class GetListBrandQuery : IRequest<OperationDataResult<GetListResponse<Ge
     public PageRequest PageRequest { get; set; }
     public string CacheKey => $"GetListBrandQuery({PageRequest.PageSize},{PageRequest.PageIndex})";
     public bool ByPassCache { get; }
-    public TimeSpan? SlidingExpiration {get;}
+    public TimeSpan? SlidingExpiration { get; }
     public string? CacheGroupKey => "GetBrands";
     #endregion
 

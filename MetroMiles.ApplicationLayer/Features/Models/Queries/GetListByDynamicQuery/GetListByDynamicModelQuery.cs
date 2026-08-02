@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Core.ApplicationLayer.Requests.Page;
 using Core.ApplicationLayer.Responses.GetList;
 using Core.PersistenceLayer.Dynamics.Dynamic;
@@ -7,11 +7,6 @@ using MediatR;
 using MetroMiles.ApplicationLayer.Services.Repositories;
 using MetroMiles.DomainLayer.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;

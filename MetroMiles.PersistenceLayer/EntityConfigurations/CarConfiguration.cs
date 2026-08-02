@@ -1,4 +1,4 @@
-﻿using MetroMiles.DomainLayer.Entities;
+using MetroMiles.DomainLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,7 +8,7 @@ public class CarConfiguration : IEntityTypeConfiguration<Car>
 {
     public void Configure(EntityTypeBuilder<Car> builder)
     {
-        builder.ToTable("Cars").HasKey(c=> c.Id);
+        builder.ToTable("Cars").HasKey(c => c.Id);
 
         builder.Property(c => c.Id).HasColumnName("Id").IsRequired();
 
@@ -19,7 +19,7 @@ public class CarConfiguration : IEntityTypeConfiguration<Car>
         builder.Property(c => c.MinFindexScore).HasColumnName("MinFindexScore").IsRequired();
         builder.Property(c => c.Status).HasColumnName("Status").IsRequired();
 
-        builder.Property(c => c.ModelId).HasColumnName("ModelId").IsRequired();  
+        builder.Property(c => c.ModelId).HasColumnName("ModelId").IsRequired();
 
         builder.Property(c => c.CreatedDate).HasColumnName("CreatedDate").IsRequired();
         builder.Property(c => c.UpdatedDate).HasColumnName("UpdatedDate");

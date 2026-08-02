@@ -1,13 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
 using MediatR;
 using MetroMiles.ApplicationLayer.Features.Brands.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
 using MetroMiles.DomainLayer.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;
@@ -32,7 +27,7 @@ public class GetByIdBrandQuery : IRequest<OperationDataResult<GetByIdBrandRespon
 
         public async Task<OperationDataResult<GetByIdBrandResponse>> Handle(GetByIdBrandQuery request, CancellationToken cancellationToken)
         {
-            Brand? brand = await _brandRepository.GetAsync(predicate: b => b.Id == request.Id, withDeleted:true, cancellationToken: cancellationToken);
+            Brand? brand = await _brandRepository.GetAsync(predicate: b => b.Id == request.Id, withDeleted: true, cancellationToken: cancellationToken);
             var existenceCheck = BrandBusinessRules.BrandShouldExistWhenSelected(brand);
             if (!existenceCheck.IsSuccessful)
                 return existenceCheck.ToErrorDataResult<GetByIdBrandResponse>();

@@ -1,14 +1,9 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Core.ApplicationLayer.Responses.GetList;
 using Core.PersistenceLayer.Pagings.Paging;
 using MetroMiles.ApplicationLayer.Features.Models.Queries.GetList;
 using MetroMiles.ApplicationLayer.Features.Models.Queries.GetListByDynamicQuery;
 using MetroMiles.DomainLayer.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MetroMiles.ApplicationLayer.Features.Models.Profiles;
 

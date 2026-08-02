@@ -1,7 +1,6 @@
 using MetroMiles.ApplicationLayer.Features.Users.Commands.Create;
 using MetroMiles.ApplicationLayer.Features.Users.Commands.Update;
 using MetroMiles.WebApiLayer.Controllers.BaseControllers;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using ResultHandler.AspNetCore.Extensions;

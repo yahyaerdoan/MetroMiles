@@ -1,4 +1,4 @@
-﻿using Core.ApplicationLayer.Requests.Page;
+using Core.ApplicationLayer.Requests.Page;
 using Core.ApplicationLayer.Responses.GetList;
 using MetroMiles.ApplicationLayer.Features.Brands.Commands.Create;
 using MetroMiles.ApplicationLayer.Features.Brands.Commands.Delete;
@@ -6,7 +6,6 @@ using MetroMiles.ApplicationLayer.Features.Brands.Commands.Update;
 using MetroMiles.ApplicationLayer.Features.Brands.Queries.GetById;
 using MetroMiles.ApplicationLayer.Features.Brands.Queries.GetList;
 using MetroMiles.WebApiLayer.Controllers.BaseControllers;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using ResultHandler.AspNetCore.Extensions;
@@ -45,7 +44,7 @@ public class BrandsController : BaseController
         return result.ToActionResult(HttpContext);
     }
     [HttpDelete]
-    public async  Task<IActionResult> Delete([FromQuery] DeleteBrandCommand deleteBrandCommand)
+    public async Task<IActionResult> Delete([FromQuery] DeleteBrandCommand deleteBrandCommand)
     {
         OperationDataResult<DeletedBrandResponse> result = await Mediator.Send(deleteBrandCommand, HttpContext.RequestAborted);
         return result.ToActionResult(HttpContext);

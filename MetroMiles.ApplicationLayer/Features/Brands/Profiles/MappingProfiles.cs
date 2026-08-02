@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Core.ApplicationLayer.Responses.GetList;
 using Core.PersistenceLayer.Pagings.Paging;
 using MetroMiles.ApplicationLayer.Features.Brands.Commands.Create;
@@ -7,11 +7,6 @@ using MetroMiles.ApplicationLayer.Features.Brands.Commands.Update;
 using MetroMiles.ApplicationLayer.Features.Brands.Queries.GetById;
 using MetroMiles.ApplicationLayer.Features.Brands.Queries.GetList;
 using MetroMiles.DomainLayer.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MetroMiles.ApplicationLayer.Features.Brands.Profiles
 {

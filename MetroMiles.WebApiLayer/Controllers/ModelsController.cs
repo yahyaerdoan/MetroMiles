@@ -1,10 +1,9 @@
-﻿using Core.ApplicationLayer.Requests.Page;
+using Core.ApplicationLayer.Requests.Page;
 using Core.ApplicationLayer.Responses.GetList;
 using Core.PersistenceLayer.Dynamics.Dynamic;
 using MetroMiles.ApplicationLayer.Features.Models.Queries.GetList;
 using MetroMiles.ApplicationLayer.Features.Models.Queries.GetListByDynamicQuery;
 using MetroMiles.WebApiLayer.Controllers.BaseControllers;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using ResultHandler.AspNetCore.Extensions;
@@ -19,7 +18,7 @@ namespace MetroMiles.WebApiLayer.Controllers
         [HttpGet]
         public async Task<IActionResult> GetList([FromQuery] PageRequest pageRequest)
         {
-            GetListModelQuery getListModelQuery = new () { PageRequest = pageRequest };
+            GetListModelQuery getListModelQuery = new() { PageRequest = pageRequest };
             OperationDataResult<GetListResponse<GetListModelListItemDto>> result = await Mediator.Send(getListModelQuery, HttpContext.RequestAborted);
             return result.ToActionResult(HttpContext);
         }

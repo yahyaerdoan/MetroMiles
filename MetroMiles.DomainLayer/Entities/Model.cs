@@ -1,13 +1,8 @@
-﻿using Core.PersistenceLayer.Repositories.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Core.PersistenceLayer.Repositories.Entities;
 
 namespace MetroMiles.DomainLayer.Entities;
 
-public class Model :  Entity<Guid>
+public class Model : Entity<Guid>
 {
     public Guid BrandId { get; set; }
     public Guid FuelId { get; set; }

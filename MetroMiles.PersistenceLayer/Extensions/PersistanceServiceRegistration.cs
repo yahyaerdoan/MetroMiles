@@ -1,14 +1,9 @@
-﻿using MetroMiles.ApplicationLayer.Services.Repositories;
+using MetroMiles.ApplicationLayer.Services.Repositories;
 using MetroMiles.PersistenceLayer.Context;
 using MetroMiles.PersistenceLayer.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MetroMiles.PersistenceLayer.Extensions
 {
@@ -26,7 +21,7 @@ namespace MetroMiles.PersistenceLayer.Extensions
             services.AddScoped<IOperationClaimRepository, OperationClaimRepository>();
             services.AddScoped<IUserOperationClaimRepository, UserOperationClaimRepository>();
             services.AddScoped<IEmailAuthenticatorRepository, EmailAuthenticatorRepository>();
-            services.AddScoped<IOneTimePasswordAuthenticatorRepository, OneTimePasswordAuthenticatorRepository>(); 
+            services.AddScoped<IOneTimePasswordAuthenticatorRepository, OneTimePasswordAuthenticatorRepository>();
             return services;
         }
     }
