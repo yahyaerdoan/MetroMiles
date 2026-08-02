@@ -24,7 +24,7 @@ public class ModelConfiguration : IEntityTypeConfiguration<Model>
         builder.Property(m => m.DeletedDate).HasColumnName("DeletedDate");
         builder.Ignore(m => m.RowVersion);
 
-        builder.HasIndex(m => m.Name).HasDatabaseName("UK_Models_Name").IsUnique();
+        builder.HasIndex(m => m.Name).HasDatabaseName("UK_Models_Name").IsUnique().HasFilter("[DeletedDate] IS NULL");
 
         builder.HasOne(m => m.Brand)
                .WithMany(b => b.Models)

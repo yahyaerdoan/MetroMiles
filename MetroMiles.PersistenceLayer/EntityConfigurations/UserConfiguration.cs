@@ -29,6 +29,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         // queries compare on a plain indexed column instead of calling ToLower()/ToUpper() inside
         // the LINQ predicate, which EF Core can't translate in a culture-safe, collation-independent way.
         builder.Property(u => u.NormalizedEmail).HasColumnName("NormalizedEmail").HasComputedColumnSql("UPPER([Email])", stored: true);
+        builder.HasIndex(u => u.Email, name: "UK_Users_Email").IsUnique().HasFilter("[DeletedDate] IS NULL");
         builder.HasIndex(u => u.NormalizedEmail).HasDatabaseName("IX_Users_NormalizedEmail");
 
         builder.HasQueryFilter(u => !u.DeletedDate.HasValue);

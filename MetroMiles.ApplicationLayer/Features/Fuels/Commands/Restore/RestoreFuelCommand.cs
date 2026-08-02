@@ -16,10 +16,11 @@ public class RestoreFuelCommand : IRequest<OperationDataResult<RestoredFuelRespo
     public Guid Id { get; set; }
     public string[] Roles => [FuelsOperationClaims.Admin, FuelsOperationClaims.Write, FuelsOperationClaims.Update];
 
-    public class RestoreFuelCommandHandler(IFuelRepository fuelRepository, IMapper mapper) : IRequestHandler<RestoreFuelCommand, OperationDataResult<RestoredFuelResponse>>
+    public class RestoreFuelCommandHandler(IFuelRepository fuelRepository, IMapper mapper, FuelBusinessRules fuelBusinessRules) : IRequestHandler<RestoreFuelCommand, OperationDataResult<RestoredFuelResponse>>
     {
         private readonly IFuelRepository _fuelRepository = fuelRepository;
         private readonly IMapper _mapper = mapper;
+        private readonly FuelBusinessRules _fuelBusinessRules = fuelBusinessRules;
 
         public async Task<OperationDataResult<RestoredFuelResponse>> Handle(RestoreFuelCommand request, CancellationToken cancellationToken)
         {
@@ -28,6 +29,12 @@ public class RestoreFuelCommand : IRequest<OperationDataResult<RestoredFuelRespo
             if (!existenceCheck.IsSuccessful)
             {
                 return existenceCheck.ToErrorDataResult<RestoredFuelResponse>();
+            }
+
+            var duplicateCheck = await _fuelBusinessRules.FuelNameCannotBeDuplicatedWhenUpdated(existenceCheck.Data.Id, existenceCheck.Data.Name);
+            if (!duplicateCheck.IsSuccessful)
+            {
+                return duplicateCheck.ToErrorDataResult<RestoredFuelResponse>();
             }
 
             existenceCheck.Data.DeletedDate = null;

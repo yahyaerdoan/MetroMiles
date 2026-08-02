@@ -16,10 +16,11 @@ public class RestoreCarCommand : IRequest<OperationDataResult<RestoredCarRespons
     public Guid Id { get; set; }
     public string[] Roles => [CarsOperationClaims.Admin, CarsOperationClaims.Write, CarsOperationClaims.Update];
 
-    public class RestoreCarCommandHandler(ICarRepository carRepository, IMapper mapper) : IRequestHandler<RestoreCarCommand, OperationDataResult<RestoredCarResponse>>
+    public class RestoreCarCommandHandler(ICarRepository carRepository, IMapper mapper, CarBusinessRules carBusinessRules) : IRequestHandler<RestoreCarCommand, OperationDataResult<RestoredCarResponse>>
     {
         private readonly ICarRepository _carRepository = carRepository;
         private readonly IMapper _mapper = mapper;
+        private readonly CarBusinessRules _carBusinessRules = carBusinessRules;
 
         public async Task<OperationDataResult<RestoredCarResponse>> Handle(RestoreCarCommand request, CancellationToken cancellationToken)
         {
@@ -28,6 +29,12 @@ public class RestoreCarCommand : IRequest<OperationDataResult<RestoredCarRespons
             if (!existenceCheck.IsSuccessful)
             {
                 return existenceCheck.ToErrorDataResult<RestoredCarResponse>();
+            }
+
+            var duplicateCheck = await _carBusinessRules.PlateCannotBeDuplicatedWhenUpdated(existenceCheck.Data.Id, existenceCheck.Data.Plate);
+            if (!duplicateCheck.IsSuccessful)
+            {
+                return duplicateCheck.ToErrorDataResult<RestoredCarResponse>();
             }
 
             existenceCheck.Data.DeletedDate = null;

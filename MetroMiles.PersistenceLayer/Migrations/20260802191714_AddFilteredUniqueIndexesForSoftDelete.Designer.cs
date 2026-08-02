@@ -4,6 +4,7 @@ using MetroMiles.PersistenceLayer.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MetroMiles.PersistenceLayer.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    partial class BaseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260802191714_AddFilteredUniqueIndexesForSoftDelete")]
+    partial class AddFilteredUniqueIndexesForSoftDelete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -762,8 +765,7 @@ namespace MetroMiles.PersistenceLayer.Migrations
 
                     b.HasIndex("Name")
                         .IsUnique()
-                        .HasDatabaseName("UK_Models_Name")
-                        .HasFilter("[DeletedDate] IS NULL");
+                        .HasDatabaseName("UK_Models_Name");
 
                     b.HasIndex("TransmissionId");
 

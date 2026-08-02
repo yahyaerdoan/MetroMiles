@@ -27,7 +27,7 @@ public class CarConfiguration : IEntityTypeConfiguration<Car>
         builder.Property(c => c.DeletedDate).HasColumnName("DeletedDate");
         builder.Property(c => c.RowVersion).HasColumnName("RowVersion").IsRowVersion();
 
-        builder.HasIndex(c => c.Plate, name: "UK_Cars_Plate").IsUnique();
+        builder.HasIndex(c => c.Plate, name: "UK_Cars_Plate").IsUnique().HasFilter("[DeletedDate] IS NULL");
         builder.HasIndex(c => c.NormalizedPlate).HasDatabaseName("IX_Cars_NormalizedPlate");
 
         builder.HasOne(c => c.Model)

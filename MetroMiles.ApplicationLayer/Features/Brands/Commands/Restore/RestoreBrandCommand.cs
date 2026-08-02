@@ -20,10 +20,11 @@ public class RestoreBrandCommand : IRequest<OperationDataResult<RestoredBrandRes
     public string? CacheGroupKey => "GetBrands";
     public string[] Roles => [BrandsOperationClaims.Admin, BrandsOperationClaims.Write, BrandsOperationClaims.Update];
 
-    public class RestoreBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper) : IRequestHandler<RestoreBrandCommand, OperationDataResult<RestoredBrandResponse>>
+    public class RestoreBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper, BrandBusinessRules brandBusinessRules) : IRequestHandler<RestoreBrandCommand, OperationDataResult<RestoredBrandResponse>>
     {
         private readonly IBrandRepository _brandRepository = brandRepository;
         private readonly IMapper _mapper = mapper;
+        private readonly BrandBusinessRules _brandBusinessRules = brandBusinessRules;
 
         public async Task<OperationDataResult<RestoredBrandResponse>> Handle(RestoreBrandCommand request, CancellationToken cancellationToken)
         {
@@ -32,6 +33,12 @@ public class RestoreBrandCommand : IRequest<OperationDataResult<RestoredBrandRes
             if (!existenceCheck.IsSuccessful)
             {
                 return existenceCheck.ToErrorDataResult<RestoredBrandResponse>();
+            }
+
+            var duplicateCheck = await _brandBusinessRules.BrandNameCannotBeDuplicatedWhenUpdated(existenceCheck.Data.Id, existenceCheck.Data.Name);
+            if (!duplicateCheck.IsSuccessful)
+            {
+                return duplicateCheck.ToErrorDataResult<RestoredBrandResponse>();
             }
 
             existenceCheck.Data.DeletedDate = null;

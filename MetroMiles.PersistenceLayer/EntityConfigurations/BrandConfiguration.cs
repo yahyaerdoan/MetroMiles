@@ -24,7 +24,7 @@ public class BrandConfiguration : IEntityTypeConfiguration<Brand>
         // the LINQ predicate, which EF Core can't translate in a culture-safe, collation-independent way.
         builder.Property(b => b.NormalizedName).HasColumnName("NormalizedName").HasComputedColumnSql("UPPER([Name])", stored: true);
 
-        builder.HasIndex(indexExpression => indexExpression.Name, name: "UK_Brands_Name").IsUnique();
+        builder.HasIndex(indexExpression => indexExpression.Name, name: "UK_Brands_Name").IsUnique().HasFilter("[DeletedDate] IS NULL");
         builder.HasIndex(b => b.NormalizedName).HasDatabaseName("IX_Brands_NormalizedName");
 
         builder.HasMany(b => b.Models);

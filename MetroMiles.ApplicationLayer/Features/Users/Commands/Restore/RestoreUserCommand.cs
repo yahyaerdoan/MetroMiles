@@ -16,10 +16,11 @@ public class RestoreUserCommand : IRequest<OperationDataResult<RestoredUserRespo
     public int Id { get; set; }
     public string[] Roles => [UsersOperationClaims.Admin, UsersOperationClaims.Write, UsersOperationClaims.Update];
 
-    public class RestoreUserCommandHandler(IUserRepository userRepository, IMapper mapper) : IRequestHandler<RestoreUserCommand, OperationDataResult<RestoredUserResponse>>
+    public class RestoreUserCommandHandler(IUserRepository userRepository, IMapper mapper, UserBusinessRules userBusinessRules) : IRequestHandler<RestoreUserCommand, OperationDataResult<RestoredUserResponse>>
     {
         private readonly IUserRepository _userRepository = userRepository;
         private readonly IMapper _mapper = mapper;
+        private readonly UserBusinessRules _userBusinessRules = userBusinessRules;
 
         public async Task<OperationDataResult<RestoredUserResponse>> Handle(RestoreUserCommand request, CancellationToken cancellationToken)
         {
@@ -28,6 +29,12 @@ public class RestoreUserCommand : IRequest<OperationDataResult<RestoredUserRespo
             if (!existenceCheck.IsSuccessful)
             {
                 return existenceCheck.ToErrorDataResult<RestoredUserResponse>();
+            }
+
+            var emailCheck = await _userBusinessRules.UserEmailShouldNotExistsWhenUpdate(existenceCheck.Data.Id, existenceCheck.Data.Email);
+            if (!emailCheck.IsSuccessful)
+            {
+                return emailCheck.ToErrorDataResult<RestoredUserResponse>();
             }
 
             existenceCheck.Data.DeletedDate = null;

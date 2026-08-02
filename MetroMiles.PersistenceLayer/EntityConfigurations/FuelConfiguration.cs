@@ -24,7 +24,7 @@ public class FuelConfiguration : IEntityTypeConfiguration<Fuel>
         // the LINQ predicate, which EF Core can't translate in a culture-safe, collation-independent way.
         builder.Property(f => f.NormalizedName).HasColumnName("NormalizedName").HasComputedColumnSql("UPPER([Name])", stored: true);
 
-        builder.HasIndex(indexExpression => indexExpression.Name, name: "UK_Fuels_Name").IsUnique();
+        builder.HasIndex(indexExpression => indexExpression.Name, name: "UK_Fuels_Name").IsUnique().HasFilter("[DeletedDate] IS NULL");
         builder.HasIndex(f => f.NormalizedName).HasDatabaseName("IX_Fuels_NormalizedName");
 
         builder.HasMany(f => f.Models)
