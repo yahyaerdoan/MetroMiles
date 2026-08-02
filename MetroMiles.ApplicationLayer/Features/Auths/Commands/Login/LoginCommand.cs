@@ -29,25 +29,30 @@ public class LoginCommand : IRequest<OperationDataResult<LoggedResponse>>
 
         public async Task<OperationDataResult<LoggedResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            User? user = await userRepository.GetAsync(
-                predicate: u => u.Email.ToLower() == request.Email.ToLower(),
+            var normalizedEmail = request.Email.ToUpperInvariant();
+            var user = await userRepository.GetAsync(
+                predicate: u => u.NormalizedEmail == normalizedEmail,
                 include: q => q.Include(u => u.UserOperationClaims).ThenInclude(uoc => uoc.OperationClaim),
                 cancellationToken: cancellationToken);
 
             if (user is null || !HashingHelper.VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
+            {
                 return Result.Unauthorized<LoggedResponse>(InvalidCredentialsMessage);
+            }
 
             // Checked only after a successful password match, so a disabled account's status isn't
             // revealed to someone who doesn't already know the password.
             if (!user.Status)
+            {
                 return Result.Forbidden<LoggedResponse>("This account is disabled.");
+            }
 
             // Lazy migration off the legacy HMACSHA512 scheme: we already have the plaintext password
             // right here (the only place we ever do), so silently re-hash it with PBKDF2 now instead
             // of forcing every existing user through a password reset.
             if (HashingHelper.IsLegacyHash(user.PasswordSalt))
             {
-                HashingHelper.CreatePasswordHash(request.Password, out byte[] rehashedPassword, out byte[] rehashedSalt);
+                HashingHelper.CreatePasswordHash(request.Password, out var rehashedPassword, out var rehashedSalt);
                 user.PasswordHash = rehashedPassword;
                 user.PasswordSalt = rehashedSalt;
                 await userRepository.UpdateAsync(user);
@@ -55,8 +60,8 @@ public class LoginCommand : IRequest<OperationDataResult<LoggedResponse>>
 
             // Housekeeping: revoke any refresh tokens this user still holds that have outlived the
             // configured refresh TTL window but were never used to refresh or explicitly revoked.
-            List<Core.SecurityLayer.Entities.RefreshToken> staleTokens = await refreshTokenRepository.GetOldRefreshTokensAsync(user.Id, tokenOptions.RefreshTokenTTL);
-            foreach (Core.SecurityLayer.Entities.RefreshToken staleToken in staleTokens)
+            var staleTokens = await refreshTokenRepository.GetOldRefreshTokensAsync(user.Id, tokenOptions.RefreshTokenTTL);
+            foreach (var staleToken in staleTokens)
             {
                 staleToken.Revoked = DateTime.UtcNow;
                 staleToken.RevokedByIp = request.IpAddress;
@@ -64,9 +69,9 @@ public class LoginCommand : IRequest<OperationDataResult<LoggedResponse>>
             }
 
             IList<OperationClaim> operationClaims = [.. user.UserOperationClaims.Select(uoc => uoc.OperationClaim)];
-            AccessToken accessToken = jwtTokenHelper.CreateToken(user, operationClaims);
+            var accessToken = jwtTokenHelper.CreateToken(user, operationClaims);
 
-            Core.SecurityLayer.Entities.RefreshToken refreshToken = jwtTokenHelper.CreateRefreshToken(user, request.IpAddress);
+            var refreshToken = jwtTokenHelper.CreateRefreshToken(user, request.IpAddress);
             await refreshTokenRepository.AddAsync(refreshToken);
 
             return Result.Success(new LoggedResponse(accessToken.Token, accessToken.Expiration, refreshToken.Token));

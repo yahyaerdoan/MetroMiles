@@ -14,22 +14,16 @@ namespace MetroMiles.ApplicationLayer.Features.Models.Queries.GetList;
 
 public class GetListModelQuery : IRequest<OperationDataResult<GetListResponse<GetListModelListItemDto>>>
 {
-    public PageRequest PageRequest { get; set; }
+    public required PageRequest PageRequest { get; set; }
 
-    public class GetListModelQueryHandler : IRequestHandler<GetListModelQuery, OperationDataResult<GetListResponse<GetListModelListItemDto>>>
+    public class GetListModelQueryHandler(IModelRepository modelRepository, IMapper mapper) : IRequestHandler<GetListModelQuery, OperationDataResult<GetListResponse<GetListModelListItemDto>>>
     {
-        private readonly IModelRepository _modelRepository;
-        private readonly IMapper _mapper;
-
-        public GetListModelQueryHandler(IModelRepository modelRepository, IMapper mapper)
-        {
-            _modelRepository = modelRepository;
-            _mapper = mapper;
-        }
+        private readonly IModelRepository _modelRepository = modelRepository;
+        private readonly IMapper _mapper = mapper;
 
         public async Task<OperationDataResult<GetListResponse<GetListModelListItemDto>>> Handle(GetListModelQuery request, CancellationToken cancellationToken)
         {
-            Paginate<Model> models = await _modelRepository.GetListAsync(
+            var models = await _modelRepository.GetListAsync(
                 include: m => m.Include(m => m.Brand).Include(m => m.Fuel).Include(m => m.Transmission!),
                 index: request.PageRequest.PageIndex,
                 size: request.PageRequest.PageSize,

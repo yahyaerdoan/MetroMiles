@@ -5,9 +5,6 @@ using MetroMiles.PersistenceLayer.Context;
 
 namespace MetroMiles.PersistenceLayer.Repositories;
 
-public class EmailAuthenticatorRepository : EfRepositoryBase<EmailAuthenticator, int, BaseDbContext>, IEmailAuthenticatorRepository
+public class EmailAuthenticatorRepository(BaseDbContext context) : EfRepositoryBase<EmailAuthenticator, int, BaseDbContext>(context), IEmailAuthenticatorRepository
 {
-    public EmailAuthenticatorRepository(BaseDbContext context) : base(context)
-    {
-    }
 }

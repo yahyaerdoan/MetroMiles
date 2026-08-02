@@ -15,23 +15,17 @@ namespace MetroMiles.ApplicationLayer.Features.Models.Queries.GetListByDynamicQu
 
 public class GetListByDynamicModelQuery : IRequest<OperationDataResult<GetListResponse<GetListByDynamicModelListItemDto>>>
 {
-    public PageRequest PageRequest { get; set; }
+    public required PageRequest PageRequest { get; set; }
     public DynamicQuery? DynamicQuery { get; set; }
 
-    public class GetListByDynamicModelQueryHandler : IRequestHandler<GetListByDynamicModelQuery, OperationDataResult<GetListResponse<GetListByDynamicModelListItemDto>>>
+    public class GetListByDynamicModelQueryHandler(IModelRepository modelRepository, IMapper mapper) : IRequestHandler<GetListByDynamicModelQuery, OperationDataResult<GetListResponse<GetListByDynamicModelListItemDto>>>
     {
-        private readonly IModelRepository _modelRepository;
-        private readonly IMapper _mapper;
-
-        public GetListByDynamicModelQueryHandler(IModelRepository modelRepository, IMapper mapper)
-        {
-            _modelRepository = modelRepository;
-            _mapper = mapper;
-        }
+        private readonly IModelRepository _modelRepository = modelRepository;
+        private readonly IMapper _mapper = mapper;
 
         public async Task<OperationDataResult<GetListResponse<GetListByDynamicModelListItemDto>>> Handle(GetListByDynamicModelQuery request, CancellationToken cancellationToken)
         {
-            Paginate<Model> models = await _modelRepository.GetListByDynamicAsync(
+            var models = await _modelRepository.GetListByDynamicAsync(
                  request.DynamicQuery ?? new DynamicQuery(),
                  include: m => m.Include(m => m.Brand).Include(m => m.Fuel).Include(m => m.Transmission!),
                  index: request.PageRequest.PageIndex,

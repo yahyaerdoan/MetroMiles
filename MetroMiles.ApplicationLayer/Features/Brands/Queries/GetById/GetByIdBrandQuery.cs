@@ -14,23 +14,19 @@ public class GetByIdBrandQuery : IRequest<OperationDataResult<GetByIdBrandRespon
 {
     public Guid Id { get; set; }
 
-    public class GetByIdBrandQueryHandler : IRequestHandler<GetByIdBrandQuery, OperationDataResult<GetByIdBrandResponse>>
+    public class GetByIdBrandQueryHandler(IBrandRepository brandRepository, IMapper mapper) : IRequestHandler<GetByIdBrandQuery, OperationDataResult<GetByIdBrandResponse>>
     {
-        private readonly IBrandRepository _brandRepository;
-        private readonly IMapper _mapper;
-
-        public GetByIdBrandQueryHandler(IBrandRepository brandRepository, IMapper mapper)
-        {
-            _brandRepository = brandRepository;
-            _mapper = mapper;
-        }
+        private readonly IBrandRepository _brandRepository = brandRepository;
+        private readonly IMapper _mapper = mapper;
 
         public async Task<OperationDataResult<GetByIdBrandResponse>> Handle(GetByIdBrandQuery request, CancellationToken cancellationToken)
         {
-            Brand? brand = await _brandRepository.GetAsync(predicate: b => b.Id == request.Id, withDeleted: true, cancellationToken: cancellationToken);
+            var brand = await _brandRepository.GetAsync(predicate: b => b.Id == request.Id, withDeleted: true, cancellationToken: cancellationToken);
             var existenceCheck = BrandBusinessRules.BrandShouldExistWhenSelected(brand);
             if (!existenceCheck.IsSuccessful)
+            {
                 return existenceCheck.ToErrorDataResult<GetByIdBrandResponse>();
+            }
 
             return Result.Success(_mapper.Map<GetByIdBrandResponse>(existenceCheck.Data));
         }

@@ -26,7 +26,7 @@ public class AuthsController : BaseController
     public async Task<IActionResult> Login([FromBody] LoginCommand loginCommand)
     {
         loginCommand.IpAddress = GetIpAddress();
-        OperationDataResult<LoggedResponse> result = await Mediator.Send(loginCommand, HttpContext.RequestAborted);
+        var result = await Mediator.Send(loginCommand, HttpContext.RequestAborted);
         return result.ToActionResult(HttpContext);
     }
 
@@ -35,7 +35,7 @@ public class AuthsController : BaseController
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenCommand refreshTokenCommand)
     {
         refreshTokenCommand.IpAddress = GetIpAddress();
-        OperationDataResult<LoggedResponse> result = await Mediator.Send(refreshTokenCommand, HttpContext.RequestAborted);
+        var result = await Mediator.Send(refreshTokenCommand, HttpContext.RequestAborted);
         return result.ToActionResult(HttpContext);
     }
 
@@ -43,7 +43,7 @@ public class AuthsController : BaseController
     public async Task<IActionResult> RevokeToken([FromBody] RevokeTokenCommand revokeTokenCommand)
     {
         revokeTokenCommand.IpAddress = GetIpAddress();
-        OperationResult result = await Mediator.Send(revokeTokenCommand, HttpContext.RequestAborted);
+        var result = await Mediator.Send(revokeTokenCommand, HttpContext.RequestAborted);
         return result.ToActionResult(HttpContext);
     }
 
@@ -55,7 +55,7 @@ public class AuthsController : BaseController
         // Always derived from the caller's own token — never from a client-supplied field — so one
         // authenticated user can't change another user's password.
         changePasswordCommand.UserId = HttpContext.User.GetUserId();
-        OperationResult result = await Mediator.Send(changePasswordCommand, HttpContext.RequestAborted);
+        var result = await Mediator.Send(changePasswordCommand, HttpContext.RequestAborted);
         return result.ToActionResult(HttpContext);
     }
 

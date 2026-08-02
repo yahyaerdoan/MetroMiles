@@ -26,16 +26,18 @@ public class RefreshTokenCommand : IRequest<OperationDataResult<LoggedResponse>>
 
         public async Task<OperationDataResult<LoggedResponse>> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
         {
-            Core.SecurityLayer.Entities.RefreshToken? existingToken = await refreshTokenRepository.GetAsync(
+            var existingToken = await refreshTokenRepository.GetAsync(
                 predicate: rt => rt.Token == request.Token,
                 include: q => q.Include(rt => rt.User).ThenInclude(u => u.UserOperationClaims).ThenInclude(uoc => uoc.OperationClaim),
                 cancellationToken: cancellationToken);
 
             if (existingToken is null || existingToken.Revoked is not null || existingToken.Expires <= DateTime.UtcNow)
+            {
                 return Result.Unauthorized<LoggedResponse>(InvalidRefreshTokenMessage);
+            }
 
-            User user = existingToken.User;
-            Core.SecurityLayer.Entities.RefreshToken newRefreshToken = jwtTokenHelper.CreateRefreshToken(user, request.IpAddress);
+            var user = existingToken.User;
+            var newRefreshToken = jwtTokenHelper.CreateRefreshToken(user, request.IpAddress);
 
             existingToken.Revoked = DateTime.UtcNow;
             existingToken.RevokedByIp = request.IpAddress;
@@ -44,7 +46,7 @@ public class RefreshTokenCommand : IRequest<OperationDataResult<LoggedResponse>>
             await refreshTokenRepository.AddAsync(newRefreshToken);
 
             IList<OperationClaim> operationClaims = [.. user.UserOperationClaims.Select(uoc => uoc.OperationClaim)];
-            AccessToken accessToken = jwtTokenHelper.CreateToken(user, operationClaims);
+            var accessToken = jwtTokenHelper.CreateToken(user, operationClaims);
 
             return Result.Success(new LoggedResponse(accessToken.Token, accessToken.Expiration, newRefreshToken.Token));
         }

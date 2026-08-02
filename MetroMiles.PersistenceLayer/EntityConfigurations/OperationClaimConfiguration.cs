@@ -23,19 +23,23 @@ public class OperationClaimConfiguration : IEntityTypeConfiguration<OperationCla
 
         builder.HasMany(oc => oc.UserOperationClaims);
 
-        builder.HasData(_seeds);
+        builder.HasData(Seeds);
     }
 
-    private static IEnumerable<OperationClaim> _seeds
+    private static IEnumerable<OperationClaim> Seeds
     {
         get
         {
-            int id = 0;
+            var id = 0;
 
             yield return new OperationClaim { Id = ++id, Name = GeneralOperationClaims.Admin };
 
             #region Feature Operation Claims
-            IEnumerable<Type> featureOperationClaimsTypes = Assembly
+            // Assembly.GetTypes()/Type.GetFields() order is unspecified by .NET — without an explicit
+            // sort, the same code can seed different IDs on different machines/builds, silently
+            // reassigning what an already-seeded ID means (e.g. "brands.admin" -> "transmissions.admin").
+            // Sorting by name makes seeding deterministic and reproducible across environments.
+            var featureOperationClaimsTypes = Assembly
                 .GetAssembly(typeof(ApplicationServiceRegistration))!
                 .GetTypes()
                 .Where(
@@ -44,17 +48,21 @@ public class OperationClaimConfiguration : IEntityTypeConfiguration<OperationCla
                         && (type.Namespace?.Contains("Constants") == true)
                         && type.IsClass
                         && type.Name.EndsWith("OperationClaims", StringComparison.Ordinal)
-                );
-            foreach (Type type in featureOperationClaimsTypes)
+                )
+                .OrderBy(type => type.FullName, StringComparer.Ordinal);
+            foreach (var type in featureOperationClaimsTypes)
             {
-                FieldInfo[] typeFields = type.GetFields(BindingFlags.Public | BindingFlags.Static);
-                IEnumerable<string> typeFieldsValues = typeFields.Select(typeField => typeField.GetValue(null)!.ToString()!);
+                var typeFields = type.GetFields(BindingFlags.Public | BindingFlags.Static)
+                    .OrderBy(typeField => typeField.Name, StringComparer.Ordinal);
+                var typeFieldsValues = typeFields.Select(typeField => typeField.GetValue(null)!.ToString()!);
 
-                IEnumerable<OperationClaim> featureOperationClaimsToAdd = typeFieldsValues.Select(
+                var featureOperationClaimsToAdd = typeFieldsValues.Select(
                     value => new OperationClaim { Id = ++id, Name = value }
                 );
-                foreach (OperationClaim featureOperationClaim in featureOperationClaimsToAdd)
+                foreach (var featureOperationClaim in featureOperationClaimsToAdd)
+                {
                     yield return featureOperationClaim;
+                }
             }
             #endregion
         }

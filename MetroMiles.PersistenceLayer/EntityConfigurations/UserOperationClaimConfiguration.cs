@@ -22,12 +22,12 @@ public class UserOperationClaimConfiguration : IEntityTypeConfiguration<UserOper
         builder.HasOne(uoc => uoc.User);
         builder.HasOne(uoc => uoc.OperationClaim);
 
-        builder.HasData(getSeeds());
+        builder.HasData(GetSeeds());
     }
 
-    private static List<UserOperationClaim> getSeeds()
+    private static List<UserOperationClaim> GetSeeds()
     {
-        List<UserOperationClaim> userOperationClaims = new();
+        List<UserOperationClaim> userOperationClaims = [];
 
         UserOperationClaim adminUserOperationClaim = new(id: 1, userId: 1, operationClaimId: 1);
         userOperationClaims.Add(adminUserOperationClaim);

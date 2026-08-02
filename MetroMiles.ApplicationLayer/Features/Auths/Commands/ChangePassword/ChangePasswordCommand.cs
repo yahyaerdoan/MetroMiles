@@ -23,16 +23,20 @@ public class ChangePasswordCommand : IRequest<OperationResult>
     {
         public async Task<OperationResult> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
         {
-            User? user = await userRepository.GetAsync(predicate: u => u.Id == request.UserId, cancellationToken: cancellationToken);
+            var user = await userRepository.GetAsync(predicate: u => u.Id == request.UserId, cancellationToken: cancellationToken);
             var existenceCheck = UserBusinessRules.UserShouldBeExistsWhenSelected(user);
             if (!existenceCheck.IsSuccessful)
+            {
                 return (OperationResult)existenceCheck;
+            }
 
             var passwordCheck = UserBusinessRules.UserPasswordShouldBeMatched(existenceCheck.Data, request.CurrentPassword);
             if (!passwordCheck.IsSuccessful)
+            {
                 return (OperationResult)passwordCheck;
+            }
 
-            HashingHelper.CreatePasswordHash(request.NewPassword, out byte[] newHash, out byte[] newSalt);
+            HashingHelper.CreatePasswordHash(request.NewPassword, out var newHash, out var newSalt);
             existenceCheck.Data.PasswordHash = newHash;
             existenceCheck.Data.PasswordSalt = newSalt;
             await userRepository.UpdateAsync(existenceCheck.Data);

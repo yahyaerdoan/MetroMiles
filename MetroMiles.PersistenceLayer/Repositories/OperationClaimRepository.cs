@@ -5,9 +5,6 @@ using MetroMiles.PersistenceLayer.Context;
 
 namespace MetroMiles.PersistenceLayer.Repositories;
 
-public class OperationClaimRepository : EfRepositoryBase<OperationClaim, int, BaseDbContext>, IOperationClaimRepository
+public class OperationClaimRepository(BaseDbContext context) : EfRepositoryBase<OperationClaim, int, BaseDbContext>(context), IOperationClaimRepository
 {
-    public OperationClaimRepository(BaseDbContext context) : base(context)
-    {
-    }
 }

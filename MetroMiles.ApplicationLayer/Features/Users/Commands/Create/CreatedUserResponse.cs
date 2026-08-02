@@ -1,4 +1,4 @@
-﻿namespace MetroMiles.ApplicationLayer.Features.Users.Commands.Create;
+namespace MetroMiles.ApplicationLayer.Features.Users.Commands.Create;
 
 public class CreatedUserResponse
 {

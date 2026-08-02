@@ -5,6 +5,5 @@ namespace MetroMiles.WebApiLayer.Controllers.BaseControllers;
 
 public class BaseController : ControllerBase
 {
-    private IMediator? _mediator;
-    protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetRequiredService<IMediator>();
+    protected IMediator Mediator => field ??= HttpContext.RequestServices.GetRequiredService<IMediator>();
 }

@@ -5,6 +5,7 @@ namespace MetroMiles.DomainLayer.Entities;
 public class Fuel : Entity<Guid>
 {
     public string Name { get; set; }
+    public string? NormalizedName { get; set; }
     public virtual ICollection<Model> Models { get; set; }
 
     public Fuel()

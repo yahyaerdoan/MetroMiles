@@ -24,16 +24,20 @@ public class UpdateUserCommand : IRequest<OperationDataResult<UpdatedUserRespons
     {
         public async Task<OperationDataResult<UpdatedUserResponse>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
-            User? existingUser = await userRepository.GetAsync(predicate: u => u.Id == request.Id, cancellationToken: cancellationToken);
+            var existingUser = await userRepository.GetAsync(predicate: u => u.Id == request.Id, cancellationToken: cancellationToken);
             var existenceCheck = UserBusinessRules.UserShouldBeExistsWhenSelected(existingUser);
             if (!existenceCheck.IsSuccessful)
+            {
                 return existenceCheck.ToErrorDataResult<UpdatedUserResponse>();
+            }
 
             var emailCheck = await userBusinessRules.UserEmailShouldNotExistsWhenUpdate(request.Id, request.Email);
             if (!emailCheck.IsSuccessful)
+            {
                 return emailCheck.ToErrorDataResult<UpdatedUserResponse>();
+            }
 
-            User user = mapper.Map(request, existenceCheck.Data);
+            var user = mapper.Map(request, existenceCheck.Data);
             await userRepository.UpdateAsync(user);
 
             return Result.Success(mapper.Map<UpdatedUserResponse>(user));

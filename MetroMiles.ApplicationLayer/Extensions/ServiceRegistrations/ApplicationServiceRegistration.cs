@@ -39,10 +39,17 @@ public static class ApplicationServiceRegistration
     {
         var types = assembly.GetTypes().Where(t => t.IsSubclassOf(type) && type != t).ToList();
         foreach (var item in types)
+        {
             if (addWithLifeCycle == null)
+            {
                 services.AddScoped(item);
+            }
             else
+            {
                 addWithLifeCycle(services, item);
+            }
+        }
+
         return services;
     }
     #endregion

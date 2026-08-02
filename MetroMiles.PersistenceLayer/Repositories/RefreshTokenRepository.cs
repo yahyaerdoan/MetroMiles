@@ -6,15 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MetroMiles.PersistenceLayer.Repositories;
 
-public class RefreshTokenRepository : EfRepositoryBase<RefreshToken, int, BaseDbContext>, IRefreshTokenRepository
+public class RefreshTokenRepository(BaseDbContext context) : EfRepositoryBase<RefreshToken, int, BaseDbContext>(context), IRefreshTokenRepository
 {
-    public RefreshTokenRepository(BaseDbContext context) : base(context)
-    {
-    }
-
     public async Task<List<RefreshToken>> GetOldRefreshTokensAsync(int userId, int refreshTokenTTL)
     {
-        List<RefreshToken> refreshTokens = await Query().AsNoTracking()
+        var refreshTokens = await Query().AsNoTracking()
             .Where(
             r => r.UserId == userId
             && r.Revoked == null

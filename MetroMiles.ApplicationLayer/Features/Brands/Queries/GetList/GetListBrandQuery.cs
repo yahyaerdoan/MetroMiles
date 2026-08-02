@@ -16,31 +16,25 @@ namespace MetroMiles.ApplicationLayer.Features.Brands.Queries.GetList;
 public class GetListBrandQuery : IRequest<OperationDataResult<GetListResponse<GetListBrandListItemDto>>>, ICacheAddRequest, ILogAddRequest
 {
     #region GetListBrandQuery & ICacheAddRequest Properties
-    public PageRequest PageRequest { get; set; }
+    public required PageRequest PageRequest { get; set; }
     public string CacheKey => $"GetListBrandQuery({PageRequest.PageSize},{PageRequest.PageIndex})";
     public bool ByPassCache { get; }
     public TimeSpan? SlidingExpiration { get; }
     public string? CacheGroupKey => "GetBrands";
     #endregion
 
-    public class GetListBrandQueryHandler : IRequestHandler<GetListBrandQuery, OperationDataResult<GetListResponse<GetListBrandListItemDto>>>
+    public class GetListBrandQueryHandler(IBrandRepository brandRepository, IMapper mapper) : IRequestHandler<GetListBrandQuery, OperationDataResult<GetListResponse<GetListBrandListItemDto>>>
     {
-        private readonly IBrandRepository _brandRepository;
-        private readonly IMapper _mapper;
-
-        public GetListBrandQueryHandler(IBrandRepository brandRepository, IMapper mapper)
-        {
-            _brandRepository = brandRepository;
-            _mapper = mapper;
-        }
+        private readonly IBrandRepository _brandRepository = brandRepository;
+        private readonly IMapper _mapper = mapper;
 
         public async Task<OperationDataResult<GetListResponse<GetListBrandListItemDto>>> Handle(GetListBrandQuery request, CancellationToken cancellationToken)
         {
-            Paginate<Brand> brands = await _brandRepository.GetListAsync(
+            var brands = await _brandRepository.GetListAsync(
                 index: request.PageRequest.PageIndex,
                 size: request.PageRequest.PageSize,
                 cancellationToken: cancellationToken);
-            GetListResponse<GetListBrandListItemDto> response = _mapper.Map<GetListResponse<GetListBrandListItemDto>>(brands);
+            var response = _mapper.Map<GetListResponse<GetListBrandListItemDto>>(brands);
             return Result.Success(response);
         }
     }

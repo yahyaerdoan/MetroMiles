@@ -19,32 +19,27 @@ namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Create;
 public class CreateBrandCommand : IRequest<OperationDataResult<CreatedBrandResponse>>, ITransactionAddRequest, ICacheRemoveRequest, ILogAddRequest, ISecureAddRequest
 {
     #region CreateBrandCommand & ICacheRemoveRequest Properties
-    public string Name { get; set; }
-    public string Description { get; set; }
+    public required string Name { get; set; }
+    public required string Description { get; set; }
     public string CacheKey => "";
     public bool ByPassCache => false;
     public string? CacheGroupKey => "GetBrands";
     public string[] Roles => [Admin, Write, Add];
     #endregion
 
-    public class CreateBrandCommandHandler : IRequestHandler<CreateBrandCommand, OperationDataResult<CreatedBrandResponse>>
+    public class CreateBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper, BrandBusinessRules brandBusinessRules) : IRequestHandler<CreateBrandCommand, OperationDataResult<CreatedBrandResponse>>
     {
-        private readonly IBrandRepository _brandRepository;
-        private readonly IMapper _mapper;
-        private readonly BrandBusinessRules _brandBusinessRules;
-
-        public CreateBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper, BrandBusinessRules brandBusinessRules)
-        {
-            _brandRepository = brandRepository;
-            _mapper = mapper;
-            _brandBusinessRules = brandBusinessRules;
-        }
+        private readonly IBrandRepository _brandRepository = brandRepository;
+        private readonly IMapper _mapper = mapper;
+        private readonly BrandBusinessRules _brandBusinessRules = brandBusinessRules;
 
         public async Task<OperationDataResult<CreatedBrandResponse>> Handle(CreateBrandCommand request, CancellationToken cancellationToken)
         {
             var duplicateCheck = await _brandBusinessRules.BrandNameCannotBeDuplicatedWhenInserted(request.Name);
             if (!duplicateCheck.IsSuccessful)
+            {
                 return duplicateCheck.ToErrorDataResult<CreatedBrandResponse>();
+            }
 
             var brand = _mapper.Map<Brand>(request);
             await _brandRepository.AddAsync(brand);

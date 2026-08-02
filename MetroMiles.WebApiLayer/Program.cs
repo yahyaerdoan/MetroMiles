@@ -21,8 +21,15 @@ builder.Services.AddPersistanceServices(builder.Configuration);
 builder.Services.AddSecurityServices();
 builder.Services.AddHttpContextAccessor();
 
-TokenOption tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOption>()
+var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOption>()
     ?? throw new InvalidOperationException("\"TokenOptions\" section cannot found in configuration.");
+if (string.IsNullOrWhiteSpace(tokenOptions.SecurityKey))
+{
+    throw new InvalidOperationException(
+        "\"TokenOptions:SecurityKey\" is not configured. Set it via user-secrets " +
+        "(dotnet user-secrets set \"TokenOptions:SecurityKey\" \"<value>\") in development, " +
+        "or an environment variable/secret store in other environments — never in appsettings.json.");
+}
 builder.Services.AddSingleton(tokenOptions);
 
 builder.Services
@@ -42,7 +49,7 @@ builder.Services
     });
 builder.Services.AddAuthorization();
 
-string[] corsAllowedOrigins = builder.Configuration.GetSection("CorsSettings:AllowedOrigins").Get<string[]>()
+var corsAllowedOrigins = builder.Configuration.GetSection("CorsSettings:AllowedOrigins").Get<string[]>()
     ?? ["http://localhost:4200"]; // Angular dev server default; override via CorsSettings:AllowedOrigins.
 
 builder.Services.AddCors(options =>
@@ -67,8 +74,17 @@ builder.Services.AddRateLimiter(options =>
             }));
 });
 
-//builder.Services.AddDistributedMemoryCache();
-builder.Services.AddStackExchangeRedisCache(opt => opt.Configuration = "localhost:6379");
+// Falls back to in-process caching when no Redis connection is configured, so the app still runs
+// (e.g. local dev without Redis installed) instead of failing on every cache-behavior request.
+var redisConnection = builder.Configuration.GetConnectionString("Redis");
+if (string.IsNullOrWhiteSpace(redisConnection))
+{
+    builder.Services.AddDistributedMemoryCache();
+}
+else
+{
+    builder.Services.AddStackExchangeRedisCache(opt => opt.Configuration = redisConnection);
+}
 
 
 builder.Services.AddControllers();

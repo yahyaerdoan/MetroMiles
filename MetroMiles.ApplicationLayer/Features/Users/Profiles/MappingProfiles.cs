@@ -1,7 +1,12 @@
 using AutoMapper;
+using Core.ApplicationLayer.Responses.GetList;
+using Core.PersistenceLayer.Pagings.Paging;
 using Core.SecurityLayer.Entities;
 using MetroMiles.ApplicationLayer.Features.Users.Commands.Create;
+using MetroMiles.ApplicationLayer.Features.Users.Commands.Delete;
 using MetroMiles.ApplicationLayer.Features.Users.Commands.Update;
+using MetroMiles.ApplicationLayer.Features.Users.Queries.GetById;
+using MetroMiles.ApplicationLayer.Features.Users.Queries.GetList;
 
 namespace MetroMiles.ApplicationLayer.Features.Users.Profiles;
 
@@ -14,5 +19,13 @@ public class MappingProfiles : Profile
 
         CreateMap<User, UpdateUserCommand>().ReverseMap();
         CreateMap<User, UpdatedUserResponse>().ReverseMap();
+
+        CreateMap<User, GetByIdUserResponse>().ReverseMap();
+
+        CreateMap<User, GetListUserListItemDto>().ReverseMap();
+        CreateMap<Paginate<User>, GetListResponse<GetListUserListItemDto>>().ReverseMap();
+
+        CreateMap<User, DeleteUserCommand>().ReverseMap();
+        CreateMap<User, DeletedUserResponse>().ReverseMap();
     }
 }

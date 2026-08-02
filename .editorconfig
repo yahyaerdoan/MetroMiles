@@ -71,6 +71,11 @@ dotnet_naming_symbols.interfaces.applicable_accessibilities = *
 
 dotnet_naming_symbols.private_fields.applicable_kinds = field
 dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+dotnet_naming_symbols.private_fields.required_modifiers = readonly
+
+dotnet_naming_symbols.private_const_fields.applicable_kinds = field
+dotnet_naming_symbols.private_const_fields.applicable_accessibilities = private
+dotnet_naming_symbols.private_const_fields.required_modifiers = const
 
 dotnet_naming_symbols.types_and_members.applicable_kinds = class, struct, enum, property, method, event, namespace, delegate, local_function
 dotnet_naming_symbols.types_and_members.applicable_accessibilities = *
@@ -83,6 +88,10 @@ dotnet_naming_rule.private_fields_camel_case.symbols = private_fields
 dotnet_naming_rule.private_fields_camel_case.style = private_field_style
 dotnet_naming_rule.private_fields_camel_case.severity = suggestion
 
+dotnet_naming_rule.private_const_fields_pascal_case.symbols = private_const_fields
+dotnet_naming_rule.private_const_fields_pascal_case.style = pascal_case_style
+dotnet_naming_rule.private_const_fields_pascal_case.severity = suggestion
+
 dotnet_naming_rule.types_and_members_pascal_case.symbols = types_and_members
 dotnet_naming_rule.types_and_members_pascal_case.style = pascal_case_style
 dotnet_naming_rule.types_and_members_pascal_case.severity = suggestion
@@ -90,3 +99,8 @@ dotnet_naming_rule.types_and_members_pascal_case.severity = suggestion
 # Common analyzer severities
 dotnet_diagnostic.CS8618.severity = suggestion
 dotnet_diagnostic.CA1062.severity = none
+
+# EF Core migrations are scaffolded by `dotnet ef migrations add` and rewritten wholesale on every
+# add/remove — hand-fixing style/perf suggestions in them doesn't stick and just adds edit noise.
+[**/Migrations/*.cs]
+dotnet_diagnostic.CA1861.severity = none

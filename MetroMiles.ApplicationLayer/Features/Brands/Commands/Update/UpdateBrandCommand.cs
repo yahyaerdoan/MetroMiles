@@ -16,33 +16,29 @@ public class UpdateBrandCommand : IRequest<OperationDataResult<UpdatedBrandRespo
 {
     #region UpdateBrandCommand & ICacheRemoveRequest Properties
     public Guid Id { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
+    public required string Name { get; set; }
+    public required string Description { get; set; }
     public string CacheKey => "";
     public bool ByPassCache => false;
     public string? CacheGroupKey => "GetBrands";
     public string[] Roles => [BrandsOperationClaims.Admin, BrandsOperationClaims.Write, BrandsOperationClaims.Update];
     #endregion
 
-    public class UpdateBrandCommandHandler : IRequestHandler<UpdateBrandCommand, OperationDataResult<UpdatedBrandResponse>>
+    public class UpdateBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper) : IRequestHandler<UpdateBrandCommand, OperationDataResult<UpdatedBrandResponse>>
     {
-        private readonly IBrandRepository _brandRepository;
-        private readonly IMapper _mapper;
-
-        public UpdateBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper)
-        {
-            _brandRepository = brandRepository;
-            _mapper = mapper;
-        }
+        private readonly IBrandRepository _brandRepository = brandRepository;
+        private readonly IMapper _mapper = mapper;
 
         public async Task<OperationDataResult<UpdatedBrandResponse>> Handle(UpdateBrandCommand request, CancellationToken cancellationToken)
         {
-            Brand? existingBrand = await _brandRepository.GetAsync(predicate: b => b.Id == request.Id, cancellationToken: cancellationToken);
+            var existingBrand = await _brandRepository.GetAsync(predicate: b => b.Id == request.Id, cancellationToken: cancellationToken);
             var existenceCheck = BrandBusinessRules.BrandShouldExistWhenSelected(existingBrand);
             if (!existenceCheck.IsSuccessful)
+            {
                 return existenceCheck.ToErrorDataResult<UpdatedBrandResponse>();
+            }
 
-            Brand brand = _mapper.Map(request, existenceCheck.Data);
+            var brand = _mapper.Map(request, existenceCheck.Data);
             await _brandRepository.UpdateAsync(brand);
             return Result.Success(_mapper.Map<UpdatedBrandResponse>(brand));
         }

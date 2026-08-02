@@ -1,9 +1,8 @@
-namespace MetroMiles.DomainLayer.Entities.Enums
+namespace MetroMiles.DomainLayer.Entities.Enums;
+
+public enum CarStatus
 {
-    public enum CarStatus
-    {
-        Available = 1,
-        Rented = 2,
-        UnderMaintenance = 3,
-    }
+    Available = 1,
+    Rented = 2,
+    UnderMaintenance = 3,
 }

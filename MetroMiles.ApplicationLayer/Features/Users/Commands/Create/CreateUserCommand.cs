@@ -33,38 +33,33 @@ public class CreateUserCommand : IRequest<OperationDataResult<CreatedUserRespons
         Email = email;
         Password = password;
     }
-    public string[] Roles => new[] { Admin, Write, Add };
+    public string[] Roles => [Admin, Write, Add];
 
-    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, OperationDataResult<CreatedUserResponse>>
+    public class CreateUserCommandHandler(IUserRepository userRepository, IMapper mapper, UserBusinessRules userBusinessRules) : IRequestHandler<CreateUserCommand, OperationDataResult<CreatedUserResponse>>
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IMapper _mapper;
-        private readonly UserBusinessRules _userBusinessRules;
-
-        public CreateUserCommandHandler(IUserRepository userRepository, IMapper mapper, UserBusinessRules userBusinessRules)
-        {
-            _userRepository = userRepository;
-            _mapper = mapper;
-            _userBusinessRules = userBusinessRules;
-        }
+        private readonly IUserRepository _userRepository = userRepository;
+        private readonly IMapper _mapper = mapper;
+        private readonly UserBusinessRules _userBusinessRules = userBusinessRules;
 
         public async Task<OperationDataResult<CreatedUserResponse>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             var emailCheck = await _userBusinessRules.UserEmailShouldNotExistsWhenInsert(request.Email);
             if (!emailCheck.IsSuccessful)
+            {
                 return emailCheck.ToErrorDataResult<CreatedUserResponse>();
+            }
 
-            User user = _mapper.Map<User>(request);
+            var user = _mapper.Map<User>(request);
             user.Status = true;
 
             HashingHelper.CreatePasswordHash(
                 request.Password,
-                passwordHash: out byte[] passwordHash,
-                passwordSalt: out byte[] passwordSalt
+                passwordHash: out var passwordHash,
+                passwordSalt: out var passwordSalt
             );
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
-            User createdUser = await _userRepository.AddAsync(user);
+            var createdUser = await _userRepository.AddAsync(user);
 
             return Result.Success(_mapper.Map<CreatedUserResponse>(createdUser));
         }

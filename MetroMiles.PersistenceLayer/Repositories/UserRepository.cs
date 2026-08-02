@@ -5,10 +5,7 @@ using MetroMiles.PersistenceLayer.Context;
 
 namespace MetroMiles.PersistenceLayer.Repositories;
 
-public class UserRepository : EfRepositoryBase<User, int, BaseDbContext>, IUserRepository
+public class UserRepository(BaseDbContext context) : EfRepositoryBase<User, int, BaseDbContext>(context), IUserRepository
 {
-    public UserRepository(BaseDbContext context) : base(context)
-    {
-    }
 }
 

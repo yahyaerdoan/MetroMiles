@@ -20,33 +20,33 @@ public class BrandsController : BaseController
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] CreateBrandCommand createBrandCommand)
     {
-        OperationDataResult<CreatedBrandResponse> result = await Mediator.Send(createBrandCommand, HttpContext.RequestAborted);
+        var result = await Mediator.Send(createBrandCommand, HttpContext.RequestAborted);
         return result.ToActionResult(HttpContext);
     }
     [HttpGet]
     public async Task<IActionResult> GetList([FromQuery] PageRequest pageRequest)
     {
         GetListBrandQuery getListBrandQuery = new() { PageRequest = pageRequest };
-        OperationDataResult<GetListResponse<GetListBrandListItemDto>> result = await Mediator.Send(getListBrandQuery, HttpContext.RequestAborted);
+        var result = await Mediator.Send(getListBrandQuery, HttpContext.RequestAborted);
         return result.ToActionResult(HttpContext);
     }
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
         GetByIdBrandQuery getByIdBrandQuery = new() { Id = id };
-        OperationDataResult<GetByIdBrandResponse> result = await Mediator.Send(getByIdBrandQuery, HttpContext.RequestAborted);
+        var result = await Mediator.Send(getByIdBrandQuery, HttpContext.RequestAborted);
         return result.ToActionResult(HttpContext);
     }
     [HttpPut]
     public async Task<IActionResult> Update([FromBody] UpdateBrandCommand updateBrandCommand)
     {
-        OperationDataResult<UpdatedBrandResponse> result = await Mediator.Send(updateBrandCommand, HttpContext.RequestAborted);
+        var result = await Mediator.Send(updateBrandCommand, HttpContext.RequestAborted);
         return result.ToActionResult(HttpContext);
     }
     [HttpDelete]
     public async Task<IActionResult> Delete([FromQuery] DeleteBrandCommand deleteBrandCommand)
     {
-        OperationDataResult<DeletedBrandResponse> result = await Mediator.Send(deleteBrandCommand, HttpContext.RequestAborted);
+        var result = await Mediator.Send(deleteBrandCommand, HttpContext.RequestAborted);
         return result.ToActionResult(HttpContext);
     }
 }

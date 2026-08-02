@@ -5,9 +5,6 @@ using MetroMiles.PersistenceLayer.Context;
 
 namespace MetroMiles.PersistenceLayer.Repositories;
 
-public class OneTimePasswordAuthenticatorRepository : EfRepositoryBase<OneTimePasswordAuthenticator, int, BaseDbContext>, IOneTimePasswordAuthenticatorRepository
+public class OneTimePasswordAuthenticatorRepository(BaseDbContext context) : EfRepositoryBase<OneTimePasswordAuthenticator, int, BaseDbContext>(context), IOneTimePasswordAuthenticatorRepository
 {
-    public OneTimePasswordAuthenticatorRepository(BaseDbContext context) : base(context)
-    {
-    }
 }

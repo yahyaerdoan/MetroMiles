@@ -8,21 +8,14 @@ using ResultHandler.Facade;
 
 namespace MetroMiles.ApplicationLayer.Features.Brands.Rules;
 
-public class BrandBusinessRules : BaseBusinessRules
+public class BrandBusinessRules(IBrandRepository brandRepository) : BaseBusinessRules
 {
-    private readonly IBrandRepository _brandRepository;
-
-    public BrandBusinessRules(IBrandRepository brandRepository)
-    {
-        _brandRepository = brandRepository;
-    }
+    private readonly IBrandRepository _brandRepository = brandRepository;
 
     public async Task<IOperationResult> BrandNameCannotBeDuplicatedWhenInserted(string name)
     {
-        // ToLower() (no CultureInfo/StringComparison overload) is the one case-folding form EF Core
-        // translates to SQL (LOWER(...)) — it works regardless of the column's collation, unlike
-        // EF.Functions.Like/Contains/== which only end up case-insensitive if the collation is.
-        var result = await _brandRepository.GetAsync(predicate: b => b.Name.ToLower() == name.ToLower());
+        var normalizedName = name.ToUpperInvariant();
+        var result = await _brandRepository.GetAsync(predicate: b => b.NormalizedName == normalizedName);
         return result != null ? Result.BadRequest(BrandMessages.BrandNameExists) : Result.Success();
     }
 

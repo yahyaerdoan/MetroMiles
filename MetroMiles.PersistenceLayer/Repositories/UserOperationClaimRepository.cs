@@ -6,17 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MetroMiles.PersistenceLayer.Repositories;
 
-public class UserOperationClaimRepository : EfRepositoryBase<UserOperationClaim, int, BaseDbContext>, IUserOperationClaimRepository
+public class UserOperationClaimRepository(BaseDbContext context) : EfRepositoryBase<UserOperationClaim, int, BaseDbContext>(context), IUserOperationClaimRepository
 {
-    public UserOperationClaimRepository(BaseDbContext context) : base(context)
-    {
-    }
-
     public async Task<IList<OperationClaim>> GetOperationClaimsByUserIdAsync(int userId)
     {
         var operationClaims = await Query().AsNoTracking()
             .Where(u => u.UserId == userId)
-            .Select(o => new OperationClaim { Id = o.OperationClaimId, Name = o.OperationClaim.Name })
+            .Select(o => new OperationClaim { Id = o.OperationClaimId, Name = o.OperationClaim.Name})
             .ToListAsync();
         return operationClaims;
     }

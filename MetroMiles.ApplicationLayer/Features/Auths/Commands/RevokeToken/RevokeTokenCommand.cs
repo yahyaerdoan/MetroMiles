@@ -16,12 +16,14 @@ public class RevokeTokenCommand : IRequest<OperationResult>
     {
         public async Task<OperationResult> Handle(RevokeTokenCommand request, CancellationToken cancellationToken)
         {
-            Core.SecurityLayer.Entities.RefreshToken? existingToken = await refreshTokenRepository.GetAsync(
+            var existingToken = await refreshTokenRepository.GetAsync(
                 predicate: rt => rt.Token == request.Token,
                 cancellationToken: cancellationToken);
 
             if (existingToken is null || existingToken.Revoked is not null || existingToken.Expires <= DateTime.UtcNow)
+            {
                 return Result.Unauthorized("Invalid or expired refresh token.");
+            }
 
             existingToken.Revoked = DateTime.UtcNow;
             existingToken.RevokedByIp = request.IpAddress;

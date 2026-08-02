@@ -5,9 +5,6 @@ using MetroMiles.PersistenceLayer.Context;
 
 namespace MetroMiles.PersistenceLayer.Repositories;
 
-public class CarRepository : EfRepositoryBase<Car, Guid, BaseDbContext>, ICarRepository
+public class CarRepository(BaseDbContext context) : EfRepositoryBase<Car, Guid, BaseDbContext>(context), ICarRepository
 {
-    public CarRepository(BaseDbContext context) : base(context)
-    {
-    }
 }
