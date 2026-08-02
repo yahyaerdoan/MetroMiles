@@ -7,6 +7,7 @@ public class UpdatedUserResponse
     public string LastName { get; set; }
     public string Email { get; set; }
     public bool Status { get; set; }
+    public byte[]? RowVersion { get; set; }
 
     public UpdatedUserResponse()
     {

@@ -4,6 +4,7 @@ using Core.PersistenceLayer.Pagings.Paging;
 using MetroMiles.ApplicationLayer.Features.Brands.Commands.Create;
 using MetroMiles.ApplicationLayer.Features.Brands.Commands.Delete;
 using MetroMiles.ApplicationLayer.Features.Brands.Commands.Update;
+using MetroMiles.ApplicationLayer.Features.Brands.Commands.Restore;
 using MetroMiles.ApplicationLayer.Features.Brands.Queries.GetById;
 using MetroMiles.ApplicationLayer.Features.Brands.Queries.GetList;
 using MetroMiles.DomainLayer.Entities;
@@ -27,5 +28,8 @@ public class MappingProfiles : Profile
 
         CreateMap<Brand, DeleteBrandCommand>().ReverseMap();
         CreateMap<Brand, DeletedBrandResponse>().ReverseMap();
+
+        CreateMap<Brand, RestoreBrandCommand>().ReverseMap();
+        CreateMap<Brand, RestoredBrandResponse>().ReverseMap();
     }
 }

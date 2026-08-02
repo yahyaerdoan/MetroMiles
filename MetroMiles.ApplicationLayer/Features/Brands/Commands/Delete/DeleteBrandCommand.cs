@@ -22,10 +22,11 @@ public class DeleteBrandCommand : IRequest<OperationDataResult<DeletedBrandRespo
     public string[] Roles => [BrandsOperationClaims.Admin, BrandsOperationClaims.Write, BrandsOperationClaims.Delete];
     #endregion
 
-    public class DeleteBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper) : IRequestHandler<DeleteBrandCommand, OperationDataResult<DeletedBrandResponse>>
+    public class DeleteBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper, BrandBusinessRules brandBusinessRules) : IRequestHandler<DeleteBrandCommand, OperationDataResult<DeletedBrandResponse>>
     {
         private readonly IBrandRepository _brandRepository = brandRepository;
         private readonly IMapper _mapper = mapper;
+        private readonly BrandBusinessRules _brandBusinessRules = brandBusinessRules;
 
         public async Task<OperationDataResult<DeletedBrandResponse>> Handle(DeleteBrandCommand request, CancellationToken cancellationToken)
         {
@@ -34,6 +35,12 @@ public class DeleteBrandCommand : IRequest<OperationDataResult<DeletedBrandRespo
             if (!existenceCheck.IsSuccessful)
             {
                 return existenceCheck.ToErrorDataResult<DeletedBrandResponse>();
+            }
+
+            var inUseCheck = await _brandBusinessRules.BrandShouldNotBeInUseWhenDeleted(request.Id);
+            if (!inUseCheck.IsSuccessful)
+            {
+                return inUseCheck.ToErrorDataResult<DeletedBrandResponse>();
             }
 
             await _brandRepository.DeleteAsync(existenceCheck.Data);

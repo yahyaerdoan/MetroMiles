@@ -3,6 +3,7 @@ using Core.ApplicationLayer.Responses.GetList;
 using Core.PersistenceLayer.Pagings.Paging;
 using MetroMiles.ApplicationLayer.Features.Fuels.Commands.Create;
 using MetroMiles.ApplicationLayer.Features.Fuels.Commands.Delete;
+using MetroMiles.ApplicationLayer.Features.Fuels.Commands.Restore;
 using MetroMiles.ApplicationLayer.Features.Fuels.Commands.Update;
 using MetroMiles.ApplicationLayer.Features.Fuels.Queries.GetById;
 using MetroMiles.ApplicationLayer.Features.Fuels.Queries.GetList;
@@ -27,5 +28,8 @@ public class MappingProfiles : Profile
 
         CreateMap<Fuel, DeleteFuelCommand>().ReverseMap();
         CreateMap<Fuel, DeletedFuelResponse>().ReverseMap();
+
+        CreateMap<Fuel, RestoreFuelCommand>().ReverseMap();
+        CreateMap<Fuel, RestoredFuelResponse>().ReverseMap();
     }
 }

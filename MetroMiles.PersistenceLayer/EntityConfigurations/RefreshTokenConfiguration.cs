@@ -22,6 +22,7 @@ public class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
         builder.Property(rt => rt.CreatedDate).HasColumnName("CreatedDate").IsRequired();
         builder.Property(rt => rt.UpdatedDate).HasColumnName("UpdatedDate");
         builder.Property(rt => rt.DeletedDate).HasColumnName("DeletedDate");
+        builder.Ignore(rt => rt.RowVersion);
 
         builder.HasQueryFilter(rt => !rt.DeletedDate.HasValue);
 

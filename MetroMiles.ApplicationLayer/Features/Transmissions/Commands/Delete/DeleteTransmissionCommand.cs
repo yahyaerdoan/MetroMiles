@@ -16,11 +16,12 @@ public class DeleteTransmissionCommand : IRequest<OperationDataResult<DeletedTra
     public Guid Id { get; set; }
     public string[] Roles => [TransmissionsOperationClaims.Admin, TransmissionsOperationClaims.Write, TransmissionsOperationClaims.Delete];
 
-    public class DeleteTransmissionCommandHandler(ITransmissionRepository transmissionRepository, IMapper mapper)
+    public class DeleteTransmissionCommandHandler(ITransmissionRepository transmissionRepository, IMapper mapper, TransmissionBusinessRules transmissionBusinessRules)
         : IRequestHandler<DeleteTransmissionCommand, OperationDataResult<DeletedTransmissionResponse>>
     {
         private readonly ITransmissionRepository _transmissionRepository = transmissionRepository;
         private readonly IMapper _mapper = mapper;
+        private readonly TransmissionBusinessRules _transmissionBusinessRules = transmissionBusinessRules;
 
         public async Task<OperationDataResult<DeletedTransmissionResponse>> Handle(DeleteTransmissionCommand request, CancellationToken cancellationToken)
         {
@@ -29,6 +30,12 @@ public class DeleteTransmissionCommand : IRequest<OperationDataResult<DeletedTra
             if (!existenceCheck.IsSuccessful)
             {
                 return existenceCheck.ToErrorDataResult<DeletedTransmissionResponse>();
+            }
+
+            var inUseCheck = await _transmissionBusinessRules.TransmissionShouldNotBeInUseWhenDeleted(request.Id);
+            if (!inUseCheck.IsSuccessful)
+            {
+                return inUseCheck.ToErrorDataResult<DeletedTransmissionResponse>();
             }
 
             await _transmissionRepository.DeleteAsync(existenceCheck.Data);

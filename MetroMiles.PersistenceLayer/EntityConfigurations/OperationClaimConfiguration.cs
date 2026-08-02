@@ -21,6 +21,7 @@ public class OperationClaimConfiguration : IEntityTypeConfiguration<OperationCla
         builder.Property(oc => oc.CreatedDate).HasColumnName("CreatedDate").IsRequired();
         builder.Property(oc => oc.UpdatedDate).HasColumnName("UpdatedDate");
         builder.Property(oc => oc.DeletedDate).HasColumnName("DeletedDate");
+        builder.Ignore(oc => oc.RowVersion);
 
         builder.HasQueryFilter(oc => !oc.DeletedDate.HasValue);
 

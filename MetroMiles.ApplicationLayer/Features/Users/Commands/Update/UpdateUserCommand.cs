@@ -17,6 +17,7 @@ public class UpdateUserCommand : IRequest<OperationDataResult<UpdatedUserRespons
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
+    public byte[]? RowVersion { get; set; }
     public string[] Roles => [UsersOperationClaims.Admin, UsersOperationClaims.Write, UsersOperationClaims.Update];
 
     public class UpdateUserCommandHandler(IUserRepository userRepository, IMapper mapper, UserBusinessRules userBusinessRules)
@@ -29,6 +30,12 @@ public class UpdateUserCommand : IRequest<OperationDataResult<UpdatedUserRespons
             if (!existenceCheck.IsSuccessful)
             {
                 return existenceCheck.ToErrorDataResult<UpdatedUserResponse>();
+            }
+
+            var versionCheck = UserBusinessRules.UserRowVersionShouldMatchWhenUpdated(existenceCheck.Data, request.RowVersion);
+            if (!versionCheck.IsSuccessful)
+            {
+                return versionCheck.ToErrorDataResult<UpdatedUserResponse>();
             }
 
             var emailCheck = await userBusinessRules.UserEmailShouldNotExistsWhenUpdate(request.Id, request.Email);

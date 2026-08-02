@@ -1,6 +1,7 @@
 using Core.ApplicationLayer.Requests.Page;
 using MetroMiles.ApplicationLayer.Features.Users.Commands.Create;
 using MetroMiles.ApplicationLayer.Features.Users.Commands.Delete;
+using MetroMiles.ApplicationLayer.Features.Users.Commands.Restore;
 using MetroMiles.ApplicationLayer.Features.Users.Commands.Update;
 using MetroMiles.ApplicationLayer.Features.Users.Queries.GetById;
 using MetroMiles.ApplicationLayer.Features.Users.Queries.GetList;
@@ -50,6 +51,13 @@ public class UsersController : BaseController
     public async Task<IActionResult> Delete([FromQuery] DeleteUserCommand deleteUserCommand)
     {
         var result = await Mediator.Send(deleteUserCommand, HttpContext.RequestAborted);
+        return result.ToActionResult(HttpContext);
+    }
+
+    [HttpPost("Restore")]
+    public async Task<IActionResult> Restore([FromQuery] RestoreUserCommand restoreUserCommand)
+    {
+        var result = await Mediator.Send(restoreUserCommand, HttpContext.RequestAborted);
         return result.ToActionResult(HttpContext);
     }
 }

@@ -10,6 +10,7 @@ public class Car : Entity<Guid>
     public int Mile { get; set; }
     public short ModelYear { get; set; }
     public string Plate { get; set; }
+    public string? NormalizedPlate { get; set; }
     public short MinFindexScore { get; set; }
     public CarStatus Status { get; set; }
     public virtual Model? Model { get; set; }

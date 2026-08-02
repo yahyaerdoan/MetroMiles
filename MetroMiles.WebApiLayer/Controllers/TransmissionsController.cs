@@ -1,6 +1,7 @@
 using Core.ApplicationLayer.Requests.Page;
 using MetroMiles.ApplicationLayer.Features.Transmissions.Commands.Create;
 using MetroMiles.ApplicationLayer.Features.Transmissions.Commands.Delete;
+using MetroMiles.ApplicationLayer.Features.Transmissions.Commands.Restore;
 using MetroMiles.ApplicationLayer.Features.Transmissions.Commands.Update;
 using MetroMiles.ApplicationLayer.Features.Transmissions.Queries.GetById;
 using MetroMiles.ApplicationLayer.Features.Transmissions.Queries.GetList;
@@ -50,6 +51,13 @@ public class TransmissionsController : BaseController
     public async Task<IActionResult> Delete([FromQuery] DeleteTransmissionCommand deleteTransmissionCommand)
     {
         var result = await Mediator.Send(deleteTransmissionCommand, HttpContext.RequestAborted);
+        return result.ToActionResult(HttpContext);
+    }
+
+    [HttpPost("Restore")]
+    public async Task<IActionResult> Restore([FromQuery] RestoreTransmissionCommand restoreTransmissionCommand)
+    {
+        var result = await Mediator.Send(restoreTransmissionCommand, HttpContext.RequestAborted);
         return result.ToActionResult(HttpContext);
     }
 }

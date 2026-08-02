@@ -437,6 +437,12 @@ namespace MetroMiles.PersistenceLayer.Migrations
                         .HasColumnType("varbinary(max)")
                         .HasColumnName("PasswordSalt");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
+
                     b.Property<bool>("Status")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -549,6 +555,12 @@ namespace MetroMiles.PersistenceLayer.Migrations
                         .HasColumnName("NormalizedName")
                         .HasComputedColumnSql("UPPER([Name])", true);
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
+
                     b.Property<DateTimeOffset?>("UpdatedDate")
                         .HasColumnType("datetimeoffset")
                         .HasColumnName("UpdatedDate");
@@ -600,10 +612,23 @@ namespace MetroMiles.PersistenceLayer.Migrations
                         .HasColumnType("smallint")
                         .HasColumnName("ModelYear");
 
+                    b.Property<string>("NormalizedPlate")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("NormalizedPlate")
+                        .HasComputedColumnSql("UPPER([Plate])", true);
+
                     b.Property<string>("Plate")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
                         .HasColumnName("Plate");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
 
                     b.Property<int>("Status")
                         .HasColumnType("int")
@@ -616,6 +641,12 @@ namespace MetroMiles.PersistenceLayer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ModelId");
+
+                    b.HasIndex("NormalizedPlate")
+                        .HasDatabaseName("IX_Cars_NormalizedPlate");
+
+                    b.HasIndex(new[] { "Plate" }, "UK_Cars_Plate")
+                        .IsUnique();
 
                     b.ToTable("Cars", (string)null);
                 });
@@ -647,6 +678,12 @@ namespace MetroMiles.PersistenceLayer.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("NormalizedName")
                         .HasComputedColumnSql("UPPER([Name])", true);
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
 
                     b.Property<DateTimeOffset?>("UpdatedDate")
                         .HasColumnType("datetimeoffset")
@@ -752,6 +789,12 @@ namespace MetroMiles.PersistenceLayer.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("NormalizedName")
                         .HasComputedColumnSql("UPPER([Name])", true);
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
 
                     b.Property<DateTimeOffset?>("UpdatedDate")
                         .HasColumnType("datetimeoffset")

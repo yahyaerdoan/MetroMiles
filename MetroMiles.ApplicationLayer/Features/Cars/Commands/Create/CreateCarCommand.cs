@@ -1,5 +1,7 @@
 using AutoMapper;
 using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
+using Core.ApplicationLayer.Pipelines.Loggings.Abstractions;
+using Core.ApplicationLayer.Pipelines.Transactions.Abstractions;
 using MediatR;
 using MetroMiles.ApplicationLayer.Features.Cars.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
@@ -14,7 +16,7 @@ using static MetroMiles.ApplicationLayer.Features.Cars.Constants.CarsOperationCl
 
 namespace MetroMiles.ApplicationLayer.Features.Cars.Commands.Create;
 
-public class CreateCarCommand : IRequest<OperationDataResult<CreatedCarResponse>>, ISecureAddRequest
+public class CreateCarCommand : IRequest<OperationDataResult<CreatedCarResponse>>, ITransactionAddRequest, ILogAddRequest, ISecureAddRequest
 {
     public Guid ModelId { get; set; }
     public int Kilometer { get; set; }
@@ -37,6 +39,12 @@ public class CreateCarCommand : IRequest<OperationDataResult<CreatedCarResponse>
             if (!modelCheck.IsSuccessful)
             {
                 return modelCheck.ToErrorDataResult<CreatedCarResponse>();
+            }
+
+            var plateCheck = await _carBusinessRules.PlateCannotBeDuplicatedWhenInserted(request.Plate);
+            if (!plateCheck.IsSuccessful)
+            {
+                return plateCheck.ToErrorDataResult<CreatedCarResponse>();
             }
 
             var car = _mapper.Map<Car>(request);

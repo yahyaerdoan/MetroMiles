@@ -22,6 +22,7 @@ public class UpdateCarCommand : IRequest<OperationDataResult<UpdatedCarResponse>
     public required string Plate { get; set; }
     public short MinFindexScore { get; set; }
     public CarStatus Status { get; set; }
+    public byte[]? RowVersion { get; set; }
     public string[] Roles => [CarsOperationClaims.Admin, CarsOperationClaims.Write, CarsOperationClaims.Update];
 
     public class UpdateCarCommandHandler(ICarRepository carRepository, IMapper mapper, CarBusinessRules carBusinessRules) : IRequestHandler<UpdateCarCommand, OperationDataResult<UpdatedCarResponse>>
@@ -39,10 +40,28 @@ public class UpdateCarCommand : IRequest<OperationDataResult<UpdatedCarResponse>
                 return existenceCheck.ToErrorDataResult<UpdatedCarResponse>();
             }
 
+            var versionCheck = CarBusinessRules.CarRowVersionShouldMatchWhenUpdated(existenceCheck.Data, request.RowVersion);
+            if (!versionCheck.IsSuccessful)
+            {
+                return versionCheck.ToErrorDataResult<UpdatedCarResponse>();
+            }
+
             var modelCheck = await _carBusinessRules.ModelIdShouldExistWhenSelected(request.ModelId);
             if (!modelCheck.IsSuccessful)
             {
                 return modelCheck.ToErrorDataResult<UpdatedCarResponse>();
+            }
+
+            var plateCheck = await _carBusinessRules.PlateCannotBeDuplicatedWhenUpdated(request.Id, request.Plate);
+            if (!plateCheck.IsSuccessful)
+            {
+                return plateCheck.ToErrorDataResult<UpdatedCarResponse>();
+            }
+
+            var rentedGuardCheck = CarBusinessRules.PlateAndModelCannotChangeWhileRented(existenceCheck.Data, request.Plate, request.ModelId);
+            if (!rentedGuardCheck.IsSuccessful)
+            {
+                return rentedGuardCheck.ToErrorDataResult<UpdatedCarResponse>();
             }
 
             var car = _mapper.Map(request, existenceCheck.Data);

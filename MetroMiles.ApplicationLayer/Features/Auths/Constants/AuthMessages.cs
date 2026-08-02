@@ -12,4 +12,6 @@ public class AuthMessages
     public const string InvalidRefreshToken = "Invalid refresh token.";
     public const string UserMailAlreadyExists = "User mail already exists.";
     public const string PasswordDontMatch = "Password don't match.";
+    public const string UserNotDeleted = "User is not deleted.";
+    public const string UserModifiedByAnotherUser = "User has been modified since you loaded it. Reload and try again.";
 }

@@ -15,12 +15,14 @@ public class UpdateFuelCommand : IRequest<OperationDataResult<UpdatedFuelRespons
 {
     public Guid Id { get; set; }
     public required string Name { get; set; }
+    public byte[]? RowVersion { get; set; }
     public string[] Roles => [FuelsOperationClaims.Admin, FuelsOperationClaims.Write, FuelsOperationClaims.Update];
 
-    public class UpdateFuelCommandHandler(IFuelRepository fuelRepository, IMapper mapper) : IRequestHandler<UpdateFuelCommand, OperationDataResult<UpdatedFuelResponse>>
+    public class UpdateFuelCommandHandler(IFuelRepository fuelRepository, IMapper mapper, FuelBusinessRules fuelBusinessRules) : IRequestHandler<UpdateFuelCommand, OperationDataResult<UpdatedFuelResponse>>
     {
         private readonly IFuelRepository _fuelRepository = fuelRepository;
         private readonly IMapper _mapper = mapper;
+        private readonly FuelBusinessRules _fuelBusinessRules = fuelBusinessRules;
 
         public async Task<OperationDataResult<UpdatedFuelResponse>> Handle(UpdateFuelCommand request, CancellationToken cancellationToken)
         {
@@ -29,6 +31,18 @@ public class UpdateFuelCommand : IRequest<OperationDataResult<UpdatedFuelRespons
             if (!existenceCheck.IsSuccessful)
             {
                 return existenceCheck.ToErrorDataResult<UpdatedFuelResponse>();
+            }
+
+            var versionCheck = FuelBusinessRules.FuelRowVersionShouldMatchWhenUpdated(existenceCheck.Data, request.RowVersion);
+            if (!versionCheck.IsSuccessful)
+            {
+                return versionCheck.ToErrorDataResult<UpdatedFuelResponse>();
+            }
+
+            var duplicateCheck = await _fuelBusinessRules.FuelNameCannotBeDuplicatedWhenUpdated(request.Id, request.Name);
+            if (!duplicateCheck.IsSuccessful)
+            {
+                return duplicateCheck.ToErrorDataResult<UpdatedFuelResponse>();
             }
 
             var fuel = _mapper.Map(request, existenceCheck.Data);

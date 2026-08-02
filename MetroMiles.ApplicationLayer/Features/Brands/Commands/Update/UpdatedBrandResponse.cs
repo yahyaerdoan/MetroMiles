@@ -7,5 +7,5 @@ public class UpdatedBrandResponse
     public required string Description { get; set; }
     public DateTimeOffset CreatedDate { get; set; }
     public DateTimeOffset UpdatedDate { get; set; }
-
+    public byte[]? RowVersion { get; set; }
 }

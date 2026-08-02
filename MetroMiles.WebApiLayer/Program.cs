@@ -86,6 +86,16 @@ else
     builder.Services.AddStackExchangeRedisCache(opt => opt.Configuration = redisConnection);
 }
 
+var databaseConnection = builder.Configuration.GetConnectionString("FakeDatabaseName")
+    ?? throw new InvalidOperationException("\"ConnectionStrings:FakeDatabaseName\" is not configured.");
+
+var healthChecksBuilder = builder.Services.AddHealthChecks()
+    .AddSqlServer(databaseConnection, name: "sql-server");
+if (!string.IsNullOrWhiteSpace(redisConnection))
+{
+    healthChecksBuilder.AddRedis(redisConnection, name: "redis");
+}
+
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi(options =>
@@ -129,5 +139,6 @@ app.UseAuthorization();
 app.UseRateLimiter();
 
 app.MapControllers();
+app.MapHealthChecks("/health");
 
 app.Run();

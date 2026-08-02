@@ -1,5 +1,7 @@
 using AutoMapper;
 using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
+using Core.ApplicationLayer.Pipelines.Loggings.Abstractions;
+using Core.ApplicationLayer.Pipelines.Transactions.Abstractions;
 using MediatR;
 using MetroMiles.ApplicationLayer.Features.Fuels.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
@@ -13,7 +15,7 @@ using static MetroMiles.ApplicationLayer.Features.Fuels.Constants.FuelsOperation
 
 namespace MetroMiles.ApplicationLayer.Features.Fuels.Commands.Create;
 
-public class CreateFuelCommand : IRequest<OperationDataResult<CreatedFuelResponse>>, ISecureAddRequest
+public class CreateFuelCommand : IRequest<OperationDataResult<CreatedFuelResponse>>, ITransactionAddRequest, ILogAddRequest, ISecureAddRequest
 {
     public required string Name { get; set; }
     public string[] Roles => [Admin, Write, Add];

@@ -3,6 +3,7 @@ using Core.ApplicationLayer.Responses.GetList;
 using Core.PersistenceLayer.Pagings.Paging;
 using MetroMiles.ApplicationLayer.Features.Transmissions.Commands.Create;
 using MetroMiles.ApplicationLayer.Features.Transmissions.Commands.Delete;
+using MetroMiles.ApplicationLayer.Features.Transmissions.Commands.Restore;
 using MetroMiles.ApplicationLayer.Features.Transmissions.Commands.Update;
 using MetroMiles.ApplicationLayer.Features.Transmissions.Queries.GetById;
 using MetroMiles.ApplicationLayer.Features.Transmissions.Queries.GetList;
@@ -27,5 +28,8 @@ public class MappingProfiles : Profile
 
         CreateMap<Transmission, DeleteTransmissionCommand>().ReverseMap();
         CreateMap<Transmission, DeletedTransmissionResponse>().ReverseMap();
+
+        CreateMap<Transmission, RestoreTransmissionCommand>().ReverseMap();
+        CreateMap<Transmission, RestoredTransmissionResponse>().ReverseMap();
     }
 }

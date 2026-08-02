@@ -23,6 +23,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.CreatedDate).HasColumnName("CreatedDate").IsRequired();
         builder.Property(u => u.UpdatedDate).HasColumnName("UpdatedDate");
         builder.Property(u => u.DeletedDate).HasColumnName("DeletedDate");
+        builder.Property(u => u.RowVersion).HasColumnName("RowVersion").IsRowVersion();
 
         // Database-computed, always-in-sync uppercase mirror of Email. Lets uniqueness/lookup
         // queries compare on a plain indexed column instead of calling ToLower()/ToUpper() inside

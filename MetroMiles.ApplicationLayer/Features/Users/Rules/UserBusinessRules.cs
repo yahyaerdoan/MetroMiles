@@ -40,4 +40,16 @@ public class UserBusinessRules(IUserRepository userRepository) : BaseBusinessRul
         var doesExists = await _userRepository.AnyAsync(predicate: u => u.Id != id && u.NormalizedEmail == normalizedEmail, enableTracking: false);
         return doesExists ? Result.BadRequest(AuthMessages.UserMailAlreadyExists) : Result.Success();
     }
+
+    public static IOperationResult<User> UserShouldBeDeletedWhenRestored(User? user)
+    {
+        if (user is null)
+        {
+            return Result.NotFound<User>(AuthMessages.UserDontExists);
+        }
+        return user.DeletedDate.HasValue ? Result.Success(user) : Result.BadRequest<User>(AuthMessages.UserNotDeleted);
+    }
+
+    public static IOperationResult UserRowVersionShouldMatchWhenUpdated(User existingUser, byte[]? clientRowVersion)
+        => RowVersionShouldMatchWhenUpdated(existingUser.RowVersion, clientRowVersion, AuthMessages.UserModifiedByAnotherUser);
 }

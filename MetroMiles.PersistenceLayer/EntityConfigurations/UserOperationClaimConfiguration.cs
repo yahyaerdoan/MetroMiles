@@ -16,6 +16,7 @@ public class UserOperationClaimConfiguration : IEntityTypeConfiguration<UserOper
         builder.Property(uoc => uoc.CreatedDate).HasColumnName("CreatedDate").IsRequired();
         builder.Property(uoc => uoc.UpdatedDate).HasColumnName("UpdatedDate");
         builder.Property(uoc => uoc.DeletedDate).HasColumnName("DeletedDate");
+        builder.Ignore(uoc => uoc.RowVersion);
 
         builder.HasQueryFilter(uoc => !uoc.DeletedDate.HasValue);
 

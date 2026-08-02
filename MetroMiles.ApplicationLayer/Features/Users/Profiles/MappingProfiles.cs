@@ -4,6 +4,7 @@ using Core.PersistenceLayer.Pagings.Paging;
 using Core.SecurityLayer.Entities;
 using MetroMiles.ApplicationLayer.Features.Users.Commands.Create;
 using MetroMiles.ApplicationLayer.Features.Users.Commands.Delete;
+using MetroMiles.ApplicationLayer.Features.Users.Commands.Restore;
 using MetroMiles.ApplicationLayer.Features.Users.Commands.Update;
 using MetroMiles.ApplicationLayer.Features.Users.Queries.GetById;
 using MetroMiles.ApplicationLayer.Features.Users.Queries.GetList;
@@ -27,5 +28,8 @@ public class MappingProfiles : Profile
 
         CreateMap<User, DeleteUserCommand>().ReverseMap();
         CreateMap<User, DeletedUserResponse>().ReverseMap();
+
+        CreateMap<User, RestoreUserCommand>().ReverseMap();
+        CreateMap<User, RestoredUserResponse>().ReverseMap();
     }
 }

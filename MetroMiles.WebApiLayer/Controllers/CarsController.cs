@@ -1,6 +1,7 @@
 using Core.ApplicationLayer.Requests.Page;
 using MetroMiles.ApplicationLayer.Features.Cars.Commands.Create;
 using MetroMiles.ApplicationLayer.Features.Cars.Commands.Delete;
+using MetroMiles.ApplicationLayer.Features.Cars.Commands.Restore;
 using MetroMiles.ApplicationLayer.Features.Cars.Commands.Update;
 using MetroMiles.ApplicationLayer.Features.Cars.Queries.GetById;
 using MetroMiles.ApplicationLayer.Features.Cars.Queries.GetList;
@@ -50,6 +51,13 @@ public class CarsController : BaseController
     public async Task<IActionResult> Delete([FromQuery] DeleteCarCommand deleteCarCommand)
     {
         var result = await Mediator.Send(deleteCarCommand, HttpContext.RequestAborted);
+        return result.ToActionResult(HttpContext);
+    }
+
+    [HttpPost("Restore")]
+    public async Task<IActionResult> Restore([FromQuery] RestoreCarCommand restoreCarCommand)
+    {
+        var result = await Mediator.Send(restoreCarCommand, HttpContext.RequestAborted);
         return result.ToActionResult(HttpContext);
     }
 }

@@ -18,16 +18,18 @@ public class UpdateBrandCommand : IRequest<OperationDataResult<UpdatedBrandRespo
     public Guid Id { get; set; }
     public required string Name { get; set; }
     public required string Description { get; set; }
+    public byte[]? RowVersion { get; set; }
     public string CacheKey => "";
     public bool ByPassCache => false;
     public string? CacheGroupKey => "GetBrands";
     public string[] Roles => [BrandsOperationClaims.Admin, BrandsOperationClaims.Write, BrandsOperationClaims.Update];
     #endregion
 
-    public class UpdateBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper) : IRequestHandler<UpdateBrandCommand, OperationDataResult<UpdatedBrandResponse>>
+    public class UpdateBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper, BrandBusinessRules brandBusinessRules) : IRequestHandler<UpdateBrandCommand, OperationDataResult<UpdatedBrandResponse>>
     {
         private readonly IBrandRepository _brandRepository = brandRepository;
         private readonly IMapper _mapper = mapper;
+        private readonly BrandBusinessRules _brandBusinessRules = brandBusinessRules;
 
         public async Task<OperationDataResult<UpdatedBrandResponse>> Handle(UpdateBrandCommand request, CancellationToken cancellationToken)
         {
@@ -36,6 +38,18 @@ public class UpdateBrandCommand : IRequest<OperationDataResult<UpdatedBrandRespo
             if (!existenceCheck.IsSuccessful)
             {
                 return existenceCheck.ToErrorDataResult<UpdatedBrandResponse>();
+            }
+
+            var versionCheck = BrandBusinessRules.BrandRowVersionShouldMatchWhenUpdated(existenceCheck.Data, request.RowVersion);
+            if (!versionCheck.IsSuccessful)
+            {
+                return versionCheck.ToErrorDataResult<UpdatedBrandResponse>();
+            }
+
+            var duplicateCheck = await _brandBusinessRules.BrandNameCannotBeDuplicatedWhenUpdated(request.Id, request.Name);
+            if (!duplicateCheck.IsSuccessful)
+            {
+                return duplicateCheck.ToErrorDataResult<UpdatedBrandResponse>();
             }
 
             var brand = _mapper.Map(request, existenceCheck.Data);

@@ -12,4 +12,5 @@ public class UpdatedCarResponse
     public required string Plate { get; set; }
     public short MinFindexScore { get; set; }
     public CarStatus Status { get; set; }
+    public byte[]? RowVersion { get; set; }
 }

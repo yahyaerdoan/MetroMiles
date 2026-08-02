@@ -1,6 +1,7 @@
 using Core.ApplicationLayer.Requests.Page;
 using MetroMiles.ApplicationLayer.Features.Fuels.Commands.Create;
 using MetroMiles.ApplicationLayer.Features.Fuels.Commands.Delete;
+using MetroMiles.ApplicationLayer.Features.Fuels.Commands.Restore;
 using MetroMiles.ApplicationLayer.Features.Fuels.Commands.Update;
 using MetroMiles.ApplicationLayer.Features.Fuels.Queries.GetById;
 using MetroMiles.ApplicationLayer.Features.Fuels.Queries.GetList;
@@ -50,6 +51,13 @@ public class FuelsController : BaseController
     public async Task<IActionResult> Delete([FromQuery] DeleteFuelCommand deleteFuelCommand)
     {
         var result = await Mediator.Send(deleteFuelCommand, HttpContext.RequestAborted);
+        return result.ToActionResult(HttpContext);
+    }
+
+    [HttpPost("Restore")]
+    public async Task<IActionResult> Restore([FromQuery] RestoreFuelCommand restoreFuelCommand)
+    {
+        var result = await Mediator.Send(restoreFuelCommand, HttpContext.RequestAborted);
         return result.ToActionResult(HttpContext);
     }
 }

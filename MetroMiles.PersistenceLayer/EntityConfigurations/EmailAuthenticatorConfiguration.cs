@@ -17,6 +17,7 @@ public class EmailAuthenticatorConfiguration : IEntityTypeConfiguration<EmailAut
         builder.Property(ea => ea.CreatedDate).HasColumnName("CreatedDate").IsRequired();
         builder.Property(ea => ea.UpdatedDate).HasColumnName("UpdatedDate");
         builder.Property(ea => ea.DeletedDate).HasColumnName("DeletedDate");
+        builder.Ignore(ea => ea.RowVersion);
 
         builder.HasQueryFilter(ea => !ea.DeletedDate.HasValue);
 

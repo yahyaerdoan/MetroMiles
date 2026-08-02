@@ -2,6 +2,7 @@ using Core.ApplicationLayer.Requests.Page;
 using Core.ApplicationLayer.Responses.GetList;
 using MetroMiles.ApplicationLayer.Features.Brands.Commands.Create;
 using MetroMiles.ApplicationLayer.Features.Brands.Commands.Delete;
+using MetroMiles.ApplicationLayer.Features.Brands.Commands.Restore;
 using MetroMiles.ApplicationLayer.Features.Brands.Commands.Update;
 using MetroMiles.ApplicationLayer.Features.Brands.Queries.GetById;
 using MetroMiles.ApplicationLayer.Features.Brands.Queries.GetList;
@@ -47,6 +48,12 @@ public class BrandsController : BaseController
     public async Task<IActionResult> Delete([FromQuery] DeleteBrandCommand deleteBrandCommand)
     {
         var result = await Mediator.Send(deleteBrandCommand, HttpContext.RequestAborted);
+        return result.ToActionResult(HttpContext);
+    }
+    [HttpPost("Restore")]
+    public async Task<IActionResult> Restore([FromQuery] RestoreBrandCommand restoreBrandCommand)
+    {
+        var result = await Mediator.Send(restoreBrandCommand, HttpContext.RequestAborted);
         return result.ToActionResult(HttpContext);
     }
 }

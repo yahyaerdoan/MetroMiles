@@ -16,10 +16,11 @@ public class DeleteFuelCommand : IRequest<OperationDataResult<DeletedFuelRespons
     public Guid Id { get; set; }
     public string[] Roles => [FuelsOperationClaims.Admin, FuelsOperationClaims.Write, FuelsOperationClaims.Delete];
 
-    public class DeleteFuelCommandHandler(IFuelRepository fuelRepository, IMapper mapper) : IRequestHandler<DeleteFuelCommand, OperationDataResult<DeletedFuelResponse>>
+    public class DeleteFuelCommandHandler(IFuelRepository fuelRepository, IMapper mapper, FuelBusinessRules fuelBusinessRules) : IRequestHandler<DeleteFuelCommand, OperationDataResult<DeletedFuelResponse>>
     {
         private readonly IFuelRepository _fuelRepository = fuelRepository;
         private readonly IMapper _mapper = mapper;
+        private readonly FuelBusinessRules _fuelBusinessRules = fuelBusinessRules;
 
         public async Task<OperationDataResult<DeletedFuelResponse>> Handle(DeleteFuelCommand request, CancellationToken cancellationToken)
         {
@@ -28,6 +29,12 @@ public class DeleteFuelCommand : IRequest<OperationDataResult<DeletedFuelRespons
             if (!existenceCheck.IsSuccessful)
             {
                 return existenceCheck.ToErrorDataResult<DeletedFuelResponse>();
+            }
+
+            var inUseCheck = await _fuelBusinessRules.FuelShouldNotBeInUseWhenDeleted(request.Id);
+            if (!inUseCheck.IsSuccessful)
+            {
+                return inUseCheck.ToErrorDataResult<DeletedFuelResponse>();
             }
 
             await _fuelRepository.DeleteAsync(existenceCheck.Data);

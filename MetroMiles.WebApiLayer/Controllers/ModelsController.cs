@@ -1,6 +1,7 @@
 using Core.ApplicationLayer.Requests.Page;
 using Core.ApplicationLayer.Responses.GetList;
 using Core.PersistenceLayer.Dynamics.Dynamic;
+using MetroMiles.ApplicationLayer.Features.Models.Queries.GetById;
 using MetroMiles.ApplicationLayer.Features.Models.Queries.GetList;
 using MetroMiles.ApplicationLayer.Features.Models.Queries.GetListByDynamicQuery;
 using MetroMiles.WebApiLayer.Controllers.BaseControllers;
@@ -20,6 +21,13 @@ public class ModelsController : BaseController
     {
         GetListModelQuery getListModelQuery = new() { PageRequest = pageRequest };
         var result = await Mediator.Send(getListModelQuery, HttpContext.RequestAborted);
+        return result.ToActionResult(HttpContext);
+    }
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById([FromRoute] Guid id)
+    {
+        GetByIdModelQuery getByIdModelQuery = new() { Id = id };
+        var result = await Mediator.Send(getByIdModelQuery, HttpContext.RequestAborted);
         return result.ToActionResult(HttpContext);
     }
     [HttpPost("GetList/ByDynamic")]

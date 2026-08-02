@@ -10,9 +10,6 @@ public class FuelConfiguration : IEntityTypeConfiguration<Fuel>
     {
         builder.ToTable("Fuels").HasKey(f => f.Id);
 
-        // NEWSEQUENTIALID() backstops EF Core's client-side sequential-GUID generation (already the
-        // SQL Server provider default when Id is left unset) at the DB level too, so the clustered
-        // index still avoids random-GUID fragmentation even for rows inserted outside of EF Core.
         builder.Property(f => f.Id).HasColumnName("Id").HasDefaultValueSql("NEWSEQUENTIALID()").IsRequired();
 
         builder.Property(f => f.Name).HasColumnName("Name").HasMaxLength(450).IsRequired();
@@ -20,6 +17,7 @@ public class FuelConfiguration : IEntityTypeConfiguration<Fuel>
         builder.Property(f => f.CreatedDate).HasColumnName("CreatedDate").IsRequired();
         builder.Property(f => f.UpdatedDate).HasColumnName("UpdatedDate");
         builder.Property(f => f.DeletedDate).HasColumnName("DeletedDate");
+        builder.Property(f => f.RowVersion).HasColumnName("RowVersion").IsRowVersion();
 
         // Database-computed, always-in-sync uppercase mirror of Name. Lets uniqueness/lookup
         // queries compare on a plain indexed column instead of calling ToLower()/ToUpper() inside

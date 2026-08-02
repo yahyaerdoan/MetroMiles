@@ -17,6 +17,7 @@ public class OneTimePasswordAuthenticatorConfiguration : IEntityTypeConfiguratio
         builder.Property(oa => oa.CreatedDate).HasColumnName("CreatedDate").IsRequired();
         builder.Property(oa => oa.UpdatedDate).HasColumnName("UpdatedDate");
         builder.Property(oa => oa.DeletedDate).HasColumnName("DeletedDate");
+        builder.Ignore(oa => oa.RowVersion);
 
         builder.HasQueryFilter(oa => !oa.DeletedDate.HasValue);
 

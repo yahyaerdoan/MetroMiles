@@ -1,5 +1,7 @@
 using AutoMapper;
 using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
+using Core.ApplicationLayer.Pipelines.Loggings.Abstractions;
+using Core.ApplicationLayer.Pipelines.Transactions.Abstractions;
 using Core.SecurityLayer.Entities;
 using Core.SecurityLayer.Hashings;
 using MediatR;
@@ -12,7 +14,7 @@ using static MetroMiles.ApplicationLayer.Features.Users.Constants.UsersOperation
 
 namespace MetroMiles.ApplicationLayer.Features.Users.Commands.Create;
 
-public class CreateUserCommand : IRequest<OperationDataResult<CreatedUserResponse>>, ISecureAddRequest
+public class CreateUserCommand : IRequest<OperationDataResult<CreatedUserResponse>>, ITransactionAddRequest, ILogAddRequest, ISecureAddRequest
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
