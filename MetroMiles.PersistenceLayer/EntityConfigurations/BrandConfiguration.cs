@@ -10,7 +10,10 @@ public class BrandConfiguration : IEntityTypeConfiguration<Brand>
     {
         builder.ToTable("Brands").HasKey(b => b.Id);
 
-        builder.Property(b => b.Id).HasColumnName("Id").IsRequired();
+        // NEWSEQUENTIALID() backstops EF Core's client-side sequential-GUID generation (already the
+        // SQL Server provider default when Id is left unset) at the DB level too, so the clustered
+        // index still avoids random-GUID fragmentation even for rows inserted outside of EF Core.
+        builder.Property(b => b.Id).HasColumnName("Id").HasDefaultValueSql("NEWSEQUENTIALID()").IsRequired();
         builder.Property(b => b.Name).HasColumnName("Name").HasMaxLength(450).IsRequired();
         builder.Property(b => b.Description).HasColumnName("Description").IsRequired();
 

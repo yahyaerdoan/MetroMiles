@@ -1,7 +1,10 @@
-using System.Reflection;
 using Core.SecurityLayer.Constants;
 using Core.SecurityLayer.Entities;
-using MetroMiles.ApplicationLayer.Extensions.ServiceRegistrations;
+using MetroMiles.ApplicationLayer.Features.Brands.Constants;
+using MetroMiles.ApplicationLayer.Features.Cars.Constants;
+using MetroMiles.ApplicationLayer.Features.Fuels.Constants;
+using MetroMiles.ApplicationLayer.Features.Transmissions.Constants;
+using MetroMiles.ApplicationLayer.Features.Users.Constants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -26,45 +29,54 @@ public class OperationClaimConfiguration : IEntityTypeConfiguration<OperationCla
         builder.HasData(Seeds);
     }
 
+    // Explicit, hand-maintained (Id, Name) pairs — deliberately NOT built by reflecting over
+    // assembly types. That approach (removed) assigned Ids by enumeration order, which .NET does
+    // not guarantee is stable: the same code could seed different Ids on different machines/builds,
+    // silently reassigning what an already-seeded Id means (e.g. "brands.admin" -> "transmissions.admin").
+    //
+    // Rule for adding a new claim: APPEND it at the end with the next unused Id. Never reuse, reorder,
+    // or renumber existing entries — UserOperationClaim rows reference these Ids, and HasData() diffs
+    // against them by Id on every migration.
+    private static readonly (int Id, string Name)[] s_claims =
+    [
+        (1, GeneralOperationClaims.Admin),
+
+        (2, BrandsOperationClaims.Add),
+        (3, BrandsOperationClaims.Admin),
+        (4, BrandsOperationClaims.Delete),
+        (5, BrandsOperationClaims.Read),
+        (6, BrandsOperationClaims.Update),
+        (7, BrandsOperationClaims.Write),
+
+        (8, CarsOperationClaims.Add),
+        (9, CarsOperationClaims.Admin),
+        (10, CarsOperationClaims.Delete),
+        (11, CarsOperationClaims.Read),
+        (12, CarsOperationClaims.Update),
+        (13, CarsOperationClaims.Write),
+
+        (14, FuelsOperationClaims.Add),
+        (15, FuelsOperationClaims.Admin),
+        (16, FuelsOperationClaims.Delete),
+        (17, FuelsOperationClaims.Read),
+        (18, FuelsOperationClaims.Update),
+        (19, FuelsOperationClaims.Write),
+
+        (20, TransmissionsOperationClaims.Add),
+        (21, TransmissionsOperationClaims.Admin),
+        (22, TransmissionsOperationClaims.Delete),
+        (23, TransmissionsOperationClaims.Read),
+        (24, TransmissionsOperationClaims.Update),
+        (25, TransmissionsOperationClaims.Write),
+
+        (26, UsersOperationClaims.Add),
+        (27, UsersOperationClaims.Admin),
+        (28, UsersOperationClaims.Delete),
+        (29, UsersOperationClaims.Read),
+        (30, UsersOperationClaims.Update),
+        (31, UsersOperationClaims.Write),
+    ];
+
     private static IEnumerable<OperationClaim> Seeds
-    {
-        get
-        {
-            var id = 0;
-
-            yield return new OperationClaim { Id = ++id, Name = GeneralOperationClaims.Admin };
-
-            #region Feature Operation Claims
-            // Assembly.GetTypes()/Type.GetFields() order is unspecified by .NET — without an explicit
-            // sort, the same code can seed different IDs on different machines/builds, silently
-            // reassigning what an already-seeded ID means (e.g. "brands.admin" -> "transmissions.admin").
-            // Sorting by name makes seeding deterministic and reproducible across environments.
-            var featureOperationClaimsTypes = Assembly
-                .GetAssembly(typeof(ApplicationServiceRegistration))!
-                .GetTypes()
-                .Where(
-                    type =>
-                        (type.Namespace?.Contains("Features") == true)
-                        && (type.Namespace?.Contains("Constants") == true)
-                        && type.IsClass
-                        && type.Name.EndsWith("OperationClaims", StringComparison.Ordinal)
-                )
-                .OrderBy(type => type.FullName, StringComparer.Ordinal);
-            foreach (var type in featureOperationClaimsTypes)
-            {
-                var typeFields = type.GetFields(BindingFlags.Public | BindingFlags.Static)
-                    .OrderBy(typeField => typeField.Name, StringComparer.Ordinal);
-                var typeFieldsValues = typeFields.Select(typeField => typeField.GetValue(null)!.ToString()!);
-
-                var featureOperationClaimsToAdd = typeFieldsValues.Select(
-                    value => new OperationClaim { Id = ++id, Name = value }
-                );
-                foreach (var featureOperationClaim in featureOperationClaimsToAdd)
-                {
-                    yield return featureOperationClaim;
-                }
-            }
-            #endregion
-        }
-    }
+        => s_claims.Select(claim => new OperationClaim { Id = claim.Id, Name = claim.Name });
 }

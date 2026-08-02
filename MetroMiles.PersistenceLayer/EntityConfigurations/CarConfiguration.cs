@@ -10,7 +10,10 @@ public class CarConfiguration : IEntityTypeConfiguration<Car>
     {
         builder.ToTable("Cars").HasKey(c => c.Id);
 
-        builder.Property(c => c.Id).HasColumnName("Id").IsRequired();
+        // NEWSEQUENTIALID() backstops EF Core's client-side sequential-GUID generation (already the
+        // SQL Server provider default when Id is left unset) at the DB level too, so the clustered
+        // index still avoids random-GUID fragmentation even for rows inserted outside of EF Core.
+        builder.Property(c => c.Id).HasColumnName("Id").HasDefaultValueSql("NEWSEQUENTIALID()").IsRequired();
 
         builder.Property(c => c.Kilometer).HasColumnName("Kilometer").IsRequired();
         builder.Property(c => c.Mile).HasColumnName("Mile").IsRequired();
