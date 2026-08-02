@@ -19,6 +19,8 @@ public class CreateUserCommand : IRequest<OperationDataResult<CreatedUserRespons
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }
+
+    [SensitiveData]
     public string Password { get; set; }
 
     public CreateUserCommand()

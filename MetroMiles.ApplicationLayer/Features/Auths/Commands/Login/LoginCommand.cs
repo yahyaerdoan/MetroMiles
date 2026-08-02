@@ -20,7 +20,7 @@ public class LoginCommand : IRequest<OperationDataResult<LoggedResponse>>
     public string Password { get; set; } = string.Empty;
     public string IpAddress { get; set; } = string.Empty;
 
-    public class LoginCommandHandler(IUserRepository userRepository, IRefreshTokenRepository refreshTokenRepository, IJwtTokenHelper jwtTokenHelper, TokenOption tokenOptions)
+    public class LoginCommandHandler(IUserRepository userRepository, IRefreshTokenRepository refreshTokenRepository, IJwtTokenHelper jwtTokenHelper)
         : IRequestHandler<LoginCommand, OperationDataResult<LoggedResponse>>
     {
         // Deliberately generic: distinguishing "no such user" from "wrong password" here lets an
@@ -34,7 +34,6 @@ public class LoginCommand : IRequest<OperationDataResult<LoggedResponse>>
                 predicate: u => u.NormalizedEmail == normalizedEmail,
                 include: q => q.Include(u => u.UserOperationClaims).ThenInclude(uoc => uoc.OperationClaim),
                 cancellationToken: cancellationToken);
-
             if (user is null || !HashingHelper.VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
             {
                 return Result.Unauthorized<LoggedResponse>(InvalidCredentialsMessage);
@@ -58,9 +57,9 @@ public class LoginCommand : IRequest<OperationDataResult<LoggedResponse>>
                 await userRepository.UpdateAsync(user);
             }
 
-            // Housekeeping: revoke any refresh tokens this user still holds that have outlived the
-            // configured refresh TTL window but were never used to refresh or explicitly revoked.
-            var staleTokens = await refreshTokenRepository.GetOldRefreshTokensAsync(user.Id, tokenOptions.RefreshTokenTTL);
+            // Housekeeping: mark this user's refresh tokens that have already expired but were never
+            // used to refresh or explicitly revoked as revoked, so they don't linger as "active" rows.
+            var staleTokens = await refreshTokenRepository.GetExpiredRefreshTokensAsync(user.Id);
             foreach (var staleToken in staleTokens)
             {
                 staleToken.Revoked = DateTime.UtcNow;
@@ -71,10 +70,10 @@ public class LoginCommand : IRequest<OperationDataResult<LoggedResponse>>
             IList<OperationClaim> operationClaims = [.. user.UserOperationClaims.Select(uoc => uoc.OperationClaim)];
             var accessToken = jwtTokenHelper.CreateToken(user, operationClaims);
 
-            var refreshToken = jwtTokenHelper.CreateRefreshToken(user, request.IpAddress);
+            var (refreshToken, rawRefreshToken) = jwtTokenHelper.CreateRefreshToken(user, request.IpAddress);
             await refreshTokenRepository.AddAsync(refreshToken);
 
-            return Result.Success(new LoggedResponse(accessToken.Token, accessToken.Expiration, refreshToken.Token));
+            return Result.Success(new LoggedResponse(accessToken.Token, accessToken.Expiration, rawRefreshToken));
         }
     }
 }

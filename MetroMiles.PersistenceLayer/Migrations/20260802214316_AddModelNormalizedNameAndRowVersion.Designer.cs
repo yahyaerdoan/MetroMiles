@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MetroMiles.PersistenceLayer.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    [Migration("20260802141844_AddNormalizedNameToBrands")]
-    partial class AddNormalizedNameToBrands
+    [Migration("20260802214316_AddModelNormalizedNameAndRowVersion")]
+    partial class AddModelNormalizedNameAndRowVersion
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -147,73 +147,181 @@ namespace MetroMiles.PersistenceLayer.Migrations
                         {
                             Id = 2,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "users.admin"
+                            Name = "brands.add"
                         },
                         new
                         {
                             Id = 3,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "users.read"
+                            Name = "brands.admin"
                         },
                         new
                         {
                             Id = 4,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "users.write"
+                            Name = "brands.delete"
                         },
                         new
                         {
                             Id = 5,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "users.add"
+                            Name = "brands.read"
                         },
                         new
                         {
                             Id = 6,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "users.update"
+                            Name = "brands.update"
                         },
                         new
                         {
                             Id = 7,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "users.delete"
+                            Name = "brands.write"
                         },
                         new
                         {
                             Id = 8,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "brands.admin"
+                            Name = "cars.add"
                         },
                         new
                         {
                             Id = 9,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "brands.read"
+                            Name = "cars.admin"
                         },
                         new
                         {
                             Id = 10,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "brands.write"
+                            Name = "cars.delete"
                         },
                         new
                         {
                             Id = 11,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "brands.add"
+                            Name = "cars.read"
                         },
                         new
                         {
                             Id = 12,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "brands.update"
+                            Name = "cars.update"
                         },
                         new
                         {
                             Id = 13,
                             CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Name = "brands.delete"
+                            Name = "cars.write"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "fuels.add"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "fuels.admin"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "fuels.delete"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "fuels.read"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "fuels.update"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "fuels.write"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "transmissions.add"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "transmissions.admin"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "transmissions.delete"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "transmissions.read"
+                        },
+                        new
+                        {
+                            Id = 24,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "transmissions.update"
+                        },
+                        new
+                        {
+                            Id = 25,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "transmissions.write"
+                        },
+                        new
+                        {
+                            Id = 26,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "users.add"
+                        },
+                        new
+                        {
+                            Id = 27,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "users.admin"
+                        },
+                        new
+                        {
+                            Id = 28,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "users.delete"
+                        },
+                        new
+                        {
+                            Id = 29,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "users.read"
+                        },
+                        new
+                        {
+                            Id = 30,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "users.update"
+                        },
+                        new
+                        {
+                            Id = 31,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "users.write"
                         });
                 });
 
@@ -332,6 +440,12 @@ namespace MetroMiles.PersistenceLayer.Migrations
                         .HasColumnType("varbinary(max)")
                         .HasColumnName("PasswordSalt");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
+
                     b.Property<bool>("Status")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -346,6 +460,10 @@ namespace MetroMiles.PersistenceLayer.Migrations
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("IX_Users_NormalizedEmail");
+
+                    b.HasIndex(new[] { "Email" }, "UK_Users_Email")
+                        .IsUnique()
+                        .HasFilter("[DeletedDate] IS NULL");
 
                     b.ToTable("Users", (string)null);
 
@@ -416,7 +534,8 @@ namespace MetroMiles.PersistenceLayer.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
+                        .HasColumnName("Id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset")
@@ -443,6 +562,12 @@ namespace MetroMiles.PersistenceLayer.Migrations
                         .HasColumnName("NormalizedName")
                         .HasComputedColumnSql("UPPER([Name])", true);
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
+
                     b.Property<DateTimeOffset?>("UpdatedDate")
                         .HasColumnType("datetimeoffset")
                         .HasColumnName("UpdatedDate");
@@ -453,7 +578,8 @@ namespace MetroMiles.PersistenceLayer.Migrations
                         .HasDatabaseName("IX_Brands_NormalizedName");
 
                     b.HasIndex(new[] { "Name" }, "UK_Brands_Name")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[DeletedDate] IS NULL");
 
                     b.ToTable("Brands", (string)null);
                 });
@@ -463,7 +589,8 @@ namespace MetroMiles.PersistenceLayer.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
+                        .HasColumnName("Id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset")
@@ -493,10 +620,23 @@ namespace MetroMiles.PersistenceLayer.Migrations
                         .HasColumnType("smallint")
                         .HasColumnName("ModelYear");
 
+                    b.Property<string>("NormalizedPlate")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("NormalizedPlate")
+                        .HasComputedColumnSql("UPPER([Plate])", true);
+
                     b.Property<string>("Plate")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
                         .HasColumnName("Plate");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
 
                     b.Property<int>("Status")
                         .HasColumnType("int")
@@ -510,6 +650,13 @@ namespace MetroMiles.PersistenceLayer.Migrations
 
                     b.HasIndex("ModelId");
 
+                    b.HasIndex("NormalizedPlate")
+                        .HasDatabaseName("IX_Cars_NormalizedPlate");
+
+                    b.HasIndex(new[] { "Plate" }, "UK_Cars_Plate")
+                        .IsUnique()
+                        .HasFilter("[DeletedDate] IS NULL");
+
                     b.ToTable("Cars", (string)null);
                 });
 
@@ -518,7 +665,8 @@ namespace MetroMiles.PersistenceLayer.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
+                        .HasColumnName("Id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset")
@@ -530,8 +678,21 @@ namespace MetroMiles.PersistenceLayer.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("Name");
+
+                    b.Property<string>("NormalizedName")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("NormalizedName")
+                        .HasComputedColumnSql("UPPER([Name])", true);
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
 
                     b.Property<DateTimeOffset?>("UpdatedDate")
                         .HasColumnType("datetimeoffset")
@@ -539,8 +700,12 @@ namespace MetroMiles.PersistenceLayer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("NormalizedName")
+                        .HasDatabaseName("IX_Fuels_NormalizedName");
+
                     b.HasIndex(new[] { "Name" }, "UK_Fuels_Name")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[DeletedDate] IS NULL");
 
                     b.ToTable("Fuels", (string)null);
                 });
@@ -550,7 +715,8 @@ namespace MetroMiles.PersistenceLayer.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
+                        .HasColumnName("Id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<Guid>("BrandId")
                         .HasColumnType("uniqueidentifier")
@@ -580,8 +746,21 @@ namespace MetroMiles.PersistenceLayer.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("Name");
+
+                    b.Property<string>("NormalizedName")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("NormalizedName")
+                        .HasComputedColumnSql("UPPER([Name])", true);
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
 
                     b.Property<Guid>("TransmissionId")
                         .HasColumnType("uniqueidentifier")
@@ -599,7 +778,11 @@ namespace MetroMiles.PersistenceLayer.Migrations
 
                     b.HasIndex("Name")
                         .IsUnique()
-                        .HasDatabaseName("UK_Models_Name");
+                        .HasDatabaseName("UK_Models_Name")
+                        .HasFilter("[DeletedDate] IS NULL");
+
+                    b.HasIndex("NormalizedName")
+                        .HasDatabaseName("IX_Models_NormalizedName");
 
                     b.HasIndex("TransmissionId");
 
@@ -611,7 +794,8 @@ namespace MetroMiles.PersistenceLayer.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
+                        .HasColumnName("Id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset")
@@ -623,8 +807,21 @@ namespace MetroMiles.PersistenceLayer.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("Name");
+
+                    b.Property<string>("NormalizedName")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("NormalizedName")
+                        .HasComputedColumnSql("UPPER([Name])", true);
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
 
                     b.Property<DateTimeOffset?>("UpdatedDate")
                         .HasColumnType("datetimeoffset")
@@ -632,8 +829,12 @@ namespace MetroMiles.PersistenceLayer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("NormalizedName")
+                        .HasDatabaseName("IX_Transmissions_NormalizedName");
+
                     b.HasIndex(new[] { "Name" }, "UK_Transmissions_Name")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[DeletedDate] IS NULL");
 
                     b.ToTable("Transmissions", (string)null);
                 });

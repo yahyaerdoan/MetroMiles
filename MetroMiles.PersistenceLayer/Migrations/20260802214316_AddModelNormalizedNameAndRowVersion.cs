@@ -5,22 +5,29 @@
 namespace MetroMiles.PersistenceLayer.Migrations
 {
     /// <inheritdoc />
-    public partial class AddNormalizedNameToBrands : Migration
+    public partial class AddModelNormalizedNameAndRowVersion : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<byte[]>(
+                name: "RowVersion",
+                table: "Models",
+                type: "rowversion",
+                rowVersion: true,
+                nullable: true);
+
             migrationBuilder.AddColumn<string>(
                 name: "NormalizedName",
-                table: "Brands",
+                table: "Models",
                 type: "nvarchar(450)",
                 nullable: true,
                 computedColumnSql: "UPPER([Name])",
                 stored: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Brands_NormalizedName",
-                table: "Brands",
+                name: "IX_Models_NormalizedName",
+                table: "Models",
                 column: "NormalizedName");
         }
 
@@ -28,12 +35,16 @@ namespace MetroMiles.PersistenceLayer.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropIndex(
-                name: "IX_Brands_NormalizedName",
-                table: "Brands");
+                name: "IX_Models_NormalizedName",
+                table: "Models");
 
             migrationBuilder.DropColumn(
                 name: "NormalizedName",
-                table: "Brands");
+                table: "Models");
+
+            migrationBuilder.DropColumn(
+                name: "RowVersion",
+                table: "Models");
         }
     }
 }

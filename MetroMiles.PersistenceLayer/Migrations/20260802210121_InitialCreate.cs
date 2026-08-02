@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MetroMiles.PersistenceLayer.Migrations
 {
     /// <inheritdoc />
-    public partial class CreatingDatabaseAndTables : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,12 +17,14 @@ namespace MetroMiles.PersistenceLayer.Migrations
                 name: "Brands",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    Name = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
+                    NormalizedName = table.Column<string>(type: "nvarchar(450)", nullable: true, computedColumnSql: "UPPER([Name])", stored: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     UpdatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    DeletedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                    DeletedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -33,11 +35,13 @@ namespace MetroMiles.PersistenceLayer.Migrations
                 name: "Fuels",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    Name = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
+                    NormalizedName = table.Column<string>(type: "nvarchar(450)", nullable: true, computedColumnSql: "UPPER([Name])", stored: true),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     UpdatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    DeletedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                    DeletedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -64,11 +68,13 @@ namespace MetroMiles.PersistenceLayer.Migrations
                 name: "Transmissions",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    Name = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
+                    NormalizedName = table.Column<string>(type: "nvarchar(450)", nullable: true, computedColumnSql: "UPPER([Name])", stored: true),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     UpdatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    DeletedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                    DeletedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -91,7 +97,8 @@ namespace MetroMiles.PersistenceLayer.Migrations
                     AuthenticatorType = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     UpdatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    DeletedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                    DeletedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -102,7 +109,7 @@ namespace MetroMiles.PersistenceLayer.Migrations
                 name: "Models",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
                     BrandId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FuelId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TransmissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -246,17 +253,19 @@ namespace MetroMiles.PersistenceLayer.Migrations
                 name: "Cars",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
                     ModelId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Kilometer = table.Column<int>(type: "int", nullable: false),
                     Mile = table.Column<int>(type: "int", nullable: false),
                     ModelYear = table.Column<short>(type: "smallint", nullable: false),
-                    Plate = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Plate = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    NormalizedPlate = table.Column<string>(type: "nvarchar(450)", nullable: true, computedColumnSql: "UPPER([Plate])", stored: true),
                     MinFindexScore = table.Column<short>(type: "smallint", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     UpdatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    DeletedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                    DeletedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -275,18 +284,36 @@ namespace MetroMiles.PersistenceLayer.Migrations
                 values: new object[,]
                 {
                     { 1, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "Admin", null },
-                    { 2, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "users.admin", null },
-                    { 3, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "users.read", null },
-                    { 4, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "users.write", null },
-                    { 5, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "users.add", null },
-                    { 6, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "users.update", null },
-                    { 7, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "users.delete", null },
-                    { 8, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "brands.admin", null },
-                    { 9, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "brands.read", null },
-                    { 10, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "brands.write", null },
-                    { 11, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "brands.add", null },
-                    { 12, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "brands.update", null },
-                    { 13, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "brands.delete", null }
+                    { 2, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "brands.add", null },
+                    { 3, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "brands.admin", null },
+                    { 4, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "brands.delete", null },
+                    { 5, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "brands.read", null },
+                    { 6, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "brands.update", null },
+                    { 7, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "brands.write", null },
+                    { 8, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "cars.add", null },
+                    { 9, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "cars.admin", null },
+                    { 10, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "cars.delete", null },
+                    { 11, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "cars.read", null },
+                    { 12, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "cars.update", null },
+                    { 13, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "cars.write", null },
+                    { 14, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "fuels.add", null },
+                    { 15, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "fuels.admin", null },
+                    { 16, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "fuels.delete", null },
+                    { 17, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "fuels.read", null },
+                    { 18, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "fuels.update", null },
+                    { 19, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "fuels.write", null },
+                    { 20, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "transmissions.add", null },
+                    { 21, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "transmissions.admin", null },
+                    { 22, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "transmissions.delete", null },
+                    { 23, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "transmissions.read", null },
+                    { 24, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "transmissions.update", null },
+                    { 25, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "transmissions.write", null },
+                    { 26, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "users.add", null },
+                    { 27, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "users.admin", null },
+                    { 28, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "users.delete", null },
+                    { 29, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "users.read", null },
+                    { 30, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "users.update", null },
+                    { 31, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "users.write", null }
                 });
 
             migrationBuilder.InsertData(
@@ -300,10 +327,16 @@ namespace MetroMiles.PersistenceLayer.Migrations
                 values: new object[] { 1, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, 1, null, 1 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Brands_NormalizedName",
+                table: "Brands",
+                column: "NormalizedName");
+
+            migrationBuilder.CreateIndex(
                 name: "UK_Brands_Name",
                 table: "Brands",
                 column: "Name",
-                unique: true);
+                unique: true,
+                filter: "[DeletedDate] IS NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cars_ModelId",
@@ -311,15 +344,33 @@ namespace MetroMiles.PersistenceLayer.Migrations
                 column: "ModelId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Cars_NormalizedPlate",
+                table: "Cars",
+                column: "NormalizedPlate");
+
+            migrationBuilder.CreateIndex(
+                name: "UK_Cars_Plate",
+                table: "Cars",
+                column: "Plate",
+                unique: true,
+                filter: "[DeletedDate] IS NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_EmailAuthenticators_UserId",
                 table: "EmailAuthenticators",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Fuels_NormalizedName",
+                table: "Fuels",
+                column: "NormalizedName");
+
+            migrationBuilder.CreateIndex(
                 name: "UK_Fuels_Name",
                 table: "Fuels",
                 column: "Name",
-                unique: true);
+                unique: true,
+                filter: "[DeletedDate] IS NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Models_BrandId",
@@ -340,7 +391,8 @@ namespace MetroMiles.PersistenceLayer.Migrations
                 name: "UK_Models_Name",
                 table: "Models",
                 column: "Name",
-                unique: true);
+                unique: true,
+                filter: "[DeletedDate] IS NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OtpAuthenticators_UserId",
@@ -353,10 +405,16 @@ namespace MetroMiles.PersistenceLayer.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Transmissions_NormalizedName",
+                table: "Transmissions",
+                column: "NormalizedName");
+
+            migrationBuilder.CreateIndex(
                 name: "UK_Transmissions_Name",
                 table: "Transmissions",
                 column: "Name",
-                unique: true);
+                unique: true,
+                filter: "[DeletedDate] IS NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserOperationClaims_OperationClaimId",
@@ -372,6 +430,13 @@ namespace MetroMiles.PersistenceLayer.Migrations
                 name: "IX_Users_NormalizedEmail",
                 table: "Users",
                 column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "UK_Users_Email",
+                table: "Users",
+                column: "Email",
+                unique: true,
+                filter: "[DeletedDate] IS NULL");
         }
 
         /// <inheritdoc />

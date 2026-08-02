@@ -23,7 +23,7 @@ public class GetByIdUserQuery : IRequest<OperationDataResult<GetByIdUserResponse
 
         public async Task<OperationDataResult<GetByIdUserResponse>> Handle(GetByIdUserQuery request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetAsync(predicate: u => u.Id == request.Id, withDeleted: true, cancellationToken: cancellationToken);
+            var user = await _userRepository.GetAsync(predicate: u => u.Id == request.Id, cancellationToken: cancellationToken);
             var existenceCheck = UserBusinessRules.UserShouldBeExistsWhenSelected(user);
             if (!existenceCheck.IsSuccessful)
             {

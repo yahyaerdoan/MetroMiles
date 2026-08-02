@@ -8,14 +8,11 @@ namespace MetroMiles.PersistenceLayer.Repositories;
 
 public class RefreshTokenRepository(BaseDbContext context) : EfRepositoryBase<RefreshToken, int, BaseDbContext>(context), IRefreshTokenRepository
 {
-    public async Task<List<RefreshToken>> GetOldRefreshTokensAsync(int userId, int refreshTokenTTL)
+    public async Task<List<RefreshToken>> GetExpiredRefreshTokensAsync(int userId)
     {
         var refreshTokens = await Query().AsNoTracking()
-            .Where(
-            r => r.UserId == userId
-            && r.Revoked == null
-            && r.Expires >= DateTime.UtcNow
-            && r.CreatedDate.AddDays(refreshTokenTTL) <= DateTime.UtcNow).ToListAsync();
+            .Where(r => r.UserId == userId && r.Revoked == null && r.Expires <= DateTime.UtcNow)
+            .ToListAsync();
         return refreshTokens;
     }
 }

@@ -21,7 +21,7 @@ public class GetByIdBrandQuery : IRequest<OperationDataResult<GetByIdBrandRespon
 
         public async Task<OperationDataResult<GetByIdBrandResponse>> Handle(GetByIdBrandQuery request, CancellationToken cancellationToken)
         {
-            var brand = await _brandRepository.GetAsync(predicate: b => b.Id == request.Id, withDeleted: true, cancellationToken: cancellationToken);
+            var brand = await _brandRepository.GetAsync(predicate: b => b.Id == request.Id, cancellationToken: cancellationToken);
             var existenceCheck = BrandBusinessRules.BrandShouldExistWhenSelected(brand);
             if (!existenceCheck.IsSuccessful)
             {

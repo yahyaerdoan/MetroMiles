@@ -1,4 +1,5 @@
 using Core.SecurityLayer.Entities;
+using Core.SecurityLayer.Hashings;
 using Core.SecurityLayer.JsonWebTokens.Abstractions;
 using Core.SecurityLayer.JsonWebTokens.Concretions;
 
@@ -26,8 +27,9 @@ public class RefreshTokenCommand : IRequest<OperationDataResult<LoggedResponse>>
 
         public async Task<OperationDataResult<LoggedResponse>> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
         {
+            var hashedToken = TokenHashingHelper.Hash(request.Token);
             var existingToken = await refreshTokenRepository.GetAsync(
-                predicate: rt => rt.Token == request.Token,
+                predicate: rt => rt.Token == hashedToken,
                 include: q => q.Include(rt => rt.User).ThenInclude(u => u.UserOperationClaims).ThenInclude(uoc => uoc.OperationClaim),
                 cancellationToken: cancellationToken);
 
@@ -37,7 +39,7 @@ public class RefreshTokenCommand : IRequest<OperationDataResult<LoggedResponse>>
             }
 
             var user = existingToken.User;
-            var newRefreshToken = jwtTokenHelper.CreateRefreshToken(user, request.IpAddress);
+            var (newRefreshToken, rawNewRefreshToken) = jwtTokenHelper.CreateRefreshToken(user, request.IpAddress);
 
             existingToken.Revoked = DateTime.UtcNow;
             existingToken.RevokedByIp = request.IpAddress;
@@ -48,7 +50,7 @@ public class RefreshTokenCommand : IRequest<OperationDataResult<LoggedResponse>>
             IList<OperationClaim> operationClaims = [.. user.UserOperationClaims.Select(uoc => uoc.OperationClaim)];
             var accessToken = jwtTokenHelper.CreateToken(user, operationClaims);
 
-            return Result.Success(new LoggedResponse(accessToken.Token, accessToken.Expiration, newRefreshToken.Token));
+            return Result.Success(new LoggedResponse(accessToken.Token, accessToken.Expiration, rawNewRefreshToken));
         }
     }
 }

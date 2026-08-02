@@ -743,8 +743,21 @@ namespace MetroMiles.PersistenceLayer.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("Name");
+
+                    b.Property<string>("NormalizedName")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("NormalizedName")
+                        .HasComputedColumnSql("UPPER([Name])", true);
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
 
                     b.Property<Guid>("TransmissionId")
                         .HasColumnType("uniqueidentifier")
@@ -764,6 +777,9 @@ namespace MetroMiles.PersistenceLayer.Migrations
                         .IsUnique()
                         .HasDatabaseName("UK_Models_Name")
                         .HasFilter("[DeletedDate] IS NULL");
+
+                    b.HasIndex("NormalizedName")
+                        .HasDatabaseName("IX_Models_NormalizedName");
 
                     b.HasIndex("TransmissionId");
 

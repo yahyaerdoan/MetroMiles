@@ -5,5 +5,5 @@ namespace MetroMiles.ApplicationLayer.Services.Repositories;
 
 public interface IRefreshTokenRepository : IAsyncRepository<RefreshToken, int>//, IRepository<RefreshToken, int>
 {
-    Task<List<RefreshToken>> GetOldRefreshTokensAsync(int userId, int refreshTokenTTL);
+    Task<List<RefreshToken>> GetExpiredRefreshTokensAsync(int userId);
 }

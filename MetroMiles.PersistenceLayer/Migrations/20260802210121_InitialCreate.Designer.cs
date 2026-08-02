@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MetroMiles.PersistenceLayer.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    [Migration("20260802151059_MakeOperationClaimSeedOrderDeterministic")]
-    partial class MakeOperationClaimSeedOrderDeterministic
+    [Migration("20260802210121_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -440,6 +440,12 @@ namespace MetroMiles.PersistenceLayer.Migrations
                         .HasColumnType("varbinary(max)")
                         .HasColumnName("PasswordSalt");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
+
                     b.Property<bool>("Status")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -454,6 +460,10 @@ namespace MetroMiles.PersistenceLayer.Migrations
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("IX_Users_NormalizedEmail");
+
+                    b.HasIndex(new[] { "Email" }, "UK_Users_Email")
+                        .IsUnique()
+                        .HasFilter("[DeletedDate] IS NULL");
 
                     b.ToTable("Users", (string)null);
 
@@ -524,7 +534,8 @@ namespace MetroMiles.PersistenceLayer.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
+                        .HasColumnName("Id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset")
@@ -551,6 +562,12 @@ namespace MetroMiles.PersistenceLayer.Migrations
                         .HasColumnName("NormalizedName")
                         .HasComputedColumnSql("UPPER([Name])", true);
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
+
                     b.Property<DateTimeOffset?>("UpdatedDate")
                         .HasColumnType("datetimeoffset")
                         .HasColumnName("UpdatedDate");
@@ -561,7 +578,8 @@ namespace MetroMiles.PersistenceLayer.Migrations
                         .HasDatabaseName("IX_Brands_NormalizedName");
 
                     b.HasIndex(new[] { "Name" }, "UK_Brands_Name")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[DeletedDate] IS NULL");
 
                     b.ToTable("Brands", (string)null);
                 });
@@ -571,7 +589,8 @@ namespace MetroMiles.PersistenceLayer.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
+                        .HasColumnName("Id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset")
@@ -601,10 +620,23 @@ namespace MetroMiles.PersistenceLayer.Migrations
                         .HasColumnType("smallint")
                         .HasColumnName("ModelYear");
 
+                    b.Property<string>("NormalizedPlate")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("NormalizedPlate")
+                        .HasComputedColumnSql("UPPER([Plate])", true);
+
                     b.Property<string>("Plate")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
                         .HasColumnName("Plate");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
 
                     b.Property<int>("Status")
                         .HasColumnType("int")
@@ -618,6 +650,13 @@ namespace MetroMiles.PersistenceLayer.Migrations
 
                     b.HasIndex("ModelId");
 
+                    b.HasIndex("NormalizedPlate")
+                        .HasDatabaseName("IX_Cars_NormalizedPlate");
+
+                    b.HasIndex(new[] { "Plate" }, "UK_Cars_Plate")
+                        .IsUnique()
+                        .HasFilter("[DeletedDate] IS NULL");
+
                     b.ToTable("Cars", (string)null);
                 });
 
@@ -626,7 +665,8 @@ namespace MetroMiles.PersistenceLayer.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
+                        .HasColumnName("Id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset")
@@ -648,6 +688,12 @@ namespace MetroMiles.PersistenceLayer.Migrations
                         .HasColumnName("NormalizedName")
                         .HasComputedColumnSql("UPPER([Name])", true);
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
+
                     b.Property<DateTimeOffset?>("UpdatedDate")
                         .HasColumnType("datetimeoffset")
                         .HasColumnName("UpdatedDate");
@@ -658,7 +704,8 @@ namespace MetroMiles.PersistenceLayer.Migrations
                         .HasDatabaseName("IX_Fuels_NormalizedName");
 
                     b.HasIndex(new[] { "Name" }, "UK_Fuels_Name")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[DeletedDate] IS NULL");
 
                     b.ToTable("Fuels", (string)null);
                 });
@@ -668,7 +715,8 @@ namespace MetroMiles.PersistenceLayer.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
+                        .HasColumnName("Id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<Guid>("BrandId")
                         .HasColumnType("uniqueidentifier")
@@ -717,7 +765,8 @@ namespace MetroMiles.PersistenceLayer.Migrations
 
                     b.HasIndex("Name")
                         .IsUnique()
-                        .HasDatabaseName("UK_Models_Name");
+                        .HasDatabaseName("UK_Models_Name")
+                        .HasFilter("[DeletedDate] IS NULL");
 
                     b.HasIndex("TransmissionId");
 
@@ -729,7 +778,8 @@ namespace MetroMiles.PersistenceLayer.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
+                        .HasColumnName("Id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset")
@@ -751,6 +801,12 @@ namespace MetroMiles.PersistenceLayer.Migrations
                         .HasColumnName("NormalizedName")
                         .HasComputedColumnSql("UPPER([Name])", true);
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
+
                     b.Property<DateTimeOffset?>("UpdatedDate")
                         .HasColumnType("datetimeoffset")
                         .HasColumnName("UpdatedDate");
@@ -761,7 +817,8 @@ namespace MetroMiles.PersistenceLayer.Migrations
                         .HasDatabaseName("IX_Transmissions_NormalizedName");
 
                     b.HasIndex(new[] { "Name" }, "UK_Transmissions_Name")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[DeletedDate] IS NULL");
 
                     b.ToTable("Transmissions", (string)null);
                 });

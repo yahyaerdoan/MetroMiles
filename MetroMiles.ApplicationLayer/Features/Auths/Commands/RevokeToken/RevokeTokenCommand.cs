@@ -1,3 +1,5 @@
+using Core.SecurityLayer.Hashings;
+
 using MediatR;
 
 using MetroMiles.ApplicationLayer.Services.Repositories;
@@ -16,8 +18,9 @@ public class RevokeTokenCommand : IRequest<OperationResult>
     {
         public async Task<OperationResult> Handle(RevokeTokenCommand request, CancellationToken cancellationToken)
         {
+            var hashedToken = TokenHashingHelper.Hash(request.Token);
             var existingToken = await refreshTokenRepository.GetAsync(
-                predicate: rt => rt.Token == request.Token,
+                predicate: rt => rt.Token == hashedToken,
                 cancellationToken: cancellationToken);
 
             if (existingToken is null || existingToken.Revoked is not null || existingToken.Expires <= DateTime.UtcNow)
