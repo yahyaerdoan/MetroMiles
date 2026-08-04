@@ -5,9 +5,6 @@ using MetroMiles.PersistenceLayer.Context;
 
 namespace MetroMiles.PersistenceLayer.Repositories;
 
-public class TransmissionRepository : EfRepositoryBase<Transmission, Guid, BaseDbContext>, ITransmissionRepository
+public class TransmissionRepository(BaseDbContext context) : EfRepositoryBase<Transmission, Guid, BaseDbContext>(context), ITransmissionRepository
 {
-    public TransmissionRepository(BaseDbContext context) : base(context)
-    {
-    }
 }

@@ -1,11 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Core.SecurityLayer.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace MetroMiles.PersistenceLayer.EntityConfigurations;
 
@@ -22,6 +17,7 @@ public class OneTimePasswordAuthenticatorConfiguration : IEntityTypeConfiguratio
         builder.Property(oa => oa.CreatedDate).HasColumnName("CreatedDate").IsRequired();
         builder.Property(oa => oa.UpdatedDate).HasColumnName("UpdatedDate");
         builder.Property(oa => oa.DeletedDate).HasColumnName("DeletedDate");
+        builder.Ignore(oa => oa.RowVersion);
 
         builder.HasQueryFilter(oa => !oa.DeletedDate.HasValue);
 

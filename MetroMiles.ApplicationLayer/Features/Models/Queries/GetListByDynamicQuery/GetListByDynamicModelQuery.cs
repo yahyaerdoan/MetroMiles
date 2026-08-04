@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Core.ApplicationLayer.Requests.Page;
 using Core.ApplicationLayer.Responses.GetList;
 using Core.PersistenceLayer.Dynamics.Dynamic;
@@ -7,33 +7,25 @@ using MediatR;
 using MetroMiles.ApplicationLayer.Services.Repositories;
 using MetroMiles.DomainLayer.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using ResultHandler.Core.Base;
+using ResultHandler.Facade;
 
 namespace MetroMiles.ApplicationLayer.Features.Models.Queries.GetListByDynamicQuery;
 
-public class GetListByDynamicModelQuery : IRequest<GetListResponse<GetListByDynamicModelListItemDto>>
+public class GetListByDynamicModelQuery : IRequest<OperationDataResult<GetListResponse<GetListByDynamicModelListItemDto>>>
 {
-    public PageRequest PageRequest { get; set; }
+    public required PageRequest PageRequest { get; set; }
     public DynamicQuery? DynamicQuery { get; set; }
 
-    public class GetListByDynamicModelQueryHandler : IRequestHandler<GetListByDynamicModelQuery, GetListResponse<GetListByDynamicModelListItemDto>>
+    public class GetListByDynamicModelQueryHandler(IModelRepository modelRepository, IMapper mapper) : IRequestHandler<GetListByDynamicModelQuery, OperationDataResult<GetListResponse<GetListByDynamicModelListItemDto>>>
     {
-        private readonly IModelRepository _modelRepository;
-        private readonly IMapper _mapper;
+        private readonly IModelRepository _modelRepository = modelRepository;
+        private readonly IMapper _mapper = mapper;
 
-        public GetListByDynamicModelQueryHandler(IModelRepository modelRepository, IMapper mapper)
+        public async Task<OperationDataResult<GetListResponse<GetListByDynamicModelListItemDto>>> Handle(GetListByDynamicModelQuery request, CancellationToken cancellationToken)
         {
-            _modelRepository = modelRepository;
-            _mapper = mapper;
-        }
-
-        public async Task<GetListResponse<GetListByDynamicModelListItemDto>> Handle(GetListByDynamicModelQuery request, CancellationToken cancellationToken)
-        {
-            Paginate<Model> models = await _modelRepository.GetListByDynamicAsync(
+            var models = await _modelRepository.GetListByDynamicAsync(
                  request.DynamicQuery ?? new DynamicQuery(),
                  include: m => m.Include(m => m.Brand).Include(m => m.Fuel).Include(m => m.Transmission!),
                  index: request.PageRequest.PageIndex,
@@ -41,7 +33,7 @@ public class GetListByDynamicModelQuery : IRequest<GetListResponse<GetListByDyna
                  cancellationToken: cancellationToken
                  );
             var response = _mapper.Map<GetListResponse<GetListByDynamicModelListItemDto>>(models);
-            return response;
+            return Result.Success(response);
         }
     }
 }

@@ -1,20 +1,14 @@
-﻿using Core.SecurityLayer.Entities;
+using System.Reflection;
+using Core.SecurityLayer.Entities;
 using MetroMiles.DomainLayer.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MetroMiles.PersistenceLayer.Context;
 
 public class BaseDbContext : DbContext
 {
-    public IConfiguration  Configuration { get; set; }
+    public IConfiguration Configuration { get; set; }
     public DbSet<Brand> Brands { get; set; }
     public DbSet<Car> Cars { get; set; }
     public DbSet<Fuel> Fuels { get; set; }

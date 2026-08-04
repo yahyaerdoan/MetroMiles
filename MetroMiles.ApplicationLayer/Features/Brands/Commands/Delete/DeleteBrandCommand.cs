@@ -1,39 +1,50 @@
-﻿using AutoMapper;
+using AutoMapper;
+using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
 using Core.ApplicationLayer.Pipelines.Cachings.Abstractions;
 using MediatR;
+using MetroMiles.ApplicationLayer.Features.Brands.Constants;
 using MetroMiles.ApplicationLayer.Features.Brands.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
 using MetroMiles.DomainLayer.Entities;
+using ResultHandler.Core.Base;
+using ResultHandler.Facade;
+using ResultHandler.Functional;
 
 namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Delete;
 
-public class DeleteBrandCommand : IRequest<DeletedBrandResponse>, ICacheRemoveRequest
+public class DeleteBrandCommand : IRequest<OperationDataResult<DeletedBrandResponse>>, ICacheRemoveRequest, ISecureAddRequest
 {
-    #region DeleteBrandCommand & ICacheRemoveRequest Properties   
+    #region DeleteBrandCommand & ICacheRemoveRequest Properties
     public Guid Id { get; set; }
     public string CacheKey => "";
     public bool ByPassCache => false;
     public string? CacheGroupKey => "GetBrands";
+    public string[] Roles => [BrandsOperationClaims.Admin, BrandsOperationClaims.Write, BrandsOperationClaims.Delete];
     #endregion
 
-    public class DeleteBrandCommandHandler : IRequestHandler<DeleteBrandCommand, DeletedBrandResponse>
+    public class DeleteBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper, BrandBusinessRules brandBusinessRules) : IRequestHandler<DeleteBrandCommand, OperationDataResult<DeletedBrandResponse>>
     {
-        private readonly IBrandRepository _brandRepository;
-        private readonly IMapper _mapper;
+        private readonly IBrandRepository _brandRepository = brandRepository;
+        private readonly IMapper _mapper = mapper;
+        private readonly BrandBusinessRules _brandBusinessRules = brandBusinessRules;
 
-        public DeleteBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper)
+        public async Task<OperationDataResult<DeletedBrandResponse>> Handle(DeleteBrandCommand request, CancellationToken cancellationToken)
         {
-            _brandRepository = brandRepository;
-            _mapper = mapper;
-        }
+            var existingBrand = await _brandRepository.GetAsync(predicate: b => b.Id == request.Id, withDeleted: false, cancellationToken: cancellationToken);
+            var existenceCheck = BrandBusinessRules.BrandShouldExistWhenSelected(existingBrand);
+            if (!existenceCheck.IsSuccessful)
+            {
+                return existenceCheck.ToErrorDataResult<DeletedBrandResponse>();
+            }
 
-        public async Task<DeletedBrandResponse> Handle(DeleteBrandCommand request, CancellationToken cancellationToken)
-        {
-            Brand? existingBrand = await _brandRepository.GetAsync(predicate: b => b.Id == request.Id, withDeleted: false, cancellationToken: cancellationToken);
-            Brand brand = BrandBusinessRules.BrandShouldExistWhenSelected(existingBrand);
-            await _brandRepository.DeleteAsync(brand);
-            DeletedBrandResponse response = _mapper.Map<DeletedBrandResponse>(brand);
-            return response;
+            var inUseCheck = await _brandBusinessRules.BrandShouldNotBeInUseWhenDeleted(request.Id);
+            if (!inUseCheck.IsSuccessful)
+            {
+                return inUseCheck.ToErrorDataResult<DeletedBrandResponse>();
+            }
+
+            await _brandRepository.DeleteAsync(existenceCheck.Data);
+            return Result.Success(_mapper.Map<DeletedBrandResponse>(existenceCheck.Data));
         }
     }
 }

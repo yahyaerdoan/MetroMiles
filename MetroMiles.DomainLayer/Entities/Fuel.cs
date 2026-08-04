@@ -1,10 +1,11 @@
-﻿using Core.PersistenceLayer.Repositories.Entities;
+using Core.PersistenceLayer.Repositories.Entities;
 
 namespace MetroMiles.DomainLayer.Entities;
 
 public class Fuel : Entity<Guid>
 {
     public string Name { get; set; }
+    public string? NormalizedName { get; set; }
     public virtual ICollection<Model> Models { get; set; }
 
     public Fuel()
@@ -12,7 +13,7 @@ public class Fuel : Entity<Guid>
         Models = new HashSet<Model>();
     }
 
-    public Fuel(Guid id, string name):this()
+    public Fuel(Guid id, string name) : this()
     {
         Id = id;
         Name = name;

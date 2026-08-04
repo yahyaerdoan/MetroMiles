@@ -1,25 +1,26 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
+using Core.ApplicationLayer.Pipelines.Loggings.Abstractions;
+using Core.ApplicationLayer.Pipelines.Transactions.Abstractions;
 using Core.SecurityLayer.Entities;
 using Core.SecurityLayer.Hashings;
 using MediatR;
-using MetroMiles.ApplicationLayer.Services.Repositories;
-using static MetroMiles.ApplicationLayer.Features.Users.Constants.UsersOperationClaims;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MetroMiles.ApplicationLayer.Features.Users.Rules;
+using MetroMiles.ApplicationLayer.Services.Repositories;
+using ResultHandler.Core.Base;
+using ResultHandler.Facade;
+using ResultHandler.Functional;
+using static MetroMiles.ApplicationLayer.Features.Users.Constants.UsersOperationClaims;
 
 namespace MetroMiles.ApplicationLayer.Features.Users.Commands.Create;
 
-public class CreateUserCommand : IRequest<CreatedUserResponse>, ISecureAddRequest
+public class CreateUserCommand : IRequest<OperationDataResult<CreatedUserResponse>>, ITransactionAddRequest, ILogAddRequest, ISecureAddRequest
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }
+
+    [SensitiveData]
     public string Password { get; set; }
 
     public CreateUserCommand()
@@ -36,37 +37,35 @@ public class CreateUserCommand : IRequest<CreatedUserResponse>, ISecureAddReques
         Email = email;
         Password = password;
     }
-    public string[] Roles => new[] { Admin, Write, Add };
+    public string[] Roles => [Admin, Write, Add];
 
-    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, CreatedUserResponse>
+    public class CreateUserCommandHandler(IUserRepository userRepository, IMapper mapper, UserBusinessRules userBusinessRules) : IRequestHandler<CreateUserCommand, OperationDataResult<CreatedUserResponse>>
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IMapper _mapper;
-        private readonly UserBusinessRules _userBusinessRules;
+        private readonly IUserRepository _userRepository = userRepository;
+        private readonly IMapper _mapper = mapper;
+        private readonly UserBusinessRules _userBusinessRules = userBusinessRules;
 
-        public CreateUserCommandHandler(IUserRepository userRepository, IMapper mapper, UserBusinessRules userBusinessRules)
+        public async Task<OperationDataResult<CreatedUserResponse>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            _userRepository = userRepository;
-            _mapper = mapper;
-            _userBusinessRules = userBusinessRules;
-        }
+            var emailCheck = await _userBusinessRules.UserEmailShouldNotExistsWhenInsert(request.Email);
+            if (!emailCheck.IsSuccessful)
+            {
+                return emailCheck.ToErrorDataResult<CreatedUserResponse>();
+            }
 
-        public async Task<CreatedUserResponse> Handle(CreateUserCommand request, CancellationToken cancellationToken)
-        {
-            await _userBusinessRules.UserEmailShouldNotExistsWhenInsert(request.Email);
-            User user = _mapper.Map<User>(request);
+            var user = _mapper.Map<User>(request);
+            user.Status = true;
 
             HashingHelper.CreatePasswordHash(
                 request.Password,
-                passwordHash: out byte[] passwordHash,
-                passwordSalt: out byte[] passwordSalt
+                passwordHash: out var passwordHash,
+                passwordSalt: out var passwordSalt
             );
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
-            User createdUser = await _userRepository.AddAsync(user);
+            var createdUser = await _userRepository.AddAsync(user);
 
-            CreatedUserResponse response = _mapper.Map<CreatedUserResponse>(createdUser);
-            return response;
+            return Result.Success(_mapper.Map<CreatedUserResponse>(createdUser));
         }
     }
 }

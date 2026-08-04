@@ -17,17 +17,522 @@ namespace MetroMiles.PersistenceLayer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.20")
+                .HasAnnotation("ProductVersion", "10.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Core.SecurityLayer.Entities.EmailAuthenticator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ActivationKey")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ActivationKey");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("CreatedDate");
+
+                    b.Property<DateTimeOffset?>("DeletedDate")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("DeletedDate");
+
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit")
+                        .HasColumnName("IsVerified");
+
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("UpdatedDate");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EmailAuthenticators", (string)null);
+                });
+
+            modelBuilder.Entity("Core.SecurityLayer.Entities.OneTimePasswordAuthenticator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("CreatedDate");
+
+                    b.Property<DateTimeOffset?>("DeletedDate")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("DeletedDate");
+
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit")
+                        .HasColumnName("IsVerified");
+
+                    b.Property<byte[]>("SecretKey")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)")
+                        .HasColumnName("SecretKey");
+
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("UpdatedDate");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("OtpAuthenticators", (string)null);
+                });
+
+            modelBuilder.Entity("Core.SecurityLayer.Entities.OperationClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("CreatedDate");
+
+                    b.Property<DateTimeOffset?>("DeletedDate")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("DeletedDate");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Name");
+
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("UpdatedDate");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OperationClaims", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "brands.add"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "brands.admin"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "brands.delete"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "brands.read"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "brands.update"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "brands.write"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "cars.add"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "cars.admin"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "cars.delete"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "cars.read"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "cars.update"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "cars.write"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "fuels.add"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "fuels.admin"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "fuels.delete"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "fuels.read"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "fuels.update"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "fuels.write"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "transmissions.add"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "transmissions.admin"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "transmissions.delete"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "transmissions.read"
+                        },
+                        new
+                        {
+                            Id = 24,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "transmissions.update"
+                        },
+                        new
+                        {
+                            Id = 25,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "transmissions.write"
+                        },
+                        new
+                        {
+                            Id = 26,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "users.add"
+                        },
+                        new
+                        {
+                            Id = 27,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "users.admin"
+                        },
+                        new
+                        {
+                            Id = 28,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "users.delete"
+                        },
+                        new
+                        {
+                            Id = 29,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "users.read"
+                        },
+                        new
+                        {
+                            Id = 30,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "users.update"
+                        },
+                        new
+                        {
+                            Id = 31,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "users.write"
+                        });
+                });
+
+            modelBuilder.Entity("Core.SecurityLayer.Entities.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedByIp")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CreatedByIp");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("CreatedDate");
+
+                    b.Property<DateTimeOffset?>("DeletedDate")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("DeletedDate");
+
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Expires");
+
+                    b.Property<string>("ReasonRevoked")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ReasonRevoked");
+
+                    b.Property<string>("ReplacedByToken")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ReplacedByToken");
+
+                    b.Property<DateTime?>("Revoked")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Revoked");
+
+                    b.Property<string>("RevokedByIp")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RevokedByIp");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Token");
+
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("UpdatedDate");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Core.SecurityLayer.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AuthenticatorType")
+                        .HasColumnType("int")
+                        .HasColumnName("AuthenticatorType");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("CreatedDate");
+
+                    b.Property<DateTimeOffset?>("DeletedDate")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("DeletedDate");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("Email");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("FirstName");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LastName");
+
+                    b.Property<string>("NormalizedEmail")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("NormalizedEmail")
+                        .HasComputedColumnSql("UPPER([Email])", true);
+
+                    b.Property<byte[]>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)")
+                        .HasColumnName("PasswordHash");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)")
+                        .HasColumnName("PasswordSalt");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
+
+                    b.Property<bool>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true)
+                        .HasColumnName("Status");
+
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("UpdatedDate");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("IX_Users_NormalizedEmail");
+
+                    b.HasIndex(new[] { "Email" }, "UK_Users_Email")
+                        .IsUnique()
+                        .HasFilter("[DeletedDate] IS NULL");
+
+                    b.ToTable("Users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AuthenticatorType = 0,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Email = "admin@metromiles.com",
+                            FirstName = "Admin",
+                            LastName = "MetroMiles",
+                            PasswordHash = new byte[] { 215, 205, 2, 234, 175, 152, 107, 196, 193, 49, 18, 156, 181, 133, 39, 157, 153, 101, 83, 86, 161, 89, 232, 11, 235, 40, 179, 49, 11, 15, 137, 208 },
+                            PasswordSalt = new byte[] { 88, 106, 194, 164, 64, 8, 0, 18, 250, 113, 212, 117, 14, 227, 36, 196 },
+                            Status = true
+                        });
+                });
+
+            modelBuilder.Entity("Core.SecurityLayer.Entities.UserOperationClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("CreatedDate");
+
+                    b.Property<DateTimeOffset?>("DeletedDate")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("DeletedDate");
+
+                    b.Property<int>("OperationClaimId")
+                        .HasColumnType("int")
+                        .HasColumnName("OperationClaimId");
+
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("UpdatedDate");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OperationClaimId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserOperationClaims", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            OperationClaimId = 1,
+                            UserId = 1
+                        });
+                });
 
             modelBuilder.Entity("MetroMiles.DomainLayer.Entities.Brand", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
+                        .HasColumnName("Id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset")
@@ -44,8 +549,21 @@ namespace MetroMiles.PersistenceLayer.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("Name");
+
+                    b.Property<string>("NormalizedName")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("NormalizedName")
+                        .HasComputedColumnSql("UPPER([Name])", true);
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
 
                     b.Property<DateTimeOffset?>("UpdatedDate")
                         .HasColumnType("datetimeoffset")
@@ -53,8 +571,12 @@ namespace MetroMiles.PersistenceLayer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("NormalizedName")
+                        .HasDatabaseName("IX_Brands_NormalizedName");
+
                     b.HasIndex(new[] { "Name" }, "UK_Brands_Name")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[DeletedDate] IS NULL");
 
                     b.ToTable("Brands", (string)null);
                 });
@@ -64,7 +586,8 @@ namespace MetroMiles.PersistenceLayer.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
+                        .HasColumnName("Id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset")
@@ -94,10 +617,23 @@ namespace MetroMiles.PersistenceLayer.Migrations
                         .HasColumnType("smallint")
                         .HasColumnName("ModelYear");
 
+                    b.Property<string>("NormalizedPlate")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("NormalizedPlate")
+                        .HasComputedColumnSql("UPPER([Plate])", true);
+
                     b.Property<string>("Plate")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
                         .HasColumnName("Plate");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
 
                     b.Property<int>("Status")
                         .HasColumnType("int")
@@ -111,6 +647,13 @@ namespace MetroMiles.PersistenceLayer.Migrations
 
                     b.HasIndex("ModelId");
 
+                    b.HasIndex("NormalizedPlate")
+                        .HasDatabaseName("IX_Cars_NormalizedPlate");
+
+                    b.HasIndex(new[] { "Plate" }, "UK_Cars_Plate")
+                        .IsUnique()
+                        .HasFilter("[DeletedDate] IS NULL");
+
                     b.ToTable("Cars", (string)null);
                 });
 
@@ -119,7 +662,8 @@ namespace MetroMiles.PersistenceLayer.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
+                        .HasColumnName("Id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset")
@@ -131,8 +675,21 @@ namespace MetroMiles.PersistenceLayer.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("Name");
+
+                    b.Property<string>("NormalizedName")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("NormalizedName")
+                        .HasComputedColumnSql("UPPER([Name])", true);
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
 
                     b.Property<DateTimeOffset?>("UpdatedDate")
                         .HasColumnType("datetimeoffset")
@@ -140,8 +697,12 @@ namespace MetroMiles.PersistenceLayer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("NormalizedName")
+                        .HasDatabaseName("IX_Fuels_NormalizedName");
+
                     b.HasIndex(new[] { "Name" }, "UK_Fuels_Name")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[DeletedDate] IS NULL");
 
                     b.ToTable("Fuels", (string)null);
                 });
@@ -151,7 +712,8 @@ namespace MetroMiles.PersistenceLayer.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
+                        .HasColumnName("Id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<Guid>("BrandId")
                         .HasColumnType("uniqueidentifier")
@@ -181,8 +743,21 @@ namespace MetroMiles.PersistenceLayer.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("Name");
+
+                    b.Property<string>("NormalizedName")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("NormalizedName")
+                        .HasComputedColumnSql("UPPER([Name])", true);
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
 
                     b.Property<Guid>("TransmissionId")
                         .HasColumnType("uniqueidentifier")
@@ -200,7 +775,11 @@ namespace MetroMiles.PersistenceLayer.Migrations
 
                     b.HasIndex("Name")
                         .IsUnique()
-                        .HasDatabaseName("UK_Models_Name");
+                        .HasDatabaseName("UK_Models_Name")
+                        .HasFilter("[DeletedDate] IS NULL");
+
+                    b.HasIndex("NormalizedName")
+                        .HasDatabaseName("IX_Models_NormalizedName");
 
                     b.HasIndex("TransmissionId");
 
@@ -212,7 +791,8 @@ namespace MetroMiles.PersistenceLayer.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
+                        .HasColumnName("Id")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset")
@@ -224,8 +804,21 @@ namespace MetroMiles.PersistenceLayer.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("Name");
+
+                    b.Property<string>("NormalizedName")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("NormalizedName")
+                        .HasComputedColumnSql("UPPER([Name])", true);
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
 
                     b.Property<DateTimeOffset?>("UpdatedDate")
                         .HasColumnType("datetimeoffset")
@@ -233,10 +826,66 @@ namespace MetroMiles.PersistenceLayer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("NormalizedName")
+                        .HasDatabaseName("IX_Transmissions_NormalizedName");
+
                     b.HasIndex(new[] { "Name" }, "UK_Transmissions_Name")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[DeletedDate] IS NULL");
 
                     b.ToTable("Transmissions", (string)null);
+                });
+
+            modelBuilder.Entity("Core.SecurityLayer.Entities.EmailAuthenticator", b =>
+                {
+                    b.HasOne("Core.SecurityLayer.Entities.User", "User")
+                        .WithMany("EmailAuthenticators")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Core.SecurityLayer.Entities.OneTimePasswordAuthenticator", b =>
+                {
+                    b.HasOne("Core.SecurityLayer.Entities.User", "User")
+                        .WithMany("OtpAuthenticators")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Core.SecurityLayer.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("Core.SecurityLayer.Entities.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Core.SecurityLayer.Entities.UserOperationClaim", b =>
+                {
+                    b.HasOne("Core.SecurityLayer.Entities.OperationClaim", "OperationClaim")
+                        .WithMany("UserOperationClaims")
+                        .HasForeignKey("OperationClaimId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.SecurityLayer.Entities.User", "User")
+                        .WithMany("UserOperationClaims")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OperationClaim");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MetroMiles.DomainLayer.Entities.Car", b =>
@@ -275,6 +924,22 @@ namespace MetroMiles.PersistenceLayer.Migrations
                     b.Navigation("Fuel");
 
                     b.Navigation("Transmission");
+                });
+
+            modelBuilder.Entity("Core.SecurityLayer.Entities.OperationClaim", b =>
+                {
+                    b.Navigation("UserOperationClaims");
+                });
+
+            modelBuilder.Entity("Core.SecurityLayer.Entities.User", b =>
+                {
+                    b.Navigation("EmailAuthenticators");
+
+                    b.Navigation("OtpAuthenticators");
+
+                    b.Navigation("RefreshTokens");
+
+                    b.Navigation("UserOperationClaims");
                 });
 
             modelBuilder.Entity("MetroMiles.DomainLayer.Entities.Brand", b =>

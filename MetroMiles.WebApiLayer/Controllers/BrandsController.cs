@@ -1,13 +1,16 @@
-﻿using Core.ApplicationLayer.Requests.Page;
+using Core.ApplicationLayer.Requests.Page;
 using Core.ApplicationLayer.Responses.GetList;
 using MetroMiles.ApplicationLayer.Features.Brands.Commands.Create;
 using MetroMiles.ApplicationLayer.Features.Brands.Commands.Delete;
+using MetroMiles.ApplicationLayer.Features.Brands.Commands.Restore;
 using MetroMiles.ApplicationLayer.Features.Brands.Commands.Update;
 using MetroMiles.ApplicationLayer.Features.Brands.Queries.GetById;
 using MetroMiles.ApplicationLayer.Features.Brands.Queries.GetList;
 using MetroMiles.WebApiLayer.Controllers.BaseControllers;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
+using ResultHandler.AspNetCore.Extensions;
+using ResultHandler.Core.Base;
 
 namespace MetroMiles.WebApiLayer.Controllers;
 
@@ -18,33 +21,39 @@ public class BrandsController : BaseController
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] CreateBrandCommand createBrandCommand)
     {
-        CreatedBrandResponse response = await Mediator.Send(createBrandCommand);
-        return Ok(response);
+        var result = await Mediator.Send(createBrandCommand, HttpContext.RequestAborted);
+        return result.ToActionResult(HttpContext);
     }
     [HttpGet]
     public async Task<IActionResult> GetList([FromQuery] PageRequest pageRequest)
     {
         GetListBrandQuery getListBrandQuery = new() { PageRequest = pageRequest };
-        GetListResponse<GetListBrandListItemDto> response = await Mediator.Send(getListBrandQuery);
-        return Ok(response);
+        var result = await Mediator.Send(getListBrandQuery, HttpContext.RequestAborted);
+        return result.ToActionResult(HttpContext);
     }
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
         GetByIdBrandQuery getByIdBrandQuery = new() { Id = id };
-        GetByIdBrandResponse response = await Mediator.Send(getByIdBrandQuery);
-        return Ok(response);
+        var result = await Mediator.Send(getByIdBrandQuery, HttpContext.RequestAborted);
+        return result.ToActionResult(HttpContext);
     }
     [HttpPut]
     public async Task<IActionResult> Update([FromBody] UpdateBrandCommand updateBrandCommand)
     {
-        UpdatedBrandResponse response = await Mediator.Send(updateBrandCommand);
-        return Ok(response);
+        var result = await Mediator.Send(updateBrandCommand, HttpContext.RequestAborted);
+        return result.ToActionResult(HttpContext);
     }
     [HttpDelete]
-    public async  Task<IActionResult> Delete([FromQuery] DeleteBrandCommand deleteBrandCommand)
+    public async Task<IActionResult> Delete([FromQuery] DeleteBrandCommand deleteBrandCommand)
     {
-        DeletedBrandResponse response = await Mediator.Send(deleteBrandCommand);
-        return Ok(response);
+        var result = await Mediator.Send(deleteBrandCommand, HttpContext.RequestAborted);
+        return result.ToActionResult(HttpContext);
+    }
+    [HttpPost("Restore")]
+    public async Task<IActionResult> Restore([FromQuery] RestoreBrandCommand restoreBrandCommand)
+    {
+        var result = await Mediator.Send(restoreBrandCommand, HttpContext.RequestAborted);
+        return result.ToActionResult(HttpContext);
     }
 }

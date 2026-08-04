@@ -29,10 +29,11 @@
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     <PackageReference Include="MediatR" Version="14.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.10" />
-    <PackageReference Include="Core.ApplicationLayer" Version="1.0.*" />
-    <PackageReference Include="Core.CrossCuttingConcernLayer" Version="1.0.*" />
-    <PackageReference Include="Core.PersistenceLayer" Version="1.0.*" />
-    <PackageReference Include="Core.SecurityLayer" Version="1.0.*" />
+    <PackageReference Include="ResponseResultHandler" Version="11.0.17" />
+    <PackageReference Include="Core.ApplicationLayer" Version="1.0.9-beta.9" />
+    <PackageReference Include="Core.CrossCuttingConcernLayer" Version="1.0.9-beta.9" />
+    <PackageReference Include="Core.PersistenceLayer" Version="1.0.9-beta.9" />
+    <PackageReference Include="Core.SecurityLayer" Version="1.0.9-beta.9" />
   </ItemGroup>
 
   <ItemGroup>

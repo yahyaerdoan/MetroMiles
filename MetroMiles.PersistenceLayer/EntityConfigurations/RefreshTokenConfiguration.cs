@@ -1,11 +1,6 @@
-﻿using Core.SecurityLayer.Entities;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Core.SecurityLayer.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace MetroMiles.PersistenceLayer.EntityConfigurations;
 
@@ -27,6 +22,7 @@ public class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
         builder.Property(rt => rt.CreatedDate).HasColumnName("CreatedDate").IsRequired();
         builder.Property(rt => rt.UpdatedDate).HasColumnName("UpdatedDate");
         builder.Property(rt => rt.DeletedDate).HasColumnName("DeletedDate");
+        builder.Ignore(rt => rt.RowVersion);
 
         builder.HasQueryFilter(rt => !rt.DeletedDate.HasValue);
 

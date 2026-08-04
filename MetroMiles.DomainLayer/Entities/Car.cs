@@ -1,4 +1,4 @@
-﻿using Core.PersistenceLayer.Repositories.Entities;
+using Core.PersistenceLayer.Repositories.Entities;
 using MetroMiles.DomainLayer.Entities.Enums;
 
 namespace MetroMiles.DomainLayer.Entities;
@@ -10,13 +10,14 @@ public class Car : Entity<Guid>
     public int Mile { get; set; }
     public short ModelYear { get; set; }
     public string Plate { get; set; }
+    public string? NormalizedPlate { get; set; }
     public short MinFindexScore { get; set; }
-    public  CarStatus Status { get;set; }
+    public CarStatus Status { get; set; }
     public virtual Model? Model { get; set; }
 
     public Car()
     {
-        
+
     }
 
     public Car(Guid id, Guid modelId, int kilometer, int mile, short modelYear, string plate, short minFindexScore, CarStatus status) : this()
