@@ -1,0 +1,142 @@
+### MetroMiles API - manual test requests
+### Requires the "REST Client" extension in VS Code (or similar .http runner).
+### Run requests top to bottom - each depends on data created by the ones above it.
+
+@baseUrl = https://localhost:7102
+@contentType = application/json
+
+### 1) Login with the seeded admin user (see UserConfiguration.cs)
+# Copy the "token" value from the response and paste it into @token below,
+# then re-run the requests that need Authorization.
+POST {{baseUrl}}/api/Auths/Login
+Content-Type: {{contentType}}
+
+{
+  "email": "admin@metromiles.com",
+  "password": "Passw0rd"
+}
+
+### 2) Paste the access token from step 1 here
+@token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJlbWFpbCI6ImFkbWluQG1ldHJvbWlsZXMuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6IkFkbWluIE1ldHJvTWlsZXMiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsIm5iZiI6MTc4NjA3OTI0OSwiZXhwIjoxNzg2MDgyODQ5LCJpc3MiOiJNZXRyb01pbGVzSXNzdWVyIiwiYXVkIjoiTWV0cm9NaWxlc0F1ZGllbmNlIn0.l8TDIlHn5NOayQiypGVHcrZUrFQTPrsMQkR9c6Dtq1YD3oiHfioF8JK2XbUa6p0PyNNPq2gTLSTHxRrYHzP02g
+
+### 3) Create a Brand
+# @name createBrand
+POST {{baseUrl}}/api/Brands
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "name": "Toyota",
+  "description": "Japanese automobile manufacturer"
+}
+
+### 4) Create a Fuel
+# @name createFuel
+POST {{baseUrl}}/api/Fuels
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "name": "Gasoline"
+}
+
+### 5) Create a Transmission
+# @name createTransmission
+POST {{baseUrl}}/api/Transmissions
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "name": "Automatic"
+}
+
+### 6) Create a Model
+# Replace brandId / fuelId / transmissionId with the Id values returned by steps 3-5.
+POST {{baseUrl}}/api/Models
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "brandId": "PASTE_BRAND_ID_HERE",
+  "fuelId": "PASTE_FUEL_ID_HERE",
+  "transmissionId": "PASTE_TRANSMISSION_ID_HERE",
+  "name": "Corolla",
+  "dailyPrice": 1200.50,
+  "imageUrl": "https://example.com/images/corolla.jpg"
+}
+
+### 7) Create a Car
+# Replace modelId with the Id value returned by step 6.
+# Status: 1 = Available, 2 = Rented, 3 = UnderMaintenance
+POST {{baseUrl}}/api/Cars
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "modelId": "PASTE_MODEL_ID_HERE",
+  "kilometer": 0,
+  "mile": 0,
+  "modelYear": 2026,
+  "plate": "34ABC123",
+  "minFindexScore": 700,
+  "status": 1
+}
+
+### 8) Create another user
+POST {{baseUrl}}/api/Users
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "email": "jane.doe@metromiles.com",
+  "password": "Passw0rd!"
+}
+
+### --- Read/list endpoints ---
+
+### Get Brands
+GET {{baseUrl}}/api/Brands
+Authorization: Bearer {{token}}
+
+### Get Fuels
+GET {{baseUrl}}/api/Fuels
+Authorization: Bearer {{token}}
+
+### Get Transmissions
+GET {{baseUrl}}/api/Transmissions
+Authorization: Bearer {{token}}
+
+### Get Models (paged)
+GET {{baseUrl}}/api/Models?PageIndex=0&PageSize=10
+Authorization: Bearer {{token}}
+
+### Get Cars (paged)
+GET {{baseUrl}}/api/Cars?PageIndex=0&PageSize=10
+Authorization: Bearer {{token}}
+
+### Get Users (paged)
+GET {{baseUrl}}/api/Users?PageIndex=0&PageSize=10
+Authorization: Bearer {{token}}
+
+### --- Auth token lifecycle ---
+
+### Refresh token (paste the refreshToken from the Login response)
+POST {{baseUrl}}/api/Auths/RefreshToken
+Content-Type: {{contentType}}
+
+{
+  "refreshToken": "PASTE_REFRESH_TOKEN_HERE"
+}
+
+### Revoke token
+POST {{baseUrl}}/api/Auths/RevokeToken
+Content-Type: {{contentType}}
+
+{
+  "refreshToken": "PASTE_REFRESH_TOKEN_HERE"
+}
+
+### Health check
+GET {{baseUrl}}/health

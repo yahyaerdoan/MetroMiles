@@ -29,7 +29,7 @@ public class BrandsController : BaseController
     {
         GetListBrandQuery getListBrandQuery = new() { PageRequest = pageRequest };
         var result = await Mediator.Send(getListBrandQuery, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id)

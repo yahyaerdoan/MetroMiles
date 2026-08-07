@@ -4,8 +4,10 @@ using Core.SecurityLayer.Encryptions;
 using Core.SecurityLayer.Extensions;
 using Core.SecurityLayer.JsonWebTokens.Concretions;
 using MetroMiles.ApplicationLayer.Extensions.ServiceRegistrations;
+using MetroMiles.PersistenceLayer.Context;
 using MetroMiles.PersistenceLayer.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Scalar.AspNetCore;
@@ -121,6 +123,11 @@ builder.Services.AddOpenApi(options =>
 
 
 var app = builder.Build();
+
+using (var migrationScope = app.Services.CreateScope())
+{
+    migrationScope.ServiceProvider.GetRequiredService<BaseDbContext>().Database.Migrate();
+}
 
 app.UseConfigureCustomExceptionMiddleware();
 
