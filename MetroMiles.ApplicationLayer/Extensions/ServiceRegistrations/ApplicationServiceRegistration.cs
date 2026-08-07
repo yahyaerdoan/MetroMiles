@@ -34,7 +34,7 @@ public static class ApplicationServiceRegistration
         return services;
     }
 
-    #region Add all BaseBusinessRules classes to service registrations dynamically.
+    // Add all BaseBusinessRules classes to service registrations dynamically.
     public static IServiceCollection AddSubClassesOfType(this IServiceCollection services, Assembly assembly, Type type, Func<IServiceCollection, Type, IServiceCollection>? addWithLifeCycle = null)
     {
         var types = assembly.GetTypes().Where(t => t.IsSubclassOf(type) && type != t).ToList();
@@ -52,5 +52,4 @@ public static class ApplicationServiceRegistration
 
         return services;
     }
-    #endregion
 }

@@ -2,7 +2,6 @@ using MetroMiles.ApplicationLayer.Extensions.RuleRegistrations;
 using MetroMiles.ApplicationLayer.Features.Brands.Constants;
 using MetroMiles.ApplicationLayer.Services.Repositories;
 using MetroMiles.DomainLayer.Entities;
-
 using ResultHandler.Core.Abstractions;
 using ResultHandler.Facade;
 

@@ -7,25 +7,22 @@ using MediatR;
 using MetroMiles.ApplicationLayer.Features.Brands.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
 using MetroMiles.DomainLayer.Entities;
-
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;
 using ResultHandler.Functional;
-
 using static MetroMiles.ApplicationLayer.Features.Brands.Constants.BrandsOperationClaims;
 
 namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Create;
 
 public class CreateBrandCommand : IRequest<OperationDataResult<CreatedBrandResponse>>, ITransactionAddRequest, ICacheRemoveRequest, ILogAddRequest, ISecureAddRequest
 {
-    #region CreateBrandCommand & ICacheRemoveRequest Properties
+    // CreateBrandCommand & ICacheRemoveRequest Properties
     public required string Name { get; set; }
     public required string Description { get; set; }
     public string CacheKey => "";
     public bool ByPassCache => false;
     public string? CacheGroupKey => "GetBrands";
     public string[] Roles => [Admin, Write, Add];
-    #endregion
 
     public class CreateBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper, BrandBusinessRules brandBusinessRules) : IRequestHandler<CreateBrandCommand, OperationDataResult<CreatedBrandResponse>>
     {

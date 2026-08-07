@@ -3,7 +3,6 @@ using Core.ApplicationLayer.Requests.Page;
 using Core.ApplicationLayer.Responses.GetList;
 using MediatR;
 using MetroMiles.ApplicationLayer.Services.Repositories;
-
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;
 

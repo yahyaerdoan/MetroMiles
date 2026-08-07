@@ -8,7 +8,6 @@ using MetroMiles.ApplicationLayer.Features.Fuels.Queries.GetList;
 using MetroMiles.WebApiLayer.Controllers.BaseControllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
 using ResultHandler.AspNetCore.Extensions;
 
 namespace MetroMiles.WebApiLayer.Controllers;

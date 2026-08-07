@@ -8,7 +8,6 @@ using MetroMiles.ApplicationLayer.Features.Brands.Queries.GetList;
 using MetroMiles.WebApiLayer.Controllers.BaseControllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
 using ResultHandler.AspNetCore.Extensions;
 
 namespace MetroMiles.WebApiLayer.Controllers;

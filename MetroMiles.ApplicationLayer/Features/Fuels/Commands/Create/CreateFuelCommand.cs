@@ -6,11 +6,9 @@ using MediatR;
 using MetroMiles.ApplicationLayer.Features.Fuels.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
 using MetroMiles.DomainLayer.Entities;
-
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;
 using ResultHandler.Functional;
-
 using static MetroMiles.ApplicationLayer.Features.Fuels.Constants.FuelsOperationClaims;
 
 namespace MetroMiles.ApplicationLayer.Features.Fuels.Commands.Create;

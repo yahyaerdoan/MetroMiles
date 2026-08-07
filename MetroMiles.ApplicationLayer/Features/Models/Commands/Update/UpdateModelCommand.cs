@@ -4,7 +4,6 @@ using MediatR;
 using MetroMiles.ApplicationLayer.Features.Models.Constants;
 using MetroMiles.ApplicationLayer.Features.Models.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
-
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;
 using ResultHandler.Functional;

@@ -5,7 +5,6 @@ using Core.PersistenceLayer.Dynamics.Dynamic;
 using MediatR;
 using MetroMiles.ApplicationLayer.Services.Repositories;
 using Microsoft.EntityFrameworkCore;
-
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;
 

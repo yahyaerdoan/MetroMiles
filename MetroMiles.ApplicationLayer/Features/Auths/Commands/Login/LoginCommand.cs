@@ -1,13 +1,9 @@
 using Core.SecurityLayer.Entities;
 using Core.SecurityLayer.Hashings;
 using Core.SecurityLayer.JsonWebTokens.Abstractions;
-
 using MediatR;
-
 using MetroMiles.ApplicationLayer.Services.Repositories;
-
 using Microsoft.EntityFrameworkCore;
-
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;
 

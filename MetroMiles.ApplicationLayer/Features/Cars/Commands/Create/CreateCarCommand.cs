@@ -7,11 +7,9 @@ using MetroMiles.ApplicationLayer.Features.Cars.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
 using MetroMiles.DomainLayer.Entities;
 using MetroMiles.DomainLayer.Entities.Enums;
-
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;
 using ResultHandler.Functional;
-
 using static MetroMiles.ApplicationLayer.Features.Cars.Constants.CarsOperationClaims;
 
 namespace MetroMiles.ApplicationLayer.Features.Cars.Commands.Create;

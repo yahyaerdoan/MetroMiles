@@ -6,7 +6,6 @@ using Core.ApplicationLayer.Responses.GetList;
 using MediatR;
 using MetroMiles.ApplicationLayer.Features.Users.Constants;
 using MetroMiles.ApplicationLayer.Services.Repositories;
-
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;
 

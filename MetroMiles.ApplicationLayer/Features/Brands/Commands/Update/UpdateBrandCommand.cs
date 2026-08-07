@@ -13,7 +13,7 @@ namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Update;
 
 public class UpdateBrandCommand : IRequest<OperationDataResult<UpdatedBrandResponse>>, ICacheRemoveRequest, ISecureAddRequest
 {
-    #region UpdateBrandCommand & ICacheRemoveRequest Properties
+    // UpdateBrandCommand & ICacheRemoveRequest Properties
     public Guid Id { get; set; }
     public required string Name { get; set; }
     public required string Description { get; set; }
@@ -22,7 +22,6 @@ public class UpdateBrandCommand : IRequest<OperationDataResult<UpdatedBrandRespo
     public bool ByPassCache => false;
     public string? CacheGroupKey => "GetBrands";
     public string[] Roles => [BrandsOperationClaims.Admin, BrandsOperationClaims.Write, BrandsOperationClaims.Update];
-    #endregion
 
     public class UpdateBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper, BrandBusinessRules brandBusinessRules) : IRequestHandler<UpdateBrandCommand, OperationDataResult<UpdatedBrandResponse>>
     {

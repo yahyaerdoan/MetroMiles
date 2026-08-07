@@ -3,7 +3,6 @@ using Core.SecurityLayer.Hashings;
 using MetroMiles.ApplicationLayer.Extensions.RuleRegistrations;
 using MetroMiles.ApplicationLayer.Features.Auths.Constants;
 using MetroMiles.ApplicationLayer.Services.Repositories;
-
 using ResultHandler.Core.Abstractions;
 using ResultHandler.Facade;
 

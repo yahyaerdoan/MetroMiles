@@ -6,11 +6,9 @@ using MediatR;
 using MetroMiles.ApplicationLayer.Features.Models.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
 using MetroMiles.DomainLayer.Entities;
-
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;
 using ResultHandler.Functional;
-
 using static MetroMiles.ApplicationLayer.Features.Models.Constants.ModelsOperationClaims;
 
 namespace MetroMiles.ApplicationLayer.Features.Models.Commands.Create;

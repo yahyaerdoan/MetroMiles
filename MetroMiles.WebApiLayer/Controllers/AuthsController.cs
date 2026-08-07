@@ -1,15 +1,12 @@
 using Core.SecurityLayer.Extensions;
-
 using MetroMiles.ApplicationLayer.Features.Auths.Commands.ChangePassword;
 using MetroMiles.ApplicationLayer.Features.Auths.Commands.Login;
 using MetroMiles.ApplicationLayer.Features.Auths.Commands.RefreshToken;
 using MetroMiles.ApplicationLayer.Features.Auths.Commands.RevokeToken;
 using MetroMiles.WebApiLayer.Controllers.BaseControllers;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-
 using ResultHandler.AspNetCore.Extensions;
 
 namespace MetroMiles.WebApiLayer.Controllers;

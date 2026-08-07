@@ -10,7 +10,6 @@ using MetroMiles.ApplicationLayer.Features.Models.Queries.GetListByDynamicQuery;
 using MetroMiles.WebApiLayer.Controllers.BaseControllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
 using ResultHandler.AspNetCore.Extensions;
 
 namespace MetroMiles.WebApiLayer.Controllers;

@@ -133,7 +133,6 @@ builder.Services.AddOpenApi(options =>
 
 
 var app = builder.Build();
-
 using (var migrationScope = app.Services.CreateScope())
 {
     migrationScope.ServiceProvider.GetRequiredService<BaseDbContext>().Database.Migrate();

@@ -3,7 +3,6 @@ using MetroMiles.ApplicationLayer.Features.Cars.Constants;
 using MetroMiles.ApplicationLayer.Services.Repositories;
 using MetroMiles.DomainLayer.Entities;
 using MetroMiles.DomainLayer.Entities.Enums;
-
 using ResultHandler.Core.Abstractions;
 using ResultHandler.Facade;
 

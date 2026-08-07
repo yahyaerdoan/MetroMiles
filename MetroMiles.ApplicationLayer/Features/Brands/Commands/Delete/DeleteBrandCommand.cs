@@ -13,13 +13,12 @@ namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Delete;
 
 public class DeleteBrandCommand : IRequest<OperationDataResult<DeletedBrandResponse>>, ICacheRemoveRequest, ISecureAddRequest
 {
-    #region DeleteBrandCommand & ICacheRemoveRequest Properties
+    // DeleteBrandCommand & ICacheRemoveRequest Properties
     public Guid Id { get; set; }
     public string CacheKey => "";
     public bool ByPassCache => false;
     public string? CacheGroupKey => "GetBrands";
     public string[] Roles => [BrandsOperationClaims.Admin, BrandsOperationClaims.Write, BrandsOperationClaims.Delete];
-    #endregion
 
     public class DeleteBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper, BrandBusinessRules brandBusinessRules) : IRequestHandler<DeleteBrandCommand, OperationDataResult<DeletedBrandResponse>>
     {

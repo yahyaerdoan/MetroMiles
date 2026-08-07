@@ -1,9 +1,6 @@
 using Core.SecurityLayer.Hashings;
-
 using MediatR;
-
 using MetroMiles.ApplicationLayer.Services.Repositories;
-
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;
 
