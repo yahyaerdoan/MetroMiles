@@ -6,6 +6,7 @@ using MetroMiles.ApplicationLayer.Features.Users.Commands.Update;
 using MetroMiles.ApplicationLayer.Features.Users.Queries.GetById;
 using MetroMiles.ApplicationLayer.Features.Users.Queries.GetList;
 using MetroMiles.WebApiLayer.Controllers.BaseControllers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using ResultHandler.AspNetCore.Extensions;
@@ -14,6 +15,7 @@ namespace MetroMiles.WebApiLayer.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class UsersController : BaseController
 {
     [HttpPost]

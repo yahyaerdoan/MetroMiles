@@ -6,6 +6,7 @@ using MetroMiles.ApplicationLayer.Features.Brands.Commands.Update;
 using MetroMiles.ApplicationLayer.Features.Brands.Queries.GetById;
 using MetroMiles.ApplicationLayer.Features.Brands.Queries.GetList;
 using MetroMiles.WebApiLayer.Controllers.BaseControllers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using ResultHandler.AspNetCore.Extensions;
@@ -16,6 +17,7 @@ namespace MetroMiles.WebApiLayer.Controllers;
 [ApiController]
 public class BrandsController : BaseController
 {
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] CreateBrandCommand createBrandCommand)
     {
@@ -36,18 +38,21 @@ public class BrandsController : BaseController
         var result = await Mediator.Send(getByIdBrandQuery, HttpContext.RequestAborted);
         return result.ToActionResult(HttpContext);
     }
+    [Authorize]
     [HttpPut]
     public async Task<IActionResult> Update([FromBody] UpdateBrandCommand updateBrandCommand)
     {
         var result = await Mediator.Send(updateBrandCommand, HttpContext.RequestAborted);
         return result.ToActionResult(HttpContext);
     }
+    [Authorize]
     [HttpDelete]
     public async Task<IActionResult> Delete([FromQuery] DeleteBrandCommand deleteBrandCommand)
     {
         var result = await Mediator.Send(deleteBrandCommand, HttpContext.RequestAborted);
         return result.ToActionResult(HttpContext);
     }
+    [Authorize]
     [HttpPost("Restore")]
     public async Task<IActionResult> Restore([FromQuery] RestoreBrandCommand restoreBrandCommand)
     {

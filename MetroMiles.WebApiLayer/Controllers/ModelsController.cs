@@ -8,6 +8,7 @@ using MetroMiles.ApplicationLayer.Features.Models.Queries.GetById;
 using MetroMiles.ApplicationLayer.Features.Models.Queries.GetList;
 using MetroMiles.ApplicationLayer.Features.Models.Queries.GetListByDynamicQuery;
 using MetroMiles.WebApiLayer.Controllers.BaseControllers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using ResultHandler.AspNetCore.Extensions;
@@ -18,6 +19,7 @@ namespace MetroMiles.WebApiLayer.Controllers;
 [ApiController]
 public class ModelsController : BaseController
 {
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] CreateModelCommand createModelCommand)
     {
@@ -40,6 +42,7 @@ public class ModelsController : BaseController
         return result.ToActionResult(HttpContext);
     }
 
+    [Authorize]
     [HttpPut]
     public async Task<IActionResult> Update([FromBody] UpdateModelCommand updateModelCommand)
     {
@@ -47,6 +50,7 @@ public class ModelsController : BaseController
         return result.ToActionResult(HttpContext);
     }
 
+    [Authorize]
     [HttpDelete]
     public async Task<IActionResult> Delete([FromQuery] DeleteModelCommand deleteModelCommand)
     {
@@ -54,6 +58,7 @@ public class ModelsController : BaseController
         return result.ToActionResult(HttpContext);
     }
 
+    [Authorize]
     [HttpPost("Restore")]
     public async Task<IActionResult> Restore([FromQuery] RestoreModelCommand restoreModelCommand)
     {

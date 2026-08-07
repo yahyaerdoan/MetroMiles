@@ -6,6 +6,7 @@ using MetroMiles.ApplicationLayer.Features.Cars.Commands.Update;
 using MetroMiles.ApplicationLayer.Features.Cars.Queries.GetById;
 using MetroMiles.ApplicationLayer.Features.Cars.Queries.GetList;
 using MetroMiles.WebApiLayer.Controllers.BaseControllers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using ResultHandler.AspNetCore.Extensions;
@@ -16,6 +17,7 @@ namespace MetroMiles.WebApiLayer.Controllers;
 [ApiController]
 public class CarsController : BaseController
 {
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] CreateCarCommand createCarCommand)
     {
@@ -39,6 +41,7 @@ public class CarsController : BaseController
         return result.ToActionResult(HttpContext);
     }
 
+    [Authorize]
     [HttpPut]
     public async Task<IActionResult> Update([FromBody] UpdateCarCommand updateCarCommand)
     {
@@ -46,6 +49,7 @@ public class CarsController : BaseController
         return result.ToActionResult(HttpContext);
     }
 
+    [Authorize]
     [HttpDelete]
     public async Task<IActionResult> Delete([FromQuery] DeleteCarCommand deleteCarCommand)
     {
@@ -53,6 +57,7 @@ public class CarsController : BaseController
         return result.ToActionResult(HttpContext);
     }
 
+    [Authorize]
     [HttpPost("Restore")]
     public async Task<IActionResult> Restore([FromQuery] RestoreCarCommand restoreCarCommand)
     {

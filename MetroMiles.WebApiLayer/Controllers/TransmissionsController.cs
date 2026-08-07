@@ -6,6 +6,7 @@ using MetroMiles.ApplicationLayer.Features.Transmissions.Commands.Update;
 using MetroMiles.ApplicationLayer.Features.Transmissions.Queries.GetById;
 using MetroMiles.ApplicationLayer.Features.Transmissions.Queries.GetList;
 using MetroMiles.WebApiLayer.Controllers.BaseControllers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using ResultHandler.AspNetCore.Extensions;
@@ -16,6 +17,7 @@ namespace MetroMiles.WebApiLayer.Controllers;
 [ApiController]
 public class TransmissionsController : BaseController
 {
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] CreateTransmissionCommand createTransmissionCommand)
     {
@@ -39,6 +41,7 @@ public class TransmissionsController : BaseController
         return result.ToActionResult(HttpContext);
     }
 
+    [Authorize]
     [HttpPut]
     public async Task<IActionResult> Update([FromBody] UpdateTransmissionCommand updateTransmissionCommand)
     {
@@ -46,6 +49,7 @@ public class TransmissionsController : BaseController
         return result.ToActionResult(HttpContext);
     }
 
+    [Authorize]
     [HttpDelete]
     public async Task<IActionResult> Delete([FromQuery] DeleteTransmissionCommand deleteTransmissionCommand)
     {
@@ -53,6 +57,7 @@ public class TransmissionsController : BaseController
         return result.ToActionResult(HttpContext);
     }
 
+    [Authorize]
     [HttpPost("Restore")]
     public async Task<IActionResult> Restore([FromQuery] RestoreTransmissionCommand restoreTransmissionCommand)
     {

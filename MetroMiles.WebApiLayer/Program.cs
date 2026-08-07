@@ -7,6 +7,7 @@ using MetroMiles.ApplicationLayer.Extensions.ServiceRegistrations;
 using MetroMiles.PersistenceLayer.Context;
 using MetroMiles.PersistenceLayer.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
@@ -112,11 +113,20 @@ builder.Services.AddOpenApi(options =>
             Scheme = "bearer",
             BearerFormat = "JWT",
         };
-        document.Security ??= [];
-        document.Security.Add(new OpenApiSecurityRequirement
+        return Task.CompletedTask;
+    });
+    options.AddOperationTransformer((operation, context, cancellationToken) =>
+    {
+        var metadata = context.Description.ActionDescriptor.EndpointMetadata;
+        var requiresAuth = metadata.OfType<AuthorizeAttribute>().Any() && !metadata.OfType<IAllowAnonymous>().Any();
+        if (requiresAuth)
         {
-            [new OpenApiSecuritySchemeReference("Bearer", document)] = []
-        });
+            operation.Security ??= [];
+            operation.Security.Add(new OpenApiSecurityRequirement
+            {
+                [new OpenApiSecuritySchemeReference("Bearer", context.Document)] = []
+            });
+        }
         return Task.CompletedTask;
     });
 });
