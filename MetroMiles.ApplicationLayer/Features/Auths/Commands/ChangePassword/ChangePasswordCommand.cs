@@ -1,4 +1,3 @@
-using Core.SecurityLayer.Entities;
 using Core.SecurityLayer.Hashings;
 
 using MediatR;

@@ -12,7 +12,7 @@ public class UserOperationClaimRepository(BaseDbContext context) : EfRepositoryB
     {
         var operationClaims = await Query().AsNoTracking()
             .Where(u => u.UserId == userId)
-            .Select(o => new OperationClaim { Id = o.OperationClaimId, Name = o.OperationClaim.Name})
+            .Select(o => new OperationClaim { Id = o.OperationClaimId, Name = o.OperationClaim.Name })
             .ToListAsync();
         return operationClaims;
     }

@@ -3,10 +3,8 @@ using Core.ApplicationLayer.Pipelines.Cachings.Abstractions;
 using Core.ApplicationLayer.Pipelines.Loggings.Abstractions;
 using Core.ApplicationLayer.Requests.Page;
 using Core.ApplicationLayer.Responses.GetList;
-using Core.PersistenceLayer.Pagings.Paging;
 using MediatR;
 using MetroMiles.ApplicationLayer.Services.Repositories;
-using MetroMiles.DomainLayer.Entities;
 
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;

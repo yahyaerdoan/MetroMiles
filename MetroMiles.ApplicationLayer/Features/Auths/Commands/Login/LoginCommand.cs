@@ -1,7 +1,6 @@
 using Core.SecurityLayer.Entities;
 using Core.SecurityLayer.Hashings;
 using Core.SecurityLayer.JsonWebTokens.Abstractions;
-using Core.SecurityLayer.JsonWebTokens.Concretions;
 
 using MediatR;
 

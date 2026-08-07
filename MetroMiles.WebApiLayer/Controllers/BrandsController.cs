@@ -1,5 +1,4 @@
 using Core.ApplicationLayer.Requests.Page;
-using Core.ApplicationLayer.Responses.GetList;
 using MetroMiles.ApplicationLayer.Features.Brands.Commands.Create;
 using MetroMiles.ApplicationLayer.Features.Brands.Commands.Delete;
 using MetroMiles.ApplicationLayer.Features.Brands.Commands.Restore;
@@ -10,7 +9,6 @@ using MetroMiles.WebApiLayer.Controllers.BaseControllers;
 using Microsoft.AspNetCore.Mvc;
 
 using ResultHandler.AspNetCore.Extensions;
-using ResultHandler.Core.Base;
 
 namespace MetroMiles.WebApiLayer.Controllers;
 

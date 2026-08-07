@@ -9,7 +9,6 @@ using MetroMiles.WebApiLayer.Controllers.BaseControllers;
 using Microsoft.AspNetCore.Mvc;
 
 using ResultHandler.AspNetCore.Extensions;
-using ResultHandler.Core.Base;
 
 namespace MetroMiles.WebApiLayer.Controllers;
 

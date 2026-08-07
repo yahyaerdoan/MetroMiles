@@ -1,7 +1,6 @@
 using AutoMapper;
 using Core.ApplicationLayer.Requests.Page;
 using Core.ApplicationLayer.Responses.GetList;
-using Core.PersistenceLayer.Pagings.Paging;
 using MediatR;
 using MetroMiles.ApplicationLayer.Services.Repositories;
 

@@ -1,6 +1,5 @@
 using AutoMapper;
 using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
-using Core.SecurityLayer.Entities;
 using MediatR;
 using MetroMiles.ApplicationLayer.Features.Users.Constants;
 using MetroMiles.ApplicationLayer.Features.Users.Rules;

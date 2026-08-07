@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 
 using ResultHandler.AspNetCore.Extensions;
-using ResultHandler.Core.Base;
 
 namespace MetroMiles.WebApiLayer.Controllers;
 

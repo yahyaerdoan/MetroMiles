@@ -2,7 +2,6 @@ using AutoMapper;
 using MediatR;
 using MetroMiles.ApplicationLayer.Features.Brands.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
-using MetroMiles.DomainLayer.Entities;
 
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;
