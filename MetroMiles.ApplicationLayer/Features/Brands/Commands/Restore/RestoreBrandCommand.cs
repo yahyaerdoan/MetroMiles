@@ -13,7 +13,7 @@ namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Restore;
 
 public class RestoreBrandCommand : IRequest<OperationDataResult<RestoredBrandResponse>>, ICacheRemoveRequest, ISecureAddRequest
 {
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
     public string CacheKey => "";
     public bool ByPassCache => false;
     public string? CacheGroupKey => "GetBrands";

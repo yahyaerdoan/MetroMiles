@@ -12,7 +12,7 @@ namespace MetroMiles.ApplicationLayer.Features.Models.Commands.Delete;
 
 public class DeleteModelCommand : IRequest<OperationDataResult<DeletedModelResponse>>, ISecureAddRequest
 {
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
     public string[] Roles => [ModelsOperationClaims.Admin, ModelsOperationClaims.Write, ModelsOperationClaims.Delete];
 
     public class DeleteModelCommandHandler(IModelRepository modelRepository, IMapper mapper, ModelBusinessRules modelBusinessRules)
@@ -31,7 +31,7 @@ public class DeleteModelCommand : IRequest<OperationDataResult<DeletedModelRespo
                 return existenceCheck.ToErrorDataResult<DeletedModelResponse>();
             }
 
-            var inUseCheck = await _modelBusinessRules.ModelShouldNotBeInUseWhenDeleted(request.Id);
+            var inUseCheck = await _modelBusinessRules.ModelShouldNotBeInUseWhenDeleted(existenceCheck.Data.Id);
             if (!inUseCheck.IsSuccessful)
             {
                 return inUseCheck.ToErrorDataResult<DeletedModelResponse>();

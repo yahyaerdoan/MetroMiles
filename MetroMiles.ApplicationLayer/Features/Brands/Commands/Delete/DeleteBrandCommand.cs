@@ -14,7 +14,7 @@ namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Delete;
 public class DeleteBrandCommand : IRequest<OperationDataResult<DeletedBrandResponse>>, ICacheRemoveRequest, ISecureAddRequest
 {
     // DeleteBrandCommand & ICacheRemoveRequest Properties
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
     public string CacheKey => "";
     public bool ByPassCache => false;
     public string? CacheGroupKey => "GetBrands";
@@ -35,7 +35,7 @@ public class DeleteBrandCommand : IRequest<OperationDataResult<DeletedBrandRespo
                 return existenceCheck.ToErrorDataResult<DeletedBrandResponse>();
             }
 
-            var inUseCheck = await _brandBusinessRules.BrandShouldNotBeInUseWhenDeleted(request.Id);
+            var inUseCheck = await _brandBusinessRules.BrandShouldNotBeInUseWhenDeleted(existenceCheck.Data.Id);
             if (!inUseCheck.IsSuccessful)
             {
                 return inUseCheck.ToErrorDataResult<DeletedBrandResponse>();

@@ -27,8 +27,8 @@ public class GetListBrandQuery : IRequest<OperationDataResult<GetListResponse<Ge
         public async Task<OperationDataResult<GetListResponse<GetListBrandListItemDto>>> Handle(GetListBrandQuery request, CancellationToken cancellationToken)
         {
             var brands = await _brandRepository.GetListAsync(
-                index: request.PageRequest.PageIndex,
-                size: request.PageRequest.PageSize,
+                index: request.PageRequest.PageIndex ?? 0,
+                size: request.PageRequest.PageSize ?? 10,
                 cancellationToken: cancellationToken);
             var response = _mapper.Map<GetListResponse<GetListBrandListItemDto>>(brands);
             return Result.Success(response);

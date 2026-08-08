@@ -12,7 +12,7 @@ namespace MetroMiles.ApplicationLayer.Features.Users.Commands.Restore;
 
 public class RestoreUserCommand : IRequest<OperationDataResult<RestoredUserResponse>>, ISecureAddRequest
 {
-    public int Id { get; set; }
+    public int? Id { get; set; }
     public string[] Roles => [UsersOperationClaims.Admin, UsersOperationClaims.Write, UsersOperationClaims.Update];
 
     public class RestoreUserCommandHandler(IUserRepository userRepository, IMapper mapper, UserBusinessRules userBusinessRules) : IRequestHandler<RestoreUserCommand, OperationDataResult<RestoredUserResponse>>

@@ -25,8 +25,8 @@ public class GetListByDynamicModelQuery : IRequest<OperationDataResult<GetListRe
             var models = await _modelRepository.GetListByDynamicAsync(
                  request.DynamicQuery ?? new DynamicQuery(),
                  include: m => m.Include(m => m.Brand).Include(m => m.Fuel).Include(m => m.Transmission!),
-                 index: request.PageRequest.PageIndex,
-                 size: request.PageRequest.PageSize,
+                 index: request.PageRequest.PageIndex ?? 0,
+                 size: request.PageRequest.PageSize ?? 10,
                  cancellationToken: cancellationToken
                  );
             var response = _mapper.Map<GetListResponse<GetListByDynamicModelListItemDto>>(models);

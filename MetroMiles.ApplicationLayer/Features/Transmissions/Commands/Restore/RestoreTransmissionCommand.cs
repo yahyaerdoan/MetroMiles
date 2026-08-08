@@ -12,7 +12,7 @@ namespace MetroMiles.ApplicationLayer.Features.Transmissions.Commands.Restore;
 
 public class RestoreTransmissionCommand : IRequest<OperationDataResult<RestoredTransmissionResponse>>, ISecureAddRequest
 {
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
     public string[] Roles => [TransmissionsOperationClaims.Admin, TransmissionsOperationClaims.Write, TransmissionsOperationClaims.Update];
 
     public class RestoreTransmissionCommandHandler(ITransmissionRepository transmissionRepository, IMapper mapper, TransmissionBusinessRules transmissionBusinessRules)

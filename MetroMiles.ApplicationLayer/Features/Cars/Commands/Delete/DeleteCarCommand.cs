@@ -12,7 +12,7 @@ namespace MetroMiles.ApplicationLayer.Features.Cars.Commands.Delete;
 
 public class DeleteCarCommand : IRequest<OperationDataResult<DeletedCarResponse>>, ISecureAddRequest
 {
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
     public string[] Roles => [CarsOperationClaims.Admin, CarsOperationClaims.Write, CarsOperationClaims.Delete];
 
     public class DeleteCarCommandHandler(ICarRepository carRepository, IMapper mapper) : IRequestHandler<DeleteCarCommand, OperationDataResult<DeletedCarResponse>>

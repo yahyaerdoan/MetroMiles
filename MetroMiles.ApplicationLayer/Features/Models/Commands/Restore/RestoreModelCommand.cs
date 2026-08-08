@@ -12,7 +12,7 @@ namespace MetroMiles.ApplicationLayer.Features.Models.Commands.Restore;
 
 public class RestoreModelCommand : IRequest<OperationDataResult<RestoredModelResponse>>, ISecureAddRequest
 {
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
     public string[] Roles => [ModelsOperationClaims.Admin, ModelsOperationClaims.Write, ModelsOperationClaims.Update];
 
     public class RestoreModelCommandHandler(IModelRepository modelRepository, IMapper mapper, ModelBusinessRules modelBusinessRules)

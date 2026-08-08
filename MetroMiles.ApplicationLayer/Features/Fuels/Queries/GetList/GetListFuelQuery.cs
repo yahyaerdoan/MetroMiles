@@ -20,8 +20,8 @@ public class GetListFuelQuery : IRequest<OperationDataResult<GetListResponse<Get
         public async Task<OperationDataResult<GetListResponse<GetListFuelListItemDto>>> Handle(GetListFuelQuery request, CancellationToken cancellationToken)
         {
             var fuels = await _fuelRepository.GetListAsync(
-                index: request.PageRequest.PageIndex,
-                size: request.PageRequest.PageSize,
+                index: request.PageRequest.PageIndex ?? 0,
+                size: request.PageRequest.PageSize ?? 10,
                 cancellationToken: cancellationToken);
             var response = _mapper.Map<GetListResponse<GetListFuelListItemDto>>(fuels);
             return Result.Success(response);

@@ -12,7 +12,7 @@ namespace MetroMiles.ApplicationLayer.Features.Users.Commands.Delete;
 
 public class DeleteUserCommand : IRequest<OperationDataResult<DeletedUserResponse>>, ISecureAddRequest
 {
-    public int Id { get; set; }
+    public int? Id { get; set; }
     public string[] Roles => [UsersOperationClaims.Admin, UsersOperationClaims.Write, UsersOperationClaims.Delete];
 
     public class DeleteUserCommandHandler(IUserRepository userRepository, IMapper mapper) : IRequestHandler<DeleteUserCommand, OperationDataResult<DeletedUserResponse>>

@@ -26,8 +26,8 @@ public class GetListUserQuery : IRequest<OperationDataResult<GetListResponse<Get
         public async Task<OperationDataResult<GetListResponse<GetListUserListItemDto>>> Handle(GetListUserQuery request, CancellationToken cancellationToken)
         {
             var users = await _userRepository.GetListAsync(
-                index: request.PageRequest.PageIndex,
-                size: request.PageRequest.PageSize,
+                index: request.PageRequest.PageIndex ?? 0,
+                size: request.PageRequest.PageSize ?? 10,
                 cancellationToken: cancellationToken);
             var response = _mapper.Map<GetListResponse<GetListUserListItemDto>>(users);
             return Result.Success(response);

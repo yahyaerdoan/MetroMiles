@@ -30,10 +30,10 @@
     <PackageReference Include="MediatR" Version="14.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.10" />
     <PackageReference Include="ResponseResultHandler" Version="12.0.0" />
-    <PackageReference Include="Core.ApplicationLayer" Version="1.0.11-beta.11" />
-    <PackageReference Include="Core.CrossCuttingConcernLayer" Version="1.0.11-beta.11" />
-    <PackageReference Include="Core.PersistenceLayer" Version="1.0.11-beta.11" />
-    <PackageReference Include="Core.SecurityLayer" Version="1.0.11-beta.11" />
+    <PackageReference Include="Core.ApplicationLayer" Version="1.0.15-beta.15" />
+    <PackageReference Include="Core.CrossCuttingConcernLayer" Version="1.0.15-beta.15" />
+    <PackageReference Include="Core.PersistenceLayer" Version="1.0.15-beta.15" />
+    <PackageReference Include="Core.SecurityLayer" Version="1.0.15-beta.15" />
   </ItemGroup>
 
   <ItemGroup>

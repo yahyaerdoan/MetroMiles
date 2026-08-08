@@ -12,7 +12,7 @@ namespace MetroMiles.ApplicationLayer.Features.Transmissions.Commands.Delete;
 
 public class DeleteTransmissionCommand : IRequest<OperationDataResult<DeletedTransmissionResponse>>, ISecureAddRequest
 {
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
     public string[] Roles => [TransmissionsOperationClaims.Admin, TransmissionsOperationClaims.Write, TransmissionsOperationClaims.Delete];
 
     public class DeleteTransmissionCommandHandler(ITransmissionRepository transmissionRepository, IMapper mapper, TransmissionBusinessRules transmissionBusinessRules)
@@ -31,7 +31,7 @@ public class DeleteTransmissionCommand : IRequest<OperationDataResult<DeletedTra
                 return existenceCheck.ToErrorDataResult<DeletedTransmissionResponse>();
             }
 
-            var inUseCheck = await _transmissionBusinessRules.TransmissionShouldNotBeInUseWhenDeleted(request.Id);
+            var inUseCheck = await _transmissionBusinessRules.TransmissionShouldNotBeInUseWhenDeleted(existenceCheck.Data.Id);
             if (!inUseCheck.IsSuccessful)
             {
                 return inUseCheck.ToErrorDataResult<DeletedTransmissionResponse>();

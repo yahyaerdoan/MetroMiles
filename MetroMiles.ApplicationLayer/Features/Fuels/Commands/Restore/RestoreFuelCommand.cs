@@ -12,7 +12,7 @@ namespace MetroMiles.ApplicationLayer.Features.Fuels.Commands.Restore;
 
 public class RestoreFuelCommand : IRequest<OperationDataResult<RestoredFuelResponse>>, ISecureAddRequest
 {
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
     public string[] Roles => [FuelsOperationClaims.Admin, FuelsOperationClaims.Write, FuelsOperationClaims.Update];
 
     public class RestoreFuelCommandHandler(IFuelRepository fuelRepository, IMapper mapper, FuelBusinessRules fuelBusinessRules) : IRequestHandler<RestoreFuelCommand, OperationDataResult<RestoredFuelResponse>>

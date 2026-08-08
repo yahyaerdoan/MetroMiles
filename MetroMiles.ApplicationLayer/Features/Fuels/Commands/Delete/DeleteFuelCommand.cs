@@ -12,7 +12,7 @@ namespace MetroMiles.ApplicationLayer.Features.Fuels.Commands.Delete;
 
 public class DeleteFuelCommand : IRequest<OperationDataResult<DeletedFuelResponse>>, ISecureAddRequest
 {
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
     public string[] Roles => [FuelsOperationClaims.Admin, FuelsOperationClaims.Write, FuelsOperationClaims.Delete];
 
     public class DeleteFuelCommandHandler(IFuelRepository fuelRepository, IMapper mapper, FuelBusinessRules fuelBusinessRules) : IRequestHandler<DeleteFuelCommand, OperationDataResult<DeletedFuelResponse>>
@@ -30,7 +30,7 @@ public class DeleteFuelCommand : IRequest<OperationDataResult<DeletedFuelRespons
                 return existenceCheck.ToErrorDataResult<DeletedFuelResponse>();
             }
 
-            var inUseCheck = await _fuelBusinessRules.FuelShouldNotBeInUseWhenDeleted(request.Id);
+            var inUseCheck = await _fuelBusinessRules.FuelShouldNotBeInUseWhenDeleted(existenceCheck.Data.Id);
             if (!inUseCheck.IsSuccessful)
             {
                 return inUseCheck.ToErrorDataResult<DeletedFuelResponse>();

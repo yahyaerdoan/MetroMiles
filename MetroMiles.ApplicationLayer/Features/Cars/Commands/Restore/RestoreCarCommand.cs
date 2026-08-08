@@ -12,7 +12,7 @@ namespace MetroMiles.ApplicationLayer.Features.Cars.Commands.Restore;
 
 public class RestoreCarCommand : IRequest<OperationDataResult<RestoredCarResponse>>, ISecureAddRequest
 {
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
     public string[] Roles => [CarsOperationClaims.Admin, CarsOperationClaims.Write, CarsOperationClaims.Update];
 
     public class RestoreCarCommandHandler(ICarRepository carRepository, IMapper mapper, CarBusinessRules carBusinessRules) : IRequestHandler<RestoreCarCommand, OperationDataResult<RestoredCarResponse>>
