@@ -6,7 +6,8 @@ public class UpdateBrandCommandValidator : AbstractValidator<UpdateBrandCommand>
 {
     public UpdateBrandCommandValidator()
     {
-        RuleFor(b => b.Id).NotEmpty();
-        RuleFor(b => b.Name).NotEmpty().MinimumLength(2);
+        RuleFor(b => b.Id).NotEmpty().WithMessage("Id is required.");
+        RuleFor(b => b.Name).NotEmpty().WithMessage("Name is required.")
+            .MinimumLength(2).WithMessage("Name must be at least {MinLength} characters long.");
     }
 }

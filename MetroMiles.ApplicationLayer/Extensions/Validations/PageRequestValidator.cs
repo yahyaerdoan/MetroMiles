@@ -11,7 +11,7 @@ public class PageRequestValidator : AbstractValidator<PageRequest>
 
     public PageRequestValidator()
     {
-        RuleFor(p => p.PageIndex).GreaterThanOrEqualTo(0);
-        RuleFor(p => p.PageSize).InclusiveBetween(1, MaxPageSize);
+        RuleFor(p => p.PageIndex).GreaterThanOrEqualTo(0).WithMessage("Page index must be {ComparisonValue} or greater.");
+        RuleFor(p => p.PageSize).InclusiveBetween(1, MaxPageSize).WithMessage("Page size must be between {From} and {To}.");
     }
 }

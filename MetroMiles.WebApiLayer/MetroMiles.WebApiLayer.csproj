@@ -25,9 +25,9 @@
     <PackageReference Include="ResponseResultHandler.AspNetCore" Version="12.0.0" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.16.18" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.7.3" />
-    <PackageReference Include="Core.ApplicationLayer" Version="1.0.9-beta.9" />
-    <PackageReference Include="Core.CrossCuttingConcernLayer" Version="1.0.9-beta.9" />
-    <PackageReference Include="Core.PersistenceLayer" Version="1.0.9-beta.9" />
+    <PackageReference Include="Core.ApplicationLayer" Version="1.0.11-beta.11" />
+    <PackageReference Include="Core.CrossCuttingConcernLayer" Version="1.0.11-beta.11" />
+    <PackageReference Include="Core.PersistenceLayer" Version="1.0.11-beta.11" />
   </ItemGroup>
 
   <ItemGroup>

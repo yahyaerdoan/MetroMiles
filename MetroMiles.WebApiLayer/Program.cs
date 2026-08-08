@@ -9,12 +9,17 @@ using MetroMiles.PersistenceLayer.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Scalar.AspNetCore;
 
 const string DevelopmentCorsPolicy = "DevelopmentCorsPolicy";
 const string AuthRateLimiterPolicy = "AuthRateLimiterPolicy";
+const string TokenSecurityKeyMissingMessage =
+    "'TokenOptions:SecurityKey' is not configured. Set it via user-secrets " +
+    "(dotnet user-secrets set 'TokenOptions:SecurityKey' '<value>') in development, " +
+    "or an environment variable/secret store in other environments — never in appsettings.json.";
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,22 +29,19 @@ builder.Services.AddPersistanceServices(builder.Configuration);
 builder.Services.AddSecurityServices();
 builder.Services.AddHttpContextAccessor();
 
-var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOption>()
-    ?? throw new InvalidOperationException("\"TokenOptions\" section cannot found in configuration.");
-if (string.IsNullOrWhiteSpace(tokenOptions.SecurityKey))
-{
-    throw new InvalidOperationException(
-        "\"TokenOptions:SecurityKey\" is not configured. Set it via user-secrets " +
-        "(dotnet user-secrets set \"TokenOptions:SecurityKey\" \"<value>\") in development, " +
-        "or an environment variable/secret store in other environments — never in appsettings.json.");
-}
-builder.Services.AddSingleton(tokenOptions);
+builder.Services.AddOptions<TokenOption>()
+    .BindConfiguration("TokenOptions")
+    .Validate(tokenOptions => !string.IsNullOrWhiteSpace(tokenOptions.SecurityKey), TokenSecurityKeyMissingMessage)
+    .ValidateOnStart();
+builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<TokenOption>>().Value);
 
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+
+builder.Services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
+    .Configure<IOptions<TokenOption>>((jwtBearerOptions, tokenOptionsAccessor) =>
     {
-        options.TokenValidationParameters = new TokenValidationParameters
+        var tokenOptions = tokenOptionsAccessor.Value;
+        jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
         {
             ValidIssuer = tokenOptions.Issuer,
             ValidAudience = tokenOptions.Audience,
@@ -50,6 +52,7 @@ builder.Services
             ValidateIssuerSigningKey = true,
         };
     });
+
 builder.Services.AddAuthorization();
 
 var corsAllowedOrigins = builder.Configuration.GetSection("CorsSettings:AllowedOrigins").Get<string[]>()
@@ -89,8 +92,7 @@ else
     builder.Services.AddStackExchangeRedisCache(opt => opt.Configuration = redisConnection);
 }
 
-var databaseConnection = builder.Configuration.GetConnectionString("FakeDatabaseName")
-    ?? throw new InvalidOperationException("\"ConnectionStrings:FakeDatabaseName\" is not configured.");
+var databaseConnection = builder.Configuration.GetRequiredConnectionString("FakeDatabaseName");
 
 var healthChecksBuilder = builder.Services.AddHealthChecks()
     .AddSqlServer(databaseConnection, name: "sql-server");

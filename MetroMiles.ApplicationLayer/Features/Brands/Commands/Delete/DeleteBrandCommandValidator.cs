@@ -6,6 +6,6 @@ public class DeleteBrandCommandValidator : AbstractValidator<DeleteBrandCommand>
 {
     public DeleteBrandCommandValidator()
     {
-        RuleFor(b => b.Id).NotEmpty();
+        RuleFor(b => b.Id).NotEmpty().WithMessage("Id is required.");
     }
 }

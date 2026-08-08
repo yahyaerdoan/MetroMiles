@@ -6,6 +6,6 @@ public class DeleteTransmissionCommandValidator : AbstractValidator<DeleteTransm
 {
     public DeleteTransmissionCommandValidator()
     {
-        RuleFor(t => t.Id).NotEmpty();
+        RuleFor(t => t.Id).NotEmpty().WithMessage("Id is required.");
     }
 }

@@ -6,6 +6,6 @@ public class RestoreBrandCommandValidator : AbstractValidator<RestoreBrandComman
 {
     public RestoreBrandCommandValidator()
     {
-        RuleFor(b => b.Id).NotEmpty();
+        RuleFor(b => b.Id).NotEmpty().WithMessage("Id is required.");
     }
 }

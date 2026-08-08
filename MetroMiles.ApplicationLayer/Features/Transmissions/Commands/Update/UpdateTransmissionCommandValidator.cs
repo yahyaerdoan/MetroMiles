@@ -6,7 +6,8 @@ public class UpdateTransmissionCommandValidator : AbstractValidator<UpdateTransm
 {
     public UpdateTransmissionCommandValidator()
     {
-        RuleFor(t => t.Id).NotEmpty();
-        RuleFor(t => t.Name).NotEmpty().MinimumLength(2);
+        RuleFor(t => t.Id).NotEmpty().WithMessage("Id is required.");
+        RuleFor(t => t.Name).NotEmpty().WithMessage("Name is required.")
+            .MinimumLength(2).WithMessage("Name must be at least {MinLength} characters long.");
     }
 }

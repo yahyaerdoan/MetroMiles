@@ -6,6 +6,6 @@ public class RestoreCarCommandValidator : AbstractValidator<RestoreCarCommand>
 {
     public RestoreCarCommandValidator()
     {
-        RuleFor(c => c.Id).NotEmpty();
+        RuleFor(c => c.Id).NotEmpty().WithMessage("Id is required.");
     }
 }

@@ -6,6 +6,7 @@ public class CreateFuelCommandValidator : AbstractValidator<CreateFuelCommand>
 {
     public CreateFuelCommandValidator()
     {
-        RuleFor(f => f.Name).NotEmpty().MinimumLength(2);
+        RuleFor(f => f.Name).NotEmpty().WithMessage("Name is required.")
+            .MinimumLength(2).WithMessage("Name must be at least {MinLength} characters long.");
     }
 }

@@ -6,11 +6,12 @@ public class CreateModelCommandValidator : AbstractValidator<CreateModelCommand>
 {
     public CreateModelCommandValidator()
     {
-        RuleFor(m => m.BrandId).NotEmpty();
-        RuleFor(m => m.FuelId).NotEmpty();
-        RuleFor(m => m.TransmissionId).NotEmpty();
-        RuleFor(m => m.Name).NotEmpty().MinimumLength(2);
-        RuleFor(m => m.DailyPrice).GreaterThan(0);
-        RuleFor(m => m.ImageUrl).NotEmpty();
+        RuleFor(m => m.BrandId).NotEmpty().WithMessage("Brand is required.");
+        RuleFor(m => m.FuelId).NotEmpty().WithMessage("Fuel is required.");
+        RuleFor(m => m.TransmissionId).NotEmpty().WithMessage("Transmission is required.");
+        RuleFor(m => m.Name).NotEmpty().WithMessage("Name is required.")
+            .MinimumLength(2).WithMessage("Name must be at least {MinLength} characters long.");
+        RuleFor(m => m.DailyPrice).GreaterThan(0).WithMessage("Daily price must be greater than {ComparisonValue}.");
+        RuleFor(m => m.ImageUrl).NotEmpty().WithMessage("Image URL is required.");
     }
 }

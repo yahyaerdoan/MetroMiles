@@ -1,6 +1,7 @@
 using AutoMapper;
 using Core.ApplicationLayer.Responses.GetList;
 using Core.PersistenceLayer.Pagings.Paging;
+using MetroMiles.ApplicationLayer.Extensions.Mappings;
 using MetroMiles.ApplicationLayer.Features.Models.Commands.Create;
 using MetroMiles.ApplicationLayer.Features.Models.Commands.Delete;
 using MetroMiles.ApplicationLayer.Features.Models.Commands.Restore;
@@ -29,22 +30,22 @@ public class MappingProfiles : Profile
         CreateMap<Model, RestoredModelResponse>().ReverseMap();
 
         CreateMap<Model, GetByIdModelResponse>()
-            .ForMember(destinationMember: b => b.BrandName, memberOptions: opt => opt.MapFrom((m, _) => m.Brand != null ? m.Brand.Name : throw new InvalidOperationException("Model.Brand was not loaded — the query must Include(Brand).")))
-            .ForMember(destinationMember: f => f.FuelName, memberOptions: opt => opt.MapFrom((m, _) => m.Fuel != null ? m.Fuel.Name : throw new InvalidOperationException("Model.Fuel was not loaded — the query must Include(Fuel).")))
-            .ForMember(destinationMember: t => t.TransmissionName, memberOptions: opt => opt.MapFrom((m, _) => m.Transmission != null ? m.Transmission.Name : throw new InvalidOperationException("Model.Transmission was not loaded — the query must Include(Transmission).")))
+            .ForMember(destinationMember: b => b.BrandName, memberOptions: opt => opt.MapFrom((m, _) => m.Brand.EnsureLoaded("Model.Brand").Name))
+            .ForMember(destinationMember: f => f.FuelName, memberOptions: opt => opt.MapFrom((m, _) => m.Fuel.EnsureLoaded("Model.Fuel").Name))
+            .ForMember(destinationMember: t => t.TransmissionName, memberOptions: opt => opt.MapFrom((m, _) => m.Transmission.EnsureLoaded("Model.Transmission").Name))
             .ReverseMap();
 
         CreateMap<Model, GetListModelListItemDto>()
-            .ForMember(destinationMember: b => b.BrandName, memberOptions: opt => opt.MapFrom((m, _) => m.Brand != null ? m.Brand.Name : throw new InvalidOperationException("Model.Brand was not loaded — the query must Include(Brand).")))
-            .ForMember(destinationMember: f => f.FuelName, memberOptions: opt => opt.MapFrom((m, _) => m.Fuel != null ? m.Fuel.Name : throw new InvalidOperationException("Model.Fuel was not loaded — the query must Include(Fuel).")))
-            .ForMember(destinationMember: t => t.TransmissionName, memberOptions: opt => opt.MapFrom((m, _) => m.Transmission != null ? m.Transmission.Name : throw new InvalidOperationException("Model.Transmission was not loaded — the query must Include(Transmission).")))
+            .ForMember(destinationMember: b => b.BrandName, memberOptions: opt => opt.MapFrom((m, _) => m.Brand.EnsureLoaded("Model.Brand").Name))
+            .ForMember(destinationMember: f => f.FuelName, memberOptions: opt => opt.MapFrom((m, _) => m.Fuel.EnsureLoaded("Model.Fuel").Name))
+            .ForMember(destinationMember: t => t.TransmissionName, memberOptions: opt => opt.MapFrom((m, _) => m.Transmission.EnsureLoaded("Model.Transmission").Name))
             .ReverseMap();
         CreateMap<Paginate<Model>, GetListResponse<GetListModelListItemDto>>().ReverseMap();
 
         CreateMap<Model, GetListByDynamicModelListItemDto>()
-          .ForMember(destinationMember: b => b.BrandName, memberOptions: opt => opt.MapFrom((m, _) => m.Brand != null ? m.Brand.Name : throw new InvalidOperationException("Model.Brand was not loaded — the query must Include(Brand).")))
-          .ForMember(destinationMember: f => f.FuelName, memberOptions: opt => opt.MapFrom((m, _) => m.Fuel != null ? m.Fuel.Name : throw new InvalidOperationException("Model.Fuel was not loaded — the query must Include(Fuel).")))
-          .ForMember(destinationMember: t => t.TransmissionName, memberOptions: opt => opt.MapFrom((m, _) => m.Transmission != null ? m.Transmission.Name : throw new InvalidOperationException("Model.Transmission was not loaded — the query must Include(Transmission).")))
+          .ForMember(destinationMember: b => b.BrandName, memberOptions: opt => opt.MapFrom((m, _) => m.Brand.EnsureLoaded("Model.Brand").Name))
+          .ForMember(destinationMember: f => f.FuelName, memberOptions: opt => opt.MapFrom((m, _) => m.Fuel.EnsureLoaded("Model.Fuel").Name))
+          .ForMember(destinationMember: t => t.TransmissionName, memberOptions: opt => opt.MapFrom((m, _) => m.Transmission.EnsureLoaded("Model.Transmission").Name))
           .ReverseMap();
         CreateMap<Paginate<Model>, GetListResponse<GetListByDynamicModelListItemDto>>().ReverseMap();
     }

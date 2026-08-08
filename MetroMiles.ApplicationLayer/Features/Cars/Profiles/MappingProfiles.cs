@@ -1,6 +1,7 @@
 using AutoMapper;
 using Core.ApplicationLayer.Responses.GetList;
 using Core.PersistenceLayer.Pagings.Paging;
+using MetroMiles.ApplicationLayer.Extensions.Mappings;
 using MetroMiles.ApplicationLayer.Features.Cars.Commands.Create;
 using MetroMiles.ApplicationLayer.Features.Cars.Commands.Delete;
 using MetroMiles.ApplicationLayer.Features.Cars.Commands.Restore;
@@ -19,13 +20,13 @@ public class MappingProfiles : Profile
         CreateMap<Car, CreatedCarResponse>().ReverseMap();
 
         CreateMap<Car, GetByIdCarResponse>()
-            .ForMember(destinationMember: d => d.ModelName, memberOptions: opt => opt.MapFrom((c, _) => c.Model != null ? c.Model.Name : throw new InvalidOperationException("Car.Model was not loaded — the query must Include(Model).")))
-            .ForMember(destinationMember: d => d.BrandName, memberOptions: opt => opt.MapFrom((c, _) => c.Model != null && c.Model.Brand != null ? c.Model.Brand.Name : throw new InvalidOperationException("Car.Model.Brand was not loaded — the query must Include(Model).ThenInclude(Brand).")))
+            .ForMember(destinationMember: d => d.ModelName, memberOptions: opt => opt.MapFrom((c, _) => c.Model.EnsureLoaded("Car.Model").Name))
+            .ForMember(destinationMember: d => d.BrandName, memberOptions: opt => opt.MapFrom((c, _) => c.Model.EnsureLoaded("Car.Model").Brand.EnsureLoaded("Car.Model.Brand").Name))
             .ReverseMap();
 
         CreateMap<Car, GetListCarListItemDto>()
-            .ForMember(destinationMember: d => d.ModelName, memberOptions: opt => opt.MapFrom((c, _) => c.Model != null ? c.Model.Name : throw new InvalidOperationException("Car.Model was not loaded — the query must Include(Model).")))
-            .ForMember(destinationMember: d => d.BrandName, memberOptions: opt => opt.MapFrom((c, _) => c.Model != null && c.Model.Brand != null ? c.Model.Brand.Name : throw new InvalidOperationException("Car.Model.Brand was not loaded — the query must Include(Model).ThenInclude(Brand).")))
+            .ForMember(destinationMember: d => d.ModelName, memberOptions: opt => opt.MapFrom((c, _) => c.Model.EnsureLoaded("Car.Model").Name))
+            .ForMember(destinationMember: d => d.BrandName, memberOptions: opt => opt.MapFrom((c, _) => c.Model.EnsureLoaded("Car.Model").Brand.EnsureLoaded("Car.Model.Brand").Name))
             .ReverseMap();
         CreateMap<Paginate<Car>, GetListResponse<GetListCarListItemDto>>().ReverseMap();
 

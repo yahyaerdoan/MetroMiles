@@ -6,6 +6,6 @@ public class RestoreTransmissionCommandValidator : AbstractValidator<RestoreTran
 {
     public RestoreTransmissionCommandValidator()
     {
-        RuleFor(t => t.Id).NotEmpty();
+        RuleFor(t => t.Id).NotEmpty().WithMessage("Id is required.");
     }
 }

@@ -6,6 +6,6 @@ public class RestoreFuelCommandValidator : AbstractValidator<RestoreFuelCommand>
 {
     public RestoreFuelCommandValidator()
     {
-        RuleFor(f => f.Id).NotEmpty();
+        RuleFor(f => f.Id).NotEmpty().WithMessage("Id is required.");
     }
 }

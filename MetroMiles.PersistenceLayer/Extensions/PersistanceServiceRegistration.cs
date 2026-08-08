@@ -12,7 +12,7 @@ public static class PersistanceServiceRegistration
     public static IServiceCollection AddPersistanceServices(this IServiceCollection services, IConfiguration configuration)
     {
         //services.AddDbContext<BaseDbContext>(options => options.UseInMemoryDatabase("DatabaseName"));
-        services.AddDbContext<BaseDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("FakeDatabaseName")));
+        services.AddDbContext<BaseDbContext>(options => options.UseSqlServer(configuration.GetRequiredConnectionString("FakeDatabaseName")));
         services.AddScoped<IBrandRepository, BrandRepository>();
         services.AddScoped<IModelRepository, ModelRepository>();
         services.AddScoped<ICarRepository, CarRepository>();

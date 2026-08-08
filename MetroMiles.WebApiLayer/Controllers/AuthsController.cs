@@ -23,7 +23,7 @@ public class AuthsController : BaseController
     {
         loginCommand.IpAddress = GetIpAddress();
         var result = await Mediator.Send(loginCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [HttpPost("RefreshToken")]

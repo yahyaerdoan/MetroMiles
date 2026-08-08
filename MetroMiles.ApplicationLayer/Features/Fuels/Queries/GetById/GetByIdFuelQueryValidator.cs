@@ -6,6 +6,6 @@ public class GetByIdFuelQueryValidator : AbstractValidator<GetByIdFuelQuery>
 {
     public GetByIdFuelQueryValidator()
     {
-        RuleFor(q => q.Id).NotEmpty();
+        RuleFor(q => q.Id).NotEmpty().WithMessage("Id is required.");
     }
 }

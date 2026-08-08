@@ -6,6 +6,6 @@ public class RestoreUserCommandValidator : AbstractValidator<RestoreUserCommand>
 {
     public RestoreUserCommandValidator()
     {
-        RuleFor(u => u.Id).NotEmpty();
+        RuleFor(u => u.Id).NotEmpty().WithMessage("Id is required.");
     }
 }

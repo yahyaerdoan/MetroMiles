@@ -6,6 +6,6 @@ public class GetByIdUserQueryValidator : AbstractValidator<GetByIdUserQuery>
 {
     public GetByIdUserQueryValidator()
     {
-        RuleFor(q => q.Id).NotEmpty();
+        RuleFor(q => q.Id).NotEmpty().WithMessage("Id is required.");
     }
 }
