@@ -1,6 +1,6 @@
 using AutoMapper;
-using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
 using MediatR;
+using MetroMiles.ApplicationLayer.Extensions.Requests;
 using MetroMiles.ApplicationLayer.Features.Models.Constants;
 using MetroMiles.ApplicationLayer.Features.Models.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
@@ -10,10 +10,9 @@ using ResultHandler.Functional;
 
 namespace MetroMiles.ApplicationLayer.Features.Models.Commands.Restore;
 
-public class RestoreModelCommand : IRequest<OperationDataResult<RestoredModelResponse>>, ISecureAddRequest
+public class RestoreModelCommand : SecuredCommand<Guid, RestoredModelResponse>
 {
-    public Guid? Id { get; set; }
-    public string[] Roles => [ModelsOperationClaims.Admin, ModelsOperationClaims.Write, ModelsOperationClaims.Update];
+    public override string[] Roles => ModelsOperationClaims.UpdateRoles;
 
     public class RestoreModelCommandHandler(IModelRepository modelRepository, IMapper mapper, ModelBusinessRules modelBusinessRules)
         : IRequestHandler<RestoreModelCommand, OperationDataResult<RestoredModelResponse>>

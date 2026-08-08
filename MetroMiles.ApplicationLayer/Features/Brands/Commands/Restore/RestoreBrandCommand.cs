@@ -1,7 +1,6 @@
 using AutoMapper;
-using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
-using Core.ApplicationLayer.Pipelines.Cachings.Abstractions;
 using MediatR;
+using MetroMiles.ApplicationLayer.Extensions.Requests;
 using MetroMiles.ApplicationLayer.Features.Brands.Constants;
 using MetroMiles.ApplicationLayer.Features.Brands.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
@@ -11,13 +10,10 @@ using ResultHandler.Functional;
 
 namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Restore;
 
-public class RestoreBrandCommand : IRequest<OperationDataResult<RestoredBrandResponse>>, ICacheRemoveRequest, ISecureAddRequest
+public class RestoreBrandCommand : CacheRemovingSecuredCommand<Guid, RestoredBrandResponse>
 {
-    public Guid? Id { get; set; }
-    public string CacheKey => "";
-    public bool ByPassCache => false;
-    public string? CacheGroupKey => "GetBrands";
-    public string[] Roles => [BrandsOperationClaims.Admin, BrandsOperationClaims.Write, BrandsOperationClaims.Update];
+    public override string? CacheGroupKey => "GetBrands";
+    public override string[] Roles => BrandsOperationClaims.UpdateRoles;
 
     public class RestoreBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper, BrandBusinessRules brandBusinessRules) : IRequestHandler<RestoreBrandCommand, OperationDataResult<RestoredBrandResponse>>
     {

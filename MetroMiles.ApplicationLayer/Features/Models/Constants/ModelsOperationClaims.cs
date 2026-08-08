@@ -10,4 +10,8 @@ public class ModelsOperationClaims
     public const string Add = "models.add";
     public const string Update = "models.update";
     public const string Delete = "models.delete";
+
+    public static string[] AddRoles => [Admin, Write, Add];
+    public static string[] UpdateRoles => [Admin, Write, Update];
+    public static string[] DeleteRoles => [Admin, Write, Delete];
 }

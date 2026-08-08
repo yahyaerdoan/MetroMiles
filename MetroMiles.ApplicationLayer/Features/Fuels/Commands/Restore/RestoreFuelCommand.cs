@@ -1,6 +1,6 @@
 using AutoMapper;
-using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
 using MediatR;
+using MetroMiles.ApplicationLayer.Extensions.Requests;
 using MetroMiles.ApplicationLayer.Features.Fuels.Constants;
 using MetroMiles.ApplicationLayer.Features.Fuels.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
@@ -10,10 +10,9 @@ using ResultHandler.Functional;
 
 namespace MetroMiles.ApplicationLayer.Features.Fuels.Commands.Restore;
 
-public class RestoreFuelCommand : IRequest<OperationDataResult<RestoredFuelResponse>>, ISecureAddRequest
+public class RestoreFuelCommand : SecuredCommand<Guid, RestoredFuelResponse>
 {
-    public Guid? Id { get; set; }
-    public string[] Roles => [FuelsOperationClaims.Admin, FuelsOperationClaims.Write, FuelsOperationClaims.Update];
+    public override string[] Roles => FuelsOperationClaims.UpdateRoles;
 
     public class RestoreFuelCommandHandler(IFuelRepository fuelRepository, IMapper mapper, FuelBusinessRules fuelBusinessRules) : IRequestHandler<RestoreFuelCommand, OperationDataResult<RestoredFuelResponse>>
     {

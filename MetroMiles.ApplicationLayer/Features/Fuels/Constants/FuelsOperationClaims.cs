@@ -10,4 +10,8 @@ public class FuelsOperationClaims
     public const string Add = "fuels.add";
     public const string Update = "fuels.update";
     public const string Delete = "fuels.delete";
+
+    public static string[] AddRoles => [Admin, Write, Add];
+    public static string[] UpdateRoles => [Admin, Write, Update];
+    public static string[] DeleteRoles => [Admin, Write, Delete];
 }

@@ -1,7 +1,6 @@
 using AutoMapper;
-using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
-using Core.ApplicationLayer.Pipelines.Cachings.Abstractions;
 using MediatR;
+using MetroMiles.ApplicationLayer.Extensions.Requests;
 using MetroMiles.ApplicationLayer.Features.Brands.Constants;
 using MetroMiles.ApplicationLayer.Features.Brands.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
@@ -11,14 +10,10 @@ using ResultHandler.Functional;
 
 namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Delete;
 
-public class DeleteBrandCommand : IRequest<OperationDataResult<DeletedBrandResponse>>, ICacheRemoveRequest, ISecureAddRequest
+public class DeleteBrandCommand : CacheRemovingSecuredCommand<Guid, DeletedBrandResponse>
 {
-    // DeleteBrandCommand & ICacheRemoveRequest Properties
-    public Guid? Id { get; set; }
-    public string CacheKey => "";
-    public bool ByPassCache => false;
-    public string? CacheGroupKey => "GetBrands";
-    public string[] Roles => [BrandsOperationClaims.Admin, BrandsOperationClaims.Write, BrandsOperationClaims.Delete];
+    public override string? CacheGroupKey => "GetBrands";
+    public override string[] Roles => BrandsOperationClaims.DeleteRoles;
 
     public class DeleteBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper, BrandBusinessRules brandBusinessRules) : IRequestHandler<DeleteBrandCommand, OperationDataResult<DeletedBrandResponse>>
     {

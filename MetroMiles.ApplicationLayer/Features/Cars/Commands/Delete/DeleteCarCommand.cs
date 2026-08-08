@@ -1,6 +1,6 @@
 using AutoMapper;
-using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
 using MediatR;
+using MetroMiles.ApplicationLayer.Extensions.Requests;
 using MetroMiles.ApplicationLayer.Features.Cars.Constants;
 using MetroMiles.ApplicationLayer.Features.Cars.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
@@ -10,10 +10,9 @@ using ResultHandler.Functional;
 
 namespace MetroMiles.ApplicationLayer.Features.Cars.Commands.Delete;
 
-public class DeleteCarCommand : IRequest<OperationDataResult<DeletedCarResponse>>, ISecureAddRequest
+public class DeleteCarCommand : SecuredCommand<Guid, DeletedCarResponse>
 {
-    public Guid? Id { get; set; }
-    public string[] Roles => [CarsOperationClaims.Admin, CarsOperationClaims.Write, CarsOperationClaims.Delete];
+    public override string[] Roles => CarsOperationClaims.DeleteRoles;
 
     public class DeleteCarCommandHandler(ICarRepository carRepository, IMapper mapper) : IRequestHandler<DeleteCarCommand, OperationDataResult<DeletedCarResponse>>
     {

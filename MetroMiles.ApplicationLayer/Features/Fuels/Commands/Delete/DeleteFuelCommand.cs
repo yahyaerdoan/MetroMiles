@@ -1,6 +1,6 @@
 using AutoMapper;
-using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
 using MediatR;
+using MetroMiles.ApplicationLayer.Extensions.Requests;
 using MetroMiles.ApplicationLayer.Features.Fuels.Constants;
 using MetroMiles.ApplicationLayer.Features.Fuels.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
@@ -10,10 +10,9 @@ using ResultHandler.Functional;
 
 namespace MetroMiles.ApplicationLayer.Features.Fuels.Commands.Delete;
 
-public class DeleteFuelCommand : IRequest<OperationDataResult<DeletedFuelResponse>>, ISecureAddRequest
+public class DeleteFuelCommand : SecuredCommand<Guid, DeletedFuelResponse>
 {
-    public Guid? Id { get; set; }
-    public string[] Roles => [FuelsOperationClaims.Admin, FuelsOperationClaims.Write, FuelsOperationClaims.Delete];
+    public override string[] Roles => FuelsOperationClaims.DeleteRoles;
 
     public class DeleteFuelCommandHandler(IFuelRepository fuelRepository, IMapper mapper, FuelBusinessRules fuelBusinessRules) : IRequestHandler<DeleteFuelCommand, OperationDataResult<DeletedFuelResponse>>
     {

@@ -1,6 +1,6 @@
 using AutoMapper;
-using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
 using MediatR;
+using MetroMiles.ApplicationLayer.Extensions.Requests;
 using MetroMiles.ApplicationLayer.Features.Cars.Constants;
 using MetroMiles.ApplicationLayer.Features.Cars.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
@@ -10,10 +10,9 @@ using ResultHandler.Functional;
 
 namespace MetroMiles.ApplicationLayer.Features.Cars.Commands.Restore;
 
-public class RestoreCarCommand : IRequest<OperationDataResult<RestoredCarResponse>>, ISecureAddRequest
+public class RestoreCarCommand : SecuredCommand<Guid, RestoredCarResponse>
 {
-    public Guid? Id { get; set; }
-    public string[] Roles => [CarsOperationClaims.Admin, CarsOperationClaims.Write, CarsOperationClaims.Update];
+    public override string[] Roles => CarsOperationClaims.UpdateRoles;
 
     public class RestoreCarCommandHandler(ICarRepository carRepository, IMapper mapper, CarBusinessRules carBusinessRules) : IRequestHandler<RestoreCarCommand, OperationDataResult<RestoredCarResponse>>
     {

@@ -1,6 +1,6 @@
 using AutoMapper;
-using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
 using MediatR;
+using MetroMiles.ApplicationLayer.Extensions.Requests;
 using MetroMiles.ApplicationLayer.Features.Models.Constants;
 using MetroMiles.ApplicationLayer.Features.Models.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
@@ -10,10 +10,9 @@ using ResultHandler.Functional;
 
 namespace MetroMiles.ApplicationLayer.Features.Models.Commands.Delete;
 
-public class DeleteModelCommand : IRequest<OperationDataResult<DeletedModelResponse>>, ISecureAddRequest
+public class DeleteModelCommand : SecuredCommand<Guid, DeletedModelResponse>
 {
-    public Guid? Id { get; set; }
-    public string[] Roles => [ModelsOperationClaims.Admin, ModelsOperationClaims.Write, ModelsOperationClaims.Delete];
+    public override string[] Roles => ModelsOperationClaims.DeleteRoles;
 
     public class DeleteModelCommandHandler(IModelRepository modelRepository, IMapper mapper, ModelBusinessRules modelBusinessRules)
         : IRequestHandler<DeleteModelCommand, OperationDataResult<DeletedModelResponse>>

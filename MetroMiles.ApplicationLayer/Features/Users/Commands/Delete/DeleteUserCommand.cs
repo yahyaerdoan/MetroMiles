@@ -1,6 +1,6 @@
 using AutoMapper;
-using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
 using MediatR;
+using MetroMiles.ApplicationLayer.Extensions.Requests;
 using MetroMiles.ApplicationLayer.Features.Users.Constants;
 using MetroMiles.ApplicationLayer.Features.Users.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
@@ -10,10 +10,9 @@ using ResultHandler.Functional;
 
 namespace MetroMiles.ApplicationLayer.Features.Users.Commands.Delete;
 
-public class DeleteUserCommand : IRequest<OperationDataResult<DeletedUserResponse>>, ISecureAddRequest
+public class DeleteUserCommand : SecuredCommand<int, DeletedUserResponse>
 {
-    public int? Id { get; set; }
-    public string[] Roles => [UsersOperationClaims.Admin, UsersOperationClaims.Write, UsersOperationClaims.Delete];
+    public override string[] Roles => UsersOperationClaims.DeleteRoles;
 
     public class DeleteUserCommandHandler(IUserRepository userRepository, IMapper mapper) : IRequestHandler<DeleteUserCommand, OperationDataResult<DeletedUserResponse>>
     {

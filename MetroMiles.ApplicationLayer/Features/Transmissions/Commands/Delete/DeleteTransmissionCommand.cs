@@ -1,6 +1,6 @@
 using AutoMapper;
-using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
 using MediatR;
+using MetroMiles.ApplicationLayer.Extensions.Requests;
 using MetroMiles.ApplicationLayer.Features.Transmissions.Constants;
 using MetroMiles.ApplicationLayer.Features.Transmissions.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
@@ -10,10 +10,9 @@ using ResultHandler.Functional;
 
 namespace MetroMiles.ApplicationLayer.Features.Transmissions.Commands.Delete;
 
-public class DeleteTransmissionCommand : IRequest<OperationDataResult<DeletedTransmissionResponse>>, ISecureAddRequest
+public class DeleteTransmissionCommand : SecuredCommand<Guid, DeletedTransmissionResponse>
 {
-    public Guid? Id { get; set; }
-    public string[] Roles => [TransmissionsOperationClaims.Admin, TransmissionsOperationClaims.Write, TransmissionsOperationClaims.Delete];
+    public override string[] Roles => TransmissionsOperationClaims.DeleteRoles;
 
     public class DeleteTransmissionCommandHandler(ITransmissionRepository transmissionRepository, IMapper mapper, TransmissionBusinessRules transmissionBusinessRules)
         : IRequestHandler<DeleteTransmissionCommand, OperationDataResult<DeletedTransmissionResponse>>
