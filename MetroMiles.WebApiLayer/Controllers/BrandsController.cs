@@ -52,10 +52,10 @@ public class BrandsController : BaseController
         return result.ToEnvelopedActionResult(HttpContext);
     }
     [Authorize]
-    [HttpPost("Restore")]
-    public async Task<IActionResult> Restore([FromQuery] RestoreBrandCommand restoreBrandCommand)
+    [HttpPost("{id}/Restore")]
+    public async Task<IActionResult> Restore([FromRoute] Guid id)
     {
-        var result = await Mediator.Send(restoreBrandCommand, HttpContext.RequestAborted);
+        var result = await Mediator.Send(new RestoreBrandCommand { Id = id }, HttpContext.RequestAborted);
         return result.ToEnvelopedActionResult(HttpContext);
     }
 }

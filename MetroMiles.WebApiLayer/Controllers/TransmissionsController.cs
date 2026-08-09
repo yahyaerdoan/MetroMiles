@@ -57,10 +57,10 @@ public class TransmissionsController : BaseController
     }
 
     [Authorize]
-    [HttpPost("Restore")]
-    public async Task<IActionResult> Restore([FromQuery] RestoreTransmissionCommand restoreTransmissionCommand)
+    [HttpPost("{id}/Restore")]
+    public async Task<IActionResult> Restore([FromRoute] Guid id)
     {
-        var result = await Mediator.Send(restoreTransmissionCommand, HttpContext.RequestAborted);
+        var result = await Mediator.Send(new RestoreTransmissionCommand { Id = id }, HttpContext.RequestAborted);
         return result.ToEnvelopedActionResult(HttpContext);
     }
 }

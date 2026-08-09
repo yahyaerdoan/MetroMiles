@@ -54,10 +54,10 @@ public class UsersController : BaseController
         return result.ToEnvelopedActionResult(HttpContext);
     }
 
-    [HttpPost("Restore")]
-    public async Task<IActionResult> Restore([FromQuery] RestoreUserCommand restoreUserCommand)
+    [HttpPost("{id}/Restore")]
+    public async Task<IActionResult> Restore([FromRoute] Guid id)
     {
-        var result = await Mediator.Send(restoreUserCommand, HttpContext.RequestAborted);
+        var result = await Mediator.Send(new RestoreUserCommand { Id = id }, HttpContext.RequestAborted);
         return result.ToEnvelopedActionResult(HttpContext);
     }
 }

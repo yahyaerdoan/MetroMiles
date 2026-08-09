@@ -57,10 +57,10 @@ public class FuelsController : BaseController
     }
 
     [Authorize]
-    [HttpPost("Restore")]
-    public async Task<IActionResult> Restore([FromQuery] RestoreFuelCommand restoreFuelCommand)
+    [HttpPost("{id}/Restore")]
+    public async Task<IActionResult> Restore([FromRoute] Guid id)
     {
-        var result = await Mediator.Send(restoreFuelCommand, HttpContext.RequestAborted);
+        var result = await Mediator.Send(new RestoreFuelCommand { Id = id }, HttpContext.RequestAborted);
         return result.ToEnvelopedActionResult(HttpContext);
     }
 }

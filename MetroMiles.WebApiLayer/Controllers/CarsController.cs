@@ -57,10 +57,10 @@ public class CarsController : BaseController
     }
 
     [Authorize]
-    [HttpPost("Restore")]
-    public async Task<IActionResult> Restore([FromQuery] RestoreCarCommand restoreCarCommand)
+    [HttpPost("{id}/Restore")]
+    public async Task<IActionResult> Restore([FromRoute] Guid id)
     {
-        var result = await Mediator.Send(restoreCarCommand, HttpContext.RequestAborted);
+        var result = await Mediator.Send(new RestoreCarCommand { Id = id }, HttpContext.RequestAborted);
         return result.ToEnvelopedActionResult(HttpContext);
     }
 }

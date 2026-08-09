@@ -58,15 +58,15 @@ public class ModelsController : BaseController
     }
 
     [Authorize]
-    [HttpPost("Restore")]
-    public async Task<IActionResult> Restore([FromQuery] RestoreModelCommand restoreModelCommand)
+    [HttpPost("{id}/Restore")]
+    public async Task<IActionResult> Restore([FromRoute] Guid id)
     {
-        var result = await Mediator.Send(restoreModelCommand, HttpContext.RequestAborted);
+        var result = await Mediator.Send(new RestoreModelCommand { Id = id }, HttpContext.RequestAborted);
         return result.ToEnvelopedActionResult(HttpContext);
     }
 
-    [HttpPost("GetList/ByDynamic")]
-    public async Task<IActionResult> GetListByDynamic([FromQuery] PageRequest pageRequest, [FromBody] DynamicQuery? dynamicQuery = null)
+    [HttpPost("Search")]
+    public async Task<IActionResult> Search([FromQuery] PageRequest pageRequest, [FromBody] DynamicQuery? dynamicQuery = null)
     {
         GetListByDynamicModelQuery getListByDynamicModelQuery = new() { PageRequest = pageRequest, DynamicQuery = dynamicQuery };
         var result = await Mediator.Send(getListByDynamicModelQuery, HttpContext.RequestAborted);
