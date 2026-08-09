@@ -10,10 +10,7 @@ using ResultHandler.Facade;
 
 namespace MetroMiles.ApplicationLayer.Features.Roles.Commands.AddClaim;
 
-// Adds a permission-style claim (e.g. "brands.delete") to a role. Stored with ClaimType ==
-// ClaimTypes.Role so UserClaimsFactory surfaces it in the JWT the same way it surfaces the role's
-// own name — ISecureAddRequest.Roles checks (AuthorizationAddingBehavior) never need to know the
-// difference between an Identity role name and one of these permission strings.
+// Adds a permission claim (e.g. "brands.delete") to a role, stored with ClaimType == ClaimTypes.Role.
 public class AddRoleClaimCommand : IRequest<OperationResult>, ISecureAddRequest
 {
     public Guid? RoleId { get; set; }

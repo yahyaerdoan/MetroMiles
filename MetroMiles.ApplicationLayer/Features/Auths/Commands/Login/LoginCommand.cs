@@ -6,6 +6,7 @@ using MetroMiles.DomainLayer.Entities;
 using Microsoft.AspNetCore.Identity;
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;
+using System.Text.Json.Serialization;
 using RefreshTokenEntity = MetroMiles.DomainLayer.Entities.RefreshToken;
 
 namespace MetroMiles.ApplicationLayer.Features.Auths.Commands.Login;
@@ -16,6 +17,8 @@ public class LoginCommand : IRequest<OperationDataResult<LoggedResponse>>
 
     public string Password { get; set; } = string.Empty;
 
+    // Set by the controller from the request's actual remote IP.
+    [JsonIgnore]
     public string IpAddress { get; set; } = string.Empty;
 
     public class LoginCommandHandler(UserManager<User> userManager, IRefreshTokenRepository refreshTokenRepository, IJwtTokenHelper jwtTokenHelper, UserClaimsFactory userClaimsFactory)

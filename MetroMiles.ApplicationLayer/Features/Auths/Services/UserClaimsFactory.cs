@@ -5,9 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace MetroMiles.ApplicationLayer.Features.Auths.Services;
 
-// Single place that turns a User into the claim set the JWT (and, transitively,
-// AuthorizationAddingBehavior's ISecureAddRequest.Roles check) relies on. Both LoginCommand and
-// RefreshTokenCommand need identical claims, so this exists to keep them from drifting apart.
+// Shared by LoginCommand and RefreshTokenCommand so their JWT claims never drift apart.
 public class UserClaimsFactory(UserManager<User> userManager, RoleManager<Role> roleManager)
 {
     public async Task<List<Claim>> CreateClaimsAsync(User user)
@@ -20,10 +18,7 @@ public class UserClaimsFactory(UserManager<User> userManager, RoleManager<Role> 
         var roleNames = await userManager.GetRolesAsync(user);
         claims.AddRoles([.. roleNames]);
 
-        // Fine-grained permission claims (e.g. "brands.delete") are stored as RoleClaims with
-        // ClaimType == ClaimTypes.Role, so they land in the token as additional role claims —
-        // ISecureAddRequest.Roles checks never need to know the difference between an actual
-        // Identity role name and one of these permission strings.
+        // Permission claims (e.g. "brands.delete") are RoleClaims of type ClaimTypes.Role.
         foreach (var roleName in roleNames)
         {
             var role = await roleManager.FindByNameAsync(roleName);

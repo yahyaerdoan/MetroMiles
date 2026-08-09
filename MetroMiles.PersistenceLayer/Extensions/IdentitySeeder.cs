@@ -5,8 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace MetroMiles.PersistenceLayer.Extensions;
 
-// Dev/first-run bootstrap: without this there is no way to log in on a fresh database, since Identity
-// stores users/roles in tables that start empty (unlike the old HasData-seeded Users table).
+// Dev/first-run bootstrap — Identity's tables start empty, so nothing could log in without this.
 public static class IdentitySeeder
 {
     private const string AdminRoleName = "Admin";
@@ -22,9 +21,7 @@ public static class IdentitySeeder
 
         if (await roleManager.FindByNameAsync(AdminRoleName) is null)
         {
-            // No extra RoleClaims needed here: AuthorizationAddingBehavior already treats a role
-            // literally named "Admin" (GeneralOperationClaims.Admin) as an all-access bypass, and
-            // UserClaimsFactory surfaces role names as ClaimTypes.Role claims automatically.
+            // No RoleClaims needed — a role named "Admin" is already an all-access bypass.
             await roleManager.CreateAsync(new Role(GeneralOperationClaims.Admin));
         }
 

@@ -4,9 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace MetroMiles.PersistenceLayer.EntityConfigurations;
 
-// Identity's own IdentityUserConfiguration<TUser,...> (applied by IdentityDbContext.OnModelCreating)
-// already configures the AspNetUsers table, keys, and its own properties — this only adds the
-// MetroMiles-specific columns/conventions layered on top.
+// Adds MetroMiles-specific columns on top of Identity's own AspNetUsers configuration.
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)

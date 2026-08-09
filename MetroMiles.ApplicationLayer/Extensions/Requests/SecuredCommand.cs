@@ -6,9 +6,7 @@ using ResultHandler.Core.Base;
 
 namespace MetroMiles.ApplicationLayer.Extensions.Requests;
 
-// Server-computed request shape shared by every secured MediatR request regardless of whether it
-// carries an Id (Delete/Restore/Update) or not (Create) — Roles is never client input, so it's
-// hidden from the request's JSON schema to avoid showing up as a fake editable field in Swagger/Scalar.
+// Roles is server-computed, never client input — JsonIgnore keeps it out of the request schema.
 public abstract class SecuredRequest<TResponse> : IRequest<OperationDataResult<TResponse>>, ISecureAddRequest
 {
     [JsonIgnore]

@@ -4,13 +4,14 @@ using MetroMiles.DomainLayer.Entities;
 using Microsoft.AspNetCore.Identity;
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;
+using System.Text.Json.Serialization;
 
 namespace MetroMiles.ApplicationLayer.Features.Auths.Commands.ChangePassword;
 
 public class ChangePasswordCommand : IRequest<OperationResult>
 {
-    // Set by the controller from the caller's own JWT claims — never trust a client-supplied user id
-    // here, or one authenticated user could change another user's password.
+    // Set by the controller from the caller's own JWT claims.
+    [JsonIgnore]
     public Guid UserId { get; set; }
 
     public string CurrentPassword { get; set; } = string.Empty;

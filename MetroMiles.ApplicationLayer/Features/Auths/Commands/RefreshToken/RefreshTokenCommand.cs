@@ -7,6 +7,7 @@ using MetroMiles.ApplicationLayer.Services.Repositories;
 using Microsoft.AspNetCore.Identity;
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;
+using System.Text.Json.Serialization;
 using RefreshTokenEntity = MetroMiles.DomainLayer.Entities.RefreshToken;
 using User = MetroMiles.DomainLayer.Entities.User;
 
@@ -16,6 +17,8 @@ public class RefreshTokenCommand : IRequest<OperationDataResult<LoggedResponse>>
 {
     public string Token { get; set; } = string.Empty;
 
+    // Set by the controller from the request's actual remote IP.
+    [JsonIgnore]
     public string IpAddress { get; set; } = string.Empty;
 
     public class RefreshTokenCommandHandler(

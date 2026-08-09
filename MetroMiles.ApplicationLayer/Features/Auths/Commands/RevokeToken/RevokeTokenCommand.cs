@@ -3,6 +3,7 @@ using MediatR;
 using MetroMiles.ApplicationLayer.Services.Repositories;
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;
+using System.Text.Json.Serialization;
 
 namespace MetroMiles.ApplicationLayer.Features.Auths.Commands.RevokeToken;
 
@@ -10,6 +11,8 @@ public class RevokeTokenCommand : IRequest<OperationResult>
 {
     public string Token { get; set; } = string.Empty;
 
+    // Set by the controller from the request's actual remote IP.
+    [JsonIgnore]
     public string IpAddress { get; set; } = string.Empty;
 
     public class RevokeTokenCommandHandler(IRefreshTokenRepository refreshTokenRepository) : IRequestHandler<RevokeTokenCommand, OperationResult>
