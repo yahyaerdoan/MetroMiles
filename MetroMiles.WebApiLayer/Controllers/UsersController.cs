@@ -33,7 +33,7 @@ public class UsersController : BaseController
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById([FromRoute] int id)
+    public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
         GetByIdUserQuery getByIdUserQuery = new() { Id = id };
         var result = await Mediator.Send(getByIdUserQuery, HttpContext.RequestAborted);

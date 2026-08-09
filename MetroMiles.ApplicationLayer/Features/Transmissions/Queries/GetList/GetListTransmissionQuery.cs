@@ -20,8 +20,8 @@ public class GetListTransmissionQuery : IRequest<OperationDataResult<GetListResp
         public async Task<OperationDataResult<GetListResponse<GetListTransmissionListItemDto>>> Handle(GetListTransmissionQuery request, CancellationToken cancellationToken)
         {
             var transmissions = await _transmissionRepository.GetListAsync(
-                index: request.PageRequest.PageIndex ?? 0,
-                size: request.PageRequest.PageSize ?? 10,
+                index: request.PageRequest.PageIndex,
+                size: request.PageRequest.PageSize,
                 cancellationToken: cancellationToken);
             var response = _mapper.Map<GetListResponse<GetListTransmissionListItemDto>>(transmissions);
             return Result.Success(response);

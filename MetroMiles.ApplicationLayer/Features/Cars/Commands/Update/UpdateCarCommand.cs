@@ -1,6 +1,7 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
-using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
 using MediatR;
+using MetroMiles.ApplicationLayer.Extensions.Requests;
 using MetroMiles.ApplicationLayer.Features.Cars.Constants;
 using MetroMiles.ApplicationLayer.Features.Cars.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
@@ -11,18 +12,26 @@ using ResultHandler.Functional;
 
 namespace MetroMiles.ApplicationLayer.Features.Cars.Commands.Update;
 
-public class UpdateCarCommand : IRequest<OperationDataResult<UpdatedCarResponse>>, ISecureAddRequest
+public class UpdateCarCommand : SecuredCommand<Guid, UpdatedCarResponse>
 {
-    public Guid Id { get; set; }
-    public Guid ModelId { get; set; }
+    public Guid? ModelId { get; set; }
+
     public int Kilometer { get; set; }
+
     public int Mile { get; set; }
+
     public short ModelYear { get; set; }
+
     public required string Plate { get; set; }
+
     public short MinFindexScore { get; set; }
+
     public CarStatus Status { get; set; }
+
     public byte[]? RowVersion { get; set; }
-    public string[] Roles => [CarsOperationClaims.Admin, CarsOperationClaims.Write, CarsOperationClaims.Update];
+
+    [JsonIgnore]
+    public override string[] Roles => CarsOperationClaims.UpdateRoles;
 
     public class UpdateCarCommandHandler(ICarRepository carRepository, IMapper mapper, CarBusinessRules carBusinessRules) : IRequestHandler<UpdateCarCommand, OperationDataResult<UpdatedCarResponse>>
     {
@@ -51,7 +60,7 @@ public class UpdateCarCommand : IRequest<OperationDataResult<UpdatedCarResponse>
                 return modelCheck.ToErrorDataResult<UpdatedCarResponse>();
             }
 
-            var plateCheck = await _carBusinessRules.PlateCannotBeDuplicatedWhenUpdated(request.Id, request.Plate);
+            var plateCheck = await _carBusinessRules.PlateCannotBeDuplicatedWhenUpdated(existenceCheck.Data.Id, request.Plate);
             if (!plateCheck.IsSuccessful)
             {
                 return plateCheck.ToErrorDataResult<UpdatedCarResponse>();

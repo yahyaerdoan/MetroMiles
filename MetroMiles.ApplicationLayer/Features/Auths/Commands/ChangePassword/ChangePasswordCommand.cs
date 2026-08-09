@@ -1,7 +1,7 @@
-using Core.SecurityLayer.Hashings;
 using MediatR;
 using MetroMiles.ApplicationLayer.Features.Users.Rules;
-using MetroMiles.ApplicationLayer.Services.Repositories;
+using MetroMiles.DomainLayer.Entities;
+using Microsoft.AspNetCore.Identity;
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;
 
@@ -11,31 +11,28 @@ public class ChangePasswordCommand : IRequest<OperationResult>
 {
     // Set by the controller from the caller's own JWT claims — never trust a client-supplied user id
     // here, or one authenticated user could change another user's password.
-    public int UserId { get; set; }
+    public Guid UserId { get; set; }
+
     public string CurrentPassword { get; set; } = string.Empty;
+
     public string NewPassword { get; set; } = string.Empty;
 
-    public class ChangePasswordCommandHandler(IUserRepository userRepository) : IRequestHandler<ChangePasswordCommand, OperationResult>
+    public class ChangePasswordCommandHandler(UserManager<User> userManager) : IRequestHandler<ChangePasswordCommand, OperationResult>
     {
         public async Task<OperationResult> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
         {
-            var user = await userRepository.GetAsync(predicate: u => u.Id == request.UserId, cancellationToken: cancellationToken);
+            var user = await userManager.FindByIdAsync(request.UserId.ToString());
             var existenceCheck = UserBusinessRules.UserShouldBeExistsWhenSelected(user);
             if (!existenceCheck.IsSuccessful)
             {
                 return (OperationResult)existenceCheck;
             }
 
-            var passwordCheck = UserBusinessRules.UserPasswordShouldBeMatched(existenceCheck.Data, request.CurrentPassword);
-            if (!passwordCheck.IsSuccessful)
+            var changeResult = await userManager.ChangePasswordAsync(existenceCheck.Data, request.CurrentPassword, request.NewPassword);
+            if (!changeResult.Succeeded)
             {
-                return (OperationResult)passwordCheck;
+                return Result.BadRequest(string.Join(" ", changeResult.Errors.Select(e => e.Description)));
             }
-
-            HashingHelper.CreatePasswordHash(request.NewPassword, out var newHash, out var newSalt);
-            existenceCheck.Data.PasswordHash = newHash;
-            existenceCheck.Data.PasswordSalt = newSalt;
-            await userRepository.UpdateAsync(existenceCheck.Data);
 
             return Result.Success();
         }

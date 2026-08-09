@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
 using MediatR;
 using MetroMiles.ApplicationLayer.Extensions.Requests;
@@ -12,6 +13,7 @@ namespace MetroMiles.ApplicationLayer.Features.Cars.Commands.Restore;
 
 public class RestoreCarCommand : SecuredCommand<Guid, RestoredCarResponse>
 {
+    [JsonIgnore]
     public override string[] Roles => CarsOperationClaims.UpdateRoles;
 
     public class RestoreCarCommandHandler(ICarRepository carRepository, IMapper mapper, CarBusinessRules carBusinessRules) : IRequestHandler<RestoreCarCommand, OperationDataResult<RestoredCarResponse>>

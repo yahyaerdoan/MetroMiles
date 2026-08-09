@@ -50,7 +50,7 @@ public class AuthsController : BaseController
     {
         // Always derived from the caller's own token — never from a client-supplied field — so one
         // authenticated user can't change another user's password.
-        changePasswordCommand.UserId = HttpContext.User.GetUserId();
+        changePasswordCommand.UserId = HttpContext.User.GetUserId<Guid>();
         var result = await Mediator.Send(changePasswordCommand, HttpContext.RequestAborted);
         return result.ToActionResult(HttpContext);
     }

@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
 using MediatR;
 using MetroMiles.ApplicationLayer.Extensions.Requests;
@@ -12,6 +13,7 @@ namespace MetroMiles.ApplicationLayer.Features.Fuels.Commands.Restore;
 
 public class RestoreFuelCommand : SecuredCommand<Guid, RestoredFuelResponse>
 {
+    [JsonIgnore]
     public override string[] Roles => FuelsOperationClaims.UpdateRoles;
 
     public class RestoreFuelCommandHandler(IFuelRepository fuelRepository, IMapper mapper, FuelBusinessRules fuelBusinessRules) : IRequestHandler<RestoreFuelCommand, OperationDataResult<RestoredFuelResponse>>

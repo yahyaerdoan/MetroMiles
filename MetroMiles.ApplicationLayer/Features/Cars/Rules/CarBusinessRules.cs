@@ -16,7 +16,7 @@ public class CarBusinessRules(IModelRepository modelRepository, ICarRepository c
     public static IOperationResult<Car> CarShouldExistWhenSelected(Car? car)
         => car is null ? Result.NotFound<Car>(CarMessages.CarNotExists) : Result.Success(car);
 
-    public async Task<IOperationResult> ModelIdShouldExistWhenSelected(Guid modelId)
+    public async Task<IOperationResult> ModelIdShouldExistWhenSelected(Guid? modelId)
     {
         var doesExist = await _modelRepository.AnyAsync(predicate: m => m.Id == modelId);
         return doesExist ? Result.Success() : Result.NotFound(CarMessages.ModelNotExists);
@@ -45,7 +45,7 @@ public class CarBusinessRules(IModelRepository modelRepository, ICarRepository c
         return car.DeletedDate.HasValue ? Result.Success(car) : Result.BadRequest<Car>(CarMessages.CarNotDeleted);
     }
 
-    public static IOperationResult PlateAndModelCannotChangeWhileRented(Car existingCar, string newPlate, Guid newModelId)
+    public static IOperationResult PlateAndModelCannotChangeWhileRented(Car existingCar, string newPlate, Guid? newModelId)
     {
         var isChangingIdentity = !string.Equals(existingCar.Plate, newPlate, StringComparison.OrdinalIgnoreCase) || existingCar.ModelId != newModelId;
         var isLocked = existingCar.Status == CarStatus.Rented && isChangingIdentity;

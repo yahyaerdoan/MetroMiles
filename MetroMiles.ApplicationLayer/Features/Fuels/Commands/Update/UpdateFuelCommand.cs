@@ -1,6 +1,7 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
-using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
 using MediatR;
+using MetroMiles.ApplicationLayer.Extensions.Requests;
 using MetroMiles.ApplicationLayer.Features.Fuels.Constants;
 using MetroMiles.ApplicationLayer.Features.Fuels.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
@@ -10,12 +11,14 @@ using ResultHandler.Functional;
 
 namespace MetroMiles.ApplicationLayer.Features.Fuels.Commands.Update;
 
-public class UpdateFuelCommand : IRequest<OperationDataResult<UpdatedFuelResponse>>, ISecureAddRequest
+public class UpdateFuelCommand : SecuredCommand<Guid, UpdatedFuelResponse>
 {
-    public Guid Id { get; set; }
     public required string Name { get; set; }
+
     public byte[]? RowVersion { get; set; }
-    public string[] Roles => [FuelsOperationClaims.Admin, FuelsOperationClaims.Write, FuelsOperationClaims.Update];
+
+    [JsonIgnore]
+    public override string[] Roles => FuelsOperationClaims.UpdateRoles;
 
     public class UpdateFuelCommandHandler(IFuelRepository fuelRepository, IMapper mapper, FuelBusinessRules fuelBusinessRules) : IRequestHandler<UpdateFuelCommand, OperationDataResult<UpdatedFuelResponse>>
     {
@@ -38,7 +41,7 @@ public class UpdateFuelCommand : IRequest<OperationDataResult<UpdatedFuelRespons
                 return versionCheck.ToErrorDataResult<UpdatedFuelResponse>();
             }
 
-            var duplicateCheck = await _fuelBusinessRules.FuelNameCannotBeDuplicatedWhenUpdated(request.Id, request.Name);
+            var duplicateCheck = await _fuelBusinessRules.FuelNameCannotBeDuplicatedWhenUpdated(existenceCheck.Data.Id, request.Name);
             if (!duplicateCheck.IsSuccessful)
             {
                 return duplicateCheck.ToErrorDataResult<UpdatedFuelResponse>();

@@ -103,6 +103,7 @@ if (!string.IsNullOrWhiteSpace(redisConnection))
 
 
 builder.Services.AddControllers();
+builder.Services.AddConfigureCustomModelValidation();
 builder.Services.AddOpenApi(options =>
 {
     options.AddDocumentTransformer((document, context, cancellationToken) =>
@@ -138,6 +139,7 @@ var app = builder.Build();
 using (var migrationScope = app.Services.CreateScope())
 {
     migrationScope.ServiceProvider.GetRequiredService<BaseDbContext>().Database.Migrate();
+    await IdentitySeeder.SeedIdentityDataAsync(migrationScope.ServiceProvider);
 }
 
 app.UseConfigureCustomExceptionMiddleware();

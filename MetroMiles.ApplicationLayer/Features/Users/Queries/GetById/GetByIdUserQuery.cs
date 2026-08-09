@@ -1,9 +1,11 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
 using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
 using MediatR;
 using MetroMiles.ApplicationLayer.Features.Users.Constants;
 using MetroMiles.ApplicationLayer.Features.Users.Rules;
-using MetroMiles.ApplicationLayer.Services.Repositories;
+using MetroMiles.DomainLayer.Entities;
+using Microsoft.AspNetCore.Identity;
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;
 using ResultHandler.Functional;
@@ -12,17 +14,19 @@ namespace MetroMiles.ApplicationLayer.Features.Users.Queries.GetById;
 
 public class GetByIdUserQuery : IRequest<OperationDataResult<GetByIdUserResponse>>, ISecureAddRequest
 {
-    public int Id { get; set; }
+    public Guid? Id { get; set; }
+
+    [JsonIgnore]
     public string[] Roles => [UsersOperationClaims.Admin, UsersOperationClaims.Read];
 
-    public class GetByIdUserQueryHandler(IUserRepository userRepository, IMapper mapper) : IRequestHandler<GetByIdUserQuery, OperationDataResult<GetByIdUserResponse>>
+    public class GetByIdUserQueryHandler(UserManager<User> userManager, IMapper mapper) : IRequestHandler<GetByIdUserQuery, OperationDataResult<GetByIdUserResponse>>
     {
-        private readonly IUserRepository _userRepository = userRepository;
+        private readonly UserManager<User> _userManager = userManager;
         private readonly IMapper _mapper = mapper;
 
         public async Task<OperationDataResult<GetByIdUserResponse>> Handle(GetByIdUserQuery request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetAsync(predicate: u => u.Id == request.Id, cancellationToken: cancellationToken);
+            var user = await _userManager.FindByIdAsync(request.Id.ToString()!);
             var existenceCheck = UserBusinessRules.UserShouldBeExistsWhenSelected(user);
             if (!existenceCheck.IsSuccessful)
             {

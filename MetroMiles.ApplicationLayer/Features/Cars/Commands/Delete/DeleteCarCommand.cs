@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
 using MediatR;
 using MetroMiles.ApplicationLayer.Extensions.Requests;
@@ -12,6 +13,7 @@ namespace MetroMiles.ApplicationLayer.Features.Cars.Commands.Delete;
 
 public class DeleteCarCommand : SecuredCommand<Guid, DeletedCarResponse>
 {
+    [JsonIgnore]
     public override string[] Roles => CarsOperationClaims.DeleteRoles;
 
     public class DeleteCarCommandHandler(ICarRepository carRepository, IMapper mapper) : IRequestHandler<DeleteCarCommand, OperationDataResult<DeletedCarResponse>>

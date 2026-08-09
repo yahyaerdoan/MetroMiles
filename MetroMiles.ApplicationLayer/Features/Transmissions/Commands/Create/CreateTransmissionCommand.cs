@@ -1,8 +1,9 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
-using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
 using Core.ApplicationLayer.Pipelines.Loggings.Abstractions;
 using Core.ApplicationLayer.Pipelines.Transactions.Abstractions;
 using MediatR;
+using MetroMiles.ApplicationLayer.Extensions.Requests;
 using MetroMiles.ApplicationLayer.Features.Transmissions.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
 using MetroMiles.DomainLayer.Entities;
@@ -13,10 +14,12 @@ using static MetroMiles.ApplicationLayer.Features.Transmissions.Constants.Transm
 
 namespace MetroMiles.ApplicationLayer.Features.Transmissions.Commands.Create;
 
-public class CreateTransmissionCommand : IRequest<OperationDataResult<CreatedTransmissionResponse>>, ITransactionAddRequest, ILogAddRequest, ISecureAddRequest
+public class CreateTransmissionCommand : SecuredRequest<CreatedTransmissionResponse>, ITransactionAddRequest, ILogAddRequest
 {
     public required string Name { get; set; }
-    public string[] Roles => [Admin, Write, Add];
+
+    [JsonIgnore]
+    public override string[] Roles => [Admin, Write, Add];
 
     public class CreateTransmissionCommandHandler(ITransmissionRepository transmissionRepository, IMapper mapper, TransmissionBusinessRules transmissionBusinessRules)
         : IRequestHandler<CreateTransmissionCommand, OperationDataResult<CreatedTransmissionResponse>>

@@ -1,9 +1,9 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
-using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
-using Core.ApplicationLayer.Pipelines.Cachings.Abstractions;
 using Core.ApplicationLayer.Pipelines.Loggings.Abstractions;
 using Core.ApplicationLayer.Pipelines.Transactions.Abstractions;
 using MediatR;
+using MetroMiles.ApplicationLayer.Extensions.Requests;
 using MetroMiles.ApplicationLayer.Features.Brands.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
 using MetroMiles.DomainLayer.Entities;
@@ -14,15 +14,17 @@ using static MetroMiles.ApplicationLayer.Features.Brands.Constants.BrandsOperati
 
 namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Create;
 
-public class CreateBrandCommand : IRequest<OperationDataResult<CreatedBrandResponse>>, ITransactionAddRequest, ICacheRemoveRequest, ILogAddRequest, ISecureAddRequest
+public class CreateBrandCommand : CacheRemovingSecuredRequest<CreatedBrandResponse>, ITransactionAddRequest, ILogAddRequest
 {
-    // CreateBrandCommand & ICacheRemoveRequest Properties
     public required string Name { get; set; }
+
     public required string Description { get; set; }
-    public string CacheKey => "";
-    public bool ByPassCache => false;
-    public string? CacheGroupKey => "GetBrands";
-    public string[] Roles => [Admin, Write, Add];
+
+    [JsonIgnore]
+    public override string? CacheGroupKey => "GetBrands";
+
+    [JsonIgnore]
+    public override string[] Roles => [Admin, Write, Add];
 
     public class CreateBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper, BrandBusinessRules brandBusinessRules) : IRequestHandler<CreateBrandCommand, OperationDataResult<CreatedBrandResponse>>
     {

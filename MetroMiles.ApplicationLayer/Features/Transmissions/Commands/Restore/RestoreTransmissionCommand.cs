@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
 using MediatR;
 using MetroMiles.ApplicationLayer.Extensions.Requests;
@@ -12,6 +13,7 @@ namespace MetroMiles.ApplicationLayer.Features.Transmissions.Commands.Restore;
 
 public class RestoreTransmissionCommand : SecuredCommand<Guid, RestoredTransmissionResponse>
 {
+    [JsonIgnore]
     public override string[] Roles => TransmissionsOperationClaims.UpdateRoles;
 
     public class RestoreTransmissionCommandHandler(ITransmissionRepository transmissionRepository, IMapper mapper, TransmissionBusinessRules transmissionBusinessRules)

@@ -1,4 +1,6 @@
+using Core.SecurityLayer.Extensions;
 using MetroMiles.ApplicationLayer.Services.Repositories;
+using MetroMiles.DomainLayer.Entities;
 using MetroMiles.PersistenceLayer.Context;
 using MetroMiles.PersistenceLayer.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -18,13 +20,10 @@ public static class PersistanceServiceRegistration
         services.AddScoped<ICarRepository, CarRepository>();
         services.AddScoped<IFuelRepository, FuelRepository>();
         services.AddScoped<ITransmissionRepository, TransmissionRepository>();
-
-        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUserQueryRepository, UserQueryRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
-        services.AddScoped<IOperationClaimRepository, OperationClaimRepository>();
-        services.AddScoped<IUserOperationClaimRepository, UserOperationClaimRepository>();
-        services.AddScoped<IEmailAuthenticatorRepository, EmailAuthenticatorRepository>();
-        services.AddScoped<IOneTimePasswordAuthenticatorRepository, OneTimePasswordAuthenticatorRepository>();
+
+        services.AddCoreIdentity<User, Role, Guid, BaseDbContext>();
         return services;
     }
 }

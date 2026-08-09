@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
 using Core.ApplicationLayer.Pipelines.Cachings.Abstractions;
 using Core.ApplicationLayer.Pipelines.Loggings.Abstractions;
@@ -14,9 +15,17 @@ public class GetListBrandQuery : IRequest<OperationDataResult<GetListResponse<Ge
 {
     // GetListBrandQuery & ICacheAddRequest Properties
     public required PageRequest PageRequest { get; set; }
+
+    [JsonIgnore]
     public string CacheKey => $"GetListBrandQuery({PageRequest.PageSize},{PageRequest.PageIndex})";
+
+    [JsonIgnore]
     public bool ByPassCache { get; }
+
+    [JsonIgnore]
     public TimeSpan? SlidingExpiration { get; }
+
+    [JsonIgnore]
     public string? CacheGroupKey => "GetBrands";
 
     public class GetListBrandQueryHandler(IBrandRepository brandRepository, IMapper mapper) : IRequestHandler<GetListBrandQuery, OperationDataResult<GetListResponse<GetListBrandListItemDto>>>
@@ -27,8 +36,8 @@ public class GetListBrandQuery : IRequest<OperationDataResult<GetListResponse<Ge
         public async Task<OperationDataResult<GetListResponse<GetListBrandListItemDto>>> Handle(GetListBrandQuery request, CancellationToken cancellationToken)
         {
             var brands = await _brandRepository.GetListAsync(
-                index: request.PageRequest.PageIndex ?? 0,
-                size: request.PageRequest.PageSize ?? 10,
+                index: request.PageRequest.PageIndex,
+                size: request.PageRequest.PageSize,
                 cancellationToken: cancellationToken);
             var response = _mapper.Map<GetListResponse<GetListBrandListItemDto>>(brands);
             return Result.Success(response);

@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
 using MediatR;
 using MetroMiles.ApplicationLayer.Extensions.Requests;
@@ -12,7 +13,9 @@ namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Restore;
 
 public class RestoreBrandCommand : CacheRemovingSecuredCommand<Guid, RestoredBrandResponse>
 {
+    [JsonIgnore]
     public override string? CacheGroupKey => "GetBrands";
+    [JsonIgnore]
     public override string[] Roles => BrandsOperationClaims.UpdateRoles;
 
     public class RestoreBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper, BrandBusinessRules brandBusinessRules) : IRequestHandler<RestoreBrandCommand, OperationDataResult<RestoredBrandResponse>>

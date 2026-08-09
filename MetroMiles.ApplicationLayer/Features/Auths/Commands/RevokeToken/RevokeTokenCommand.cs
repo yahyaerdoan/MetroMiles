@@ -9,6 +9,7 @@ namespace MetroMiles.ApplicationLayer.Features.Auths.Commands.RevokeToken;
 public class RevokeTokenCommand : IRequest<OperationResult>
 {
     public string Token { get; set; } = string.Empty;
+
     public string IpAddress { get; set; } = string.Empty;
 
     public class RevokeTokenCommandHandler(IRefreshTokenRepository refreshTokenRepository) : IRequestHandler<RevokeTokenCommand, OperationResult>

@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
 using MediatR;
 using MetroMiles.ApplicationLayer.Extensions.Requests;
@@ -12,6 +13,7 @@ namespace MetroMiles.ApplicationLayer.Features.Transmissions.Commands.Delete;
 
 public class DeleteTransmissionCommand : SecuredCommand<Guid, DeletedTransmissionResponse>
 {
+    [JsonIgnore]
     public override string[] Roles => TransmissionsOperationClaims.DeleteRoles;
 
     public class DeleteTransmissionCommandHandler(ITransmissionRepository transmissionRepository, IMapper mapper, TransmissionBusinessRules transmissionBusinessRules)

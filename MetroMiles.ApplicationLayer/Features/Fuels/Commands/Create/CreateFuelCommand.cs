@@ -1,8 +1,9 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
-using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
 using Core.ApplicationLayer.Pipelines.Loggings.Abstractions;
 using Core.ApplicationLayer.Pipelines.Transactions.Abstractions;
 using MediatR;
+using MetroMiles.ApplicationLayer.Extensions.Requests;
 using MetroMiles.ApplicationLayer.Features.Fuels.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
 using MetroMiles.DomainLayer.Entities;
@@ -13,10 +14,12 @@ using static MetroMiles.ApplicationLayer.Features.Fuels.Constants.FuelsOperation
 
 namespace MetroMiles.ApplicationLayer.Features.Fuels.Commands.Create;
 
-public class CreateFuelCommand : IRequest<OperationDataResult<CreatedFuelResponse>>, ITransactionAddRequest, ILogAddRequest, ISecureAddRequest
+public class CreateFuelCommand : SecuredRequest<CreatedFuelResponse>, ITransactionAddRequest, ILogAddRequest
 {
     public required string Name { get; set; }
-    public string[] Roles => [Admin, Write, Add];
+
+    [JsonIgnore]
+    public override string[] Roles => [Admin, Write, Add];
 
     public class CreateFuelCommandHandler(IFuelRepository fuelRepository, IMapper mapper, FuelBusinessRules fuelBusinessRules) : IRequestHandler<CreateFuelCommand, OperationDataResult<CreatedFuelResponse>>
     {

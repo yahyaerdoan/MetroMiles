@@ -22,8 +22,8 @@ public class GetListModelQuery : IRequest<OperationDataResult<GetListResponse<Ge
         {
             var models = await _modelRepository.GetListAsync(
                 include: m => m.Include(m => m.Brand).Include(m => m.Fuel).Include(m => m.Transmission!),
-                index: request.PageRequest.PageIndex ?? 0,
-                size: request.PageRequest.PageSize ?? 10,
+                index: request.PageRequest.PageIndex,
+                size: request.PageRequest.PageSize,
                 cancellationToken: cancellationToken
                 );
             var response = _mapper.Map<GetListResponse<GetListModelListItemDto>>(models);

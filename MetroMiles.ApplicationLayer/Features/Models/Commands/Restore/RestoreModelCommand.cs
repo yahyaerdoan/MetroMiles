@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
 using MediatR;
 using MetroMiles.ApplicationLayer.Extensions.Requests;
@@ -12,6 +13,7 @@ namespace MetroMiles.ApplicationLayer.Features.Models.Commands.Restore;
 
 public class RestoreModelCommand : SecuredCommand<Guid, RestoredModelResponse>
 {
+    [JsonIgnore]
     public override string[] Roles => ModelsOperationClaims.UpdateRoles;
 
     public class RestoreModelCommandHandler(IModelRepository modelRepository, IMapper mapper, ModelBusinessRules modelBusinessRules)

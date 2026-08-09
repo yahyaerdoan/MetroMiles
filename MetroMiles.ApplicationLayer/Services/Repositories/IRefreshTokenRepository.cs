@@ -1,9 +1,8 @@
 using Core.PersistenceLayer.Repositories.IRepositories;
-using Core.SecurityLayer.Entities;
+using MetroMiles.DomainLayer.Entities;
 
 namespace MetroMiles.ApplicationLayer.Services.Repositories;
 
-public interface IRefreshTokenRepository : IAsyncRepository<RefreshToken, int>//, IRepository<RefreshToken, int>
+public interface IRefreshTokenRepository : IAsyncRepository<RefreshToken, Guid>
 {
-    Task<List<RefreshToken>> GetExpiredRefreshTokensAsync(int userId);
 }

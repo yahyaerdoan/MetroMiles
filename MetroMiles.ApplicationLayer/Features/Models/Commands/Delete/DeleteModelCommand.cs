@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
 using MediatR;
 using MetroMiles.ApplicationLayer.Extensions.Requests;
@@ -12,6 +13,7 @@ namespace MetroMiles.ApplicationLayer.Features.Models.Commands.Delete;
 
 public class DeleteModelCommand : SecuredCommand<Guid, DeletedModelResponse>
 {
+    [JsonIgnore]
     public override string[] Roles => ModelsOperationClaims.DeleteRoles;
 
     public class DeleteModelCommandHandler(IModelRepository modelRepository, IMapper mapper, ModelBusinessRules modelBusinessRules)

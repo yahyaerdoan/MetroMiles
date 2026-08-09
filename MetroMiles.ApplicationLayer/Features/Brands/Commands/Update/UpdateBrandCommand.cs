@@ -1,7 +1,7 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
-using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
-using Core.ApplicationLayer.Pipelines.Cachings.Abstractions;
 using MediatR;
+using MetroMiles.ApplicationLayer.Extensions.Requests;
 using MetroMiles.ApplicationLayer.Features.Brands.Constants;
 using MetroMiles.ApplicationLayer.Features.Brands.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
@@ -11,17 +11,19 @@ using ResultHandler.Functional;
 
 namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Update;
 
-public class UpdateBrandCommand : IRequest<OperationDataResult<UpdatedBrandResponse>>, ICacheRemoveRequest, ISecureAddRequest
+public class UpdateBrandCommand : CacheRemovingSecuredCommand<Guid, UpdatedBrandResponse>
 {
-    // UpdateBrandCommand & ICacheRemoveRequest Properties
-    public Guid Id { get; set; }
     public required string Name { get; set; }
+
     public required string Description { get; set; }
+
     public byte[]? RowVersion { get; set; }
-    public string CacheKey => "";
-    public bool ByPassCache => false;
-    public string? CacheGroupKey => "GetBrands";
-    public string[] Roles => [BrandsOperationClaims.Admin, BrandsOperationClaims.Write, BrandsOperationClaims.Update];
+
+    [JsonIgnore]
+    public override string? CacheGroupKey => "GetBrands";
+
+    [JsonIgnore]
+    public override string[] Roles => BrandsOperationClaims.UpdateRoles;
 
     public class UpdateBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper, BrandBusinessRules brandBusinessRules) : IRequestHandler<UpdateBrandCommand, OperationDataResult<UpdatedBrandResponse>>
     {
@@ -44,7 +46,7 @@ public class UpdateBrandCommand : IRequest<OperationDataResult<UpdatedBrandRespo
                 return versionCheck.ToErrorDataResult<UpdatedBrandResponse>();
             }
 
-            var duplicateCheck = await _brandBusinessRules.BrandNameCannotBeDuplicatedWhenUpdated(request.Id, request.Name);
+            var duplicateCheck = await _brandBusinessRules.BrandNameCannotBeDuplicatedWhenUpdated(existenceCheck.Data.Id, request.Name);
             if (!duplicateCheck.IsSuccessful)
             {
                 return duplicateCheck.ToErrorDataResult<UpdatedBrandResponse>();

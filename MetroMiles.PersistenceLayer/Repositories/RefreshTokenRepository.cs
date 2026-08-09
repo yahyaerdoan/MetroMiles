@@ -1,18 +1,10 @@
 using Core.PersistenceLayer.Repositories.EfRepositories;
-using Core.SecurityLayer.Entities;
 using MetroMiles.ApplicationLayer.Services.Repositories;
+using MetroMiles.DomainLayer.Entities;
 using MetroMiles.PersistenceLayer.Context;
-using Microsoft.EntityFrameworkCore;
 
 namespace MetroMiles.PersistenceLayer.Repositories;
 
-public class RefreshTokenRepository(BaseDbContext context) : EfRepositoryBase<RefreshToken, int, BaseDbContext>(context), IRefreshTokenRepository
+public class RefreshTokenRepository(BaseDbContext context) : EfRepositoryBase<RefreshToken, Guid, BaseDbContext>(context), IRefreshTokenRepository
 {
-    public async Task<List<RefreshToken>> GetExpiredRefreshTokensAsync(int userId)
-    {
-        var refreshTokens = await Query().AsNoTracking()
-            .Where(r => r.UserId == userId && r.Revoked == null && r.Expires <= DateTime.UtcNow)
-            .ToListAsync();
-        return refreshTokens;
-    }
 }

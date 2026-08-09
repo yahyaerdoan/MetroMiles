@@ -1,12 +1,12 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
-using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
 using Core.ApplicationLayer.Pipelines.Loggings.Abstractions;
 using Core.ApplicationLayer.Pipelines.Transactions.Abstractions;
-using Core.SecurityLayer.Entities;
-using Core.SecurityLayer.Hashings;
 using MediatR;
+using MetroMiles.ApplicationLayer.Extensions.Requests;
 using MetroMiles.ApplicationLayer.Features.Users.Rules;
-using MetroMiles.ApplicationLayer.Services.Repositories;
+using MetroMiles.DomainLayer.Entities;
+using Microsoft.AspNetCore.Identity;
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;
 using ResultHandler.Functional;
@@ -14,10 +14,12 @@ using static MetroMiles.ApplicationLayer.Features.Users.Constants.UsersOperation
 
 namespace MetroMiles.ApplicationLayer.Features.Users.Commands.Create;
 
-public class CreateUserCommand : IRequest<OperationDataResult<CreatedUserResponse>>, ITransactionAddRequest, ILogAddRequest, ISecureAddRequest
+public class CreateUserCommand : SecuredRequest<CreatedUserResponse>, ITransactionAddRequest, ILogAddRequest
 {
     public string FirstName { get; set; }
+
     public string LastName { get; set; }
+
     public string Email { get; set; }
 
     [SensitiveData]
@@ -30,6 +32,7 @@ public class CreateUserCommand : IRequest<OperationDataResult<CreatedUserRespons
         Email = string.Empty;
         Password = string.Empty;
     }
+
     public CreateUserCommand(string firstName, string lastName, string email, string password)
     {
         FirstName = firstName;
@@ -37,11 +40,13 @@ public class CreateUserCommand : IRequest<OperationDataResult<CreatedUserRespons
         Email = email;
         Password = password;
     }
-    public string[] Roles => [Admin, Write, Add];
 
-    public class CreateUserCommandHandler(IUserRepository userRepository, IMapper mapper, UserBusinessRules userBusinessRules) : IRequestHandler<CreateUserCommand, OperationDataResult<CreatedUserResponse>>
+    [JsonIgnore]
+    public override string[] Roles => [Admin, Write, Add];
+
+    public class CreateUserCommandHandler(UserManager<User> userManager, IMapper mapper, UserBusinessRules userBusinessRules) : IRequestHandler<CreateUserCommand, OperationDataResult<CreatedUserResponse>>
     {
-        private readonly IUserRepository _userRepository = userRepository;
+        private readonly UserManager<User> _userManager = userManager;
         private readonly IMapper _mapper = mapper;
         private readonly UserBusinessRules _userBusinessRules = userBusinessRules;
 
@@ -53,19 +58,21 @@ public class CreateUserCommand : IRequest<OperationDataResult<CreatedUserRespons
                 return emailCheck.ToErrorDataResult<CreatedUserResponse>();
             }
 
-            var user = _mapper.Map<User>(request);
-            user.Status = true;
+            User user = new()
+            {
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                UserName = request.Email,
+                Email = request.Email,
+            };
 
-            HashingHelper.CreatePasswordHash(
-                request.Password,
-                passwordHash: out var passwordHash,
-                passwordSalt: out var passwordSalt
-            );
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
-            var createdUser = await _userRepository.AddAsync(user);
+            var createResult = await _userManager.CreateAsync(user, request.Password);
+            if (!createResult.Succeeded)
+            {
+                return Result.BadRequest<CreatedUserResponse>(string.Join(" ", createResult.Errors.Select(e => e.Description)));
+            }
 
-            return Result.Success(_mapper.Map<CreatedUserResponse>(createdUser));
+            return Result.Success(_mapper.Map<CreatedUserResponse>(user));
         }
     }
 }

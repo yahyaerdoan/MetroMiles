@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
 using MediatR;
 using MetroMiles.ApplicationLayer.Extensions.Requests;
@@ -12,6 +13,7 @@ namespace MetroMiles.ApplicationLayer.Features.Fuels.Commands.Delete;
 
 public class DeleteFuelCommand : SecuredCommand<Guid, DeletedFuelResponse>
 {
+    [JsonIgnore]
     public override string[] Roles => FuelsOperationClaims.DeleteRoles;
 
     public class DeleteFuelCommandHandler(IFuelRepository fuelRepository, IMapper mapper, FuelBusinessRules fuelBusinessRules) : IRequestHandler<DeleteFuelCommand, OperationDataResult<DeletedFuelResponse>>

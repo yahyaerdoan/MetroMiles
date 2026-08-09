@@ -37,19 +37,19 @@ public class ModelBusinessRules(
         return doesExist ? Result.BadRequest(ModelMessages.ModelNameExists) : Result.Success();
     }
 
-    public async Task<IOperationResult> BrandIdShouldExistWhenSelected(Guid brandId)
+    public async Task<IOperationResult> BrandIdShouldExistWhenSelected(Guid? brandId)
     {
         var doesExist = await _brandRepository.AnyAsync(predicate: b => b.Id == brandId);
         return doesExist ? Result.Success() : Result.NotFound(ModelMessages.BrandNotExists);
     }
 
-    public async Task<IOperationResult> FuelIdShouldExistWhenSelected(Guid fuelId)
+    public async Task<IOperationResult> FuelIdShouldExistWhenSelected(Guid? fuelId)
     {
         var doesExist = await _fuelRepository.AnyAsync(predicate: f => f.Id == fuelId);
         return doesExist ? Result.Success() : Result.NotFound(ModelMessages.FuelNotExists);
     }
 
-    public async Task<IOperationResult> TransmissionIdShouldExistWhenSelected(Guid transmissionId)
+    public async Task<IOperationResult> TransmissionIdShouldExistWhenSelected(Guid? transmissionId)
     {
         var doesExist = await _transmissionRepository.AnyAsync(predicate: t => t.Id == transmissionId);
         return doesExist ? Result.Success() : Result.NotFound(ModelMessages.TransmissionNotExists);

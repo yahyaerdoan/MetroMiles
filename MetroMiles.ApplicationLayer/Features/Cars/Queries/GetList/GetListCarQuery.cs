@@ -22,8 +22,8 @@ public class GetListCarQuery : IRequest<OperationDataResult<GetListResponse<GetL
         {
             var cars = await _carRepository.GetListAsync(
                 include: c => c.Include(c => c.Model!).ThenInclude(m => m.Brand!),
-                index: request.PageRequest.PageIndex ?? 0,
-                size: request.PageRequest.PageSize ?? 10,
+                index: request.PageRequest.PageIndex,
+                size: request.PageRequest.PageSize,
                 cancellationToken: cancellationToken);
             var response = _mapper.Map<GetListResponse<GetListCarListItemDto>>(cars);
             return Result.Success(response);

@@ -1,8 +1,9 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
-using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
 using Core.ApplicationLayer.Pipelines.Loggings.Abstractions;
 using Core.ApplicationLayer.Pipelines.Transactions.Abstractions;
 using MediatR;
+using MetroMiles.ApplicationLayer.Extensions.Requests;
 using MetroMiles.ApplicationLayer.Features.Cars.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
 using MetroMiles.DomainLayer.Entities;
@@ -14,16 +15,24 @@ using static MetroMiles.ApplicationLayer.Features.Cars.Constants.CarsOperationCl
 
 namespace MetroMiles.ApplicationLayer.Features.Cars.Commands.Create;
 
-public class CreateCarCommand : IRequest<OperationDataResult<CreatedCarResponse>>, ITransactionAddRequest, ILogAddRequest, ISecureAddRequest
+public class CreateCarCommand : SecuredRequest<CreatedCarResponse>, ITransactionAddRequest, ILogAddRequest
 {
-    public Guid ModelId { get; set; }
+    public Guid? ModelId { get; set; }
+
     public int Kilometer { get; set; }
+
     public int Mile { get; set; }
+
     public short ModelYear { get; set; }
+
     public required string Plate { get; set; }
+
     public short MinFindexScore { get; set; }
+
     public CarStatus Status { get; set; }
-    public string[] Roles => [Admin, Write, Add];
+
+    [JsonIgnore]
+    public override string[] Roles => [Admin, Write, Add];
 
     public class CreateCarCommandHandler(ICarRepository carRepository, IMapper mapper, CarBusinessRules carBusinessRules) : IRequestHandler<CreateCarCommand, OperationDataResult<CreatedCarResponse>>
     {

@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
 using MediatR;
 using MetroMiles.ApplicationLayer.Extensions.Requests;
@@ -12,7 +13,9 @@ namespace MetroMiles.ApplicationLayer.Features.Brands.Commands.Delete;
 
 public class DeleteBrandCommand : CacheRemovingSecuredCommand<Guid, DeletedBrandResponse>
 {
+    [JsonIgnore]
     public override string? CacheGroupKey => "GetBrands";
+    [JsonIgnore]
     public override string[] Roles => BrandsOperationClaims.DeleteRoles;
 
     public class DeleteBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper, BrandBusinessRules brandBusinessRules) : IRequestHandler<DeleteBrandCommand, OperationDataResult<DeletedBrandResponse>>

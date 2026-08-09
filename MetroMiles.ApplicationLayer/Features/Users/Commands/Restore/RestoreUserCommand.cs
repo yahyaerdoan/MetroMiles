@@ -1,43 +1,49 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
 using MediatR;
 using MetroMiles.ApplicationLayer.Extensions.Requests;
 using MetroMiles.ApplicationLayer.Features.Users.Constants;
 using MetroMiles.ApplicationLayer.Features.Users.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
+using MetroMiles.DomainLayer.Entities;
+using Microsoft.AspNetCore.Identity;
 using ResultHandler.Core.Base;
 using ResultHandler.Facade;
 using ResultHandler.Functional;
 
 namespace MetroMiles.ApplicationLayer.Features.Users.Commands.Restore;
 
-public class RestoreUserCommand : SecuredCommand<int, RestoredUserResponse>
+public class RestoreUserCommand : SecuredCommand<Guid, RestoredUserResponse>
 {
+    [JsonIgnore]
     public override string[] Roles => UsersOperationClaims.UpdateRoles;
 
-    public class RestoreUserCommandHandler(IUserRepository userRepository, IMapper mapper, UserBusinessRules userBusinessRules) : IRequestHandler<RestoreUserCommand, OperationDataResult<RestoredUserResponse>>
+    public class RestoreUserCommandHandler(UserManager<User> userManager, IUserQueryRepository userQueryRepository, IMapper mapper, UserBusinessRules userBusinessRules)
+        : IRequestHandler<RestoreUserCommand, OperationDataResult<RestoredUserResponse>>
     {
-        private readonly IUserRepository _userRepository = userRepository;
-        private readonly IMapper _mapper = mapper;
-        private readonly UserBusinessRules _userBusinessRules = userBusinessRules;
-
         public async Task<OperationDataResult<RestoredUserResponse>> Handle(RestoreUserCommand request, CancellationToken cancellationToken)
         {
-            var existingUser = await _userRepository.GetAsync(predicate: u => u.Id == request.Id, withDeleted: true, cancellationToken: cancellationToken);
+            var existingUser = await userQueryRepository.GetByIdWithDeletedAsync(request.Id, cancellationToken);
             var existenceCheck = UserBusinessRules.UserShouldBeDeletedWhenRestored(existingUser);
             if (!existenceCheck.IsSuccessful)
             {
                 return existenceCheck.ToErrorDataResult<RestoredUserResponse>();
             }
 
-            var emailCheck = await _userBusinessRules.UserEmailShouldNotExistsWhenUpdate(existenceCheck.Data.Id, existenceCheck.Data.Email);
+            var emailCheck = await userBusinessRules.UserEmailShouldNotExistsWhenUpdate(existenceCheck.Data.Id, existenceCheck.Data.Email!);
             if (!emailCheck.IsSuccessful)
             {
                 return emailCheck.ToErrorDataResult<RestoredUserResponse>();
             }
 
             existenceCheck.Data.DeletedDate = null;
-            await _userRepository.UpdateAsync(existenceCheck.Data);
-            return Result.Success(_mapper.Map<RestoredUserResponse>(existenceCheck.Data));
+            var updateResult = await userManager.UpdateAsync(existenceCheck.Data);
+            if (!updateResult.Succeeded)
+            {
+                return Result.BadRequest<RestoredUserResponse>(string.Join(" ", updateResult.Errors.Select(e => e.Description)));
+            }
+
+            return Result.Success(mapper.Map<RestoredUserResponse>(existenceCheck.Data));
         }
     }
 }

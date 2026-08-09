@@ -8,6 +8,7 @@ using Core.CrossCuttingConcernLayer.Loggings.Serilogs.Loggers;
 using Core.CrossCuttingConcernLayer.Loggings.Serilogs.Services;
 using FluentValidation;
 using MetroMiles.ApplicationLayer.Extensions.RuleRegistrations;
+using MetroMiles.ApplicationLayer.Features.Auths.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MetroMiles.ApplicationLayer.Extensions.ServiceRegistrations;
@@ -31,6 +32,7 @@ public static class ApplicationServiceRegistration
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
         services.AddSingleton<BaseLoggerService, MsSqlLogger>();
+        services.AddScoped<UserClaimsFactory>();
         return services;
     }
 

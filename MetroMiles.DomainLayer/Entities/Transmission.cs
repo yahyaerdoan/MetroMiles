@@ -5,8 +5,11 @@ namespace MetroMiles.DomainLayer.Entities;
 public class Transmission : Entity<Guid>
 {
     public string Name { get; set; }
+
     public string? NormalizedName { get; set; }
+
     public virtual ICollection<Model> Models { get; set; }
+
     public Transmission()
     {
         Models = new HashSet<Model>();

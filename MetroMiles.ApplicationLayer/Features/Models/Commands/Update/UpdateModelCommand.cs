@@ -1,6 +1,7 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
-using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
 using MediatR;
+using MetroMiles.ApplicationLayer.Extensions.Requests;
 using MetroMiles.ApplicationLayer.Features.Models.Constants;
 using MetroMiles.ApplicationLayer.Features.Models.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
@@ -10,17 +11,24 @@ using ResultHandler.Functional;
 
 namespace MetroMiles.ApplicationLayer.Features.Models.Commands.Update;
 
-public class UpdateModelCommand : IRequest<OperationDataResult<UpdatedModelResponse>>, ISecureAddRequest
+public class UpdateModelCommand : SecuredCommand<Guid, UpdatedModelResponse>
 {
-    public Guid Id { get; set; }
-    public Guid BrandId { get; set; }
-    public Guid FuelId { get; set; }
-    public Guid TransmissionId { get; set; }
+    public Guid? BrandId { get; set; }
+
+    public Guid? FuelId { get; set; }
+
+    public Guid? TransmissionId { get; set; }
+
     public required string Name { get; set; }
+
     public decimal DailyPrice { get; set; }
+
     public required string ImageUrl { get; set; }
+
     public byte[]? RowVersion { get; set; }
-    public string[] Roles => [ModelsOperationClaims.Admin, ModelsOperationClaims.Write, ModelsOperationClaims.Update];
+
+    [JsonIgnore]
+    public override string[] Roles => ModelsOperationClaims.UpdateRoles;
 
     public class UpdateModelCommandHandler(IModelRepository modelRepository, IMapper mapper, ModelBusinessRules modelBusinessRules)
         : IRequestHandler<UpdateModelCommand, OperationDataResult<UpdatedModelResponse>>
@@ -62,7 +70,7 @@ public class UpdateModelCommand : IRequest<OperationDataResult<UpdatedModelRespo
                 return transmissionCheck.ToErrorDataResult<UpdatedModelResponse>();
             }
 
-            var duplicateCheck = await _modelBusinessRules.ModelNameCannotBeDuplicatedWhenUpdated(request.Id, request.Name);
+            var duplicateCheck = await _modelBusinessRules.ModelNameCannotBeDuplicatedWhenUpdated(existenceCheck.Data.Id, request.Name);
             if (!duplicateCheck.IsSuccessful)
             {
                 return duplicateCheck.ToErrorDataResult<UpdatedModelResponse>();

@@ -1,6 +1,7 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
-using Core.ApplicationLayer.Pipelines.Authorizations.Abstractions;
 using MediatR;
+using MetroMiles.ApplicationLayer.Extensions.Requests;
 using MetroMiles.ApplicationLayer.Features.Transmissions.Constants;
 using MetroMiles.ApplicationLayer.Features.Transmissions.Rules;
 using MetroMiles.ApplicationLayer.Services.Repositories;
@@ -10,12 +11,14 @@ using ResultHandler.Functional;
 
 namespace MetroMiles.ApplicationLayer.Features.Transmissions.Commands.Update;
 
-public class UpdateTransmissionCommand : IRequest<OperationDataResult<UpdatedTransmissionResponse>>, ISecureAddRequest
+public class UpdateTransmissionCommand : SecuredCommand<Guid, UpdatedTransmissionResponse>
 {
-    public Guid Id { get; set; }
     public required string Name { get; set; }
+
     public byte[]? RowVersion { get; set; }
-    public string[] Roles => [TransmissionsOperationClaims.Admin, TransmissionsOperationClaims.Write, TransmissionsOperationClaims.Update];
+
+    [JsonIgnore]
+    public override string[] Roles => TransmissionsOperationClaims.UpdateRoles;
 
     public class UpdateTransmissionCommandHandler(ITransmissionRepository transmissionRepository, IMapper mapper, TransmissionBusinessRules transmissionBusinessRules)
         : IRequestHandler<UpdateTransmissionCommand, OperationDataResult<UpdatedTransmissionResponse>>
@@ -39,7 +42,7 @@ public class UpdateTransmissionCommand : IRequest<OperationDataResult<UpdatedTra
                 return versionCheck.ToErrorDataResult<UpdatedTransmissionResponse>();
             }
 
-            var duplicateCheck = await _transmissionBusinessRules.TransmissionNameCannotBeDuplicatedWhenUpdated(request.Id, request.Name);
+            var duplicateCheck = await _transmissionBusinessRules.TransmissionNameCannotBeDuplicatedWhenUpdated(existenceCheck.Data.Id, request.Name);
             if (!duplicateCheck.IsSuccessful)
             {
                 return duplicateCheck.ToErrorDataResult<UpdatedTransmissionResponse>();
