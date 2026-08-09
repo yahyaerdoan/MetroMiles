@@ -41,18 +41,19 @@ public class FuelsController : BaseController
     }
 
     [Authorize]
-    [HttpPut]
-    public async Task<IActionResult> Update([FromBody] UpdateFuelCommand updateFuelCommand)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateFuelCommand updateFuelCommand)
     {
+        updateFuelCommand.Id = id;
         var result = await Mediator.Send(updateFuelCommand, HttpContext.RequestAborted);
         return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [Authorize]
-    [HttpDelete]
-    public async Task<IActionResult> Delete([FromQuery] DeleteFuelCommand deleteFuelCommand)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
-        var result = await Mediator.Send(deleteFuelCommand, HttpContext.RequestAborted);
+        var result = await Mediator.Send(new DeleteFuelCommand { Id = id }, HttpContext.RequestAborted);
         return result.ToEnvelopedActionResult(HttpContext);
     }
 

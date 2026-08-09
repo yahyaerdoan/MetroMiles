@@ -41,18 +41,19 @@ public class CarsController : BaseController
     }
 
     [Authorize]
-    [HttpPut]
-    public async Task<IActionResult> Update([FromBody] UpdateCarCommand updateCarCommand)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateCarCommand updateCarCommand)
     {
+        updateCarCommand.Id = id;
         var result = await Mediator.Send(updateCarCommand, HttpContext.RequestAborted);
         return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [Authorize]
-    [HttpDelete]
-    public async Task<IActionResult> Delete([FromQuery] DeleteCarCommand deleteCarCommand)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
-        var result = await Mediator.Send(deleteCarCommand, HttpContext.RequestAborted);
+        var result = await Mediator.Send(new DeleteCarCommand { Id = id }, HttpContext.RequestAborted);
         return result.ToEnvelopedActionResult(HttpContext);
     }
 

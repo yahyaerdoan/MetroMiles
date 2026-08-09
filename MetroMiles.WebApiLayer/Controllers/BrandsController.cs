@@ -38,17 +38,18 @@ public class BrandsController : BaseController
         return result.ToEnvelopedActionResult(HttpContext);
     }
     [Authorize]
-    [HttpPut]
-    public async Task<IActionResult> Update([FromBody] UpdateBrandCommand updateBrandCommand)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateBrandCommand updateBrandCommand)
     {
+        updateBrandCommand.Id = id;
         var result = await Mediator.Send(updateBrandCommand, HttpContext.RequestAborted);
         return result.ToEnvelopedActionResult(HttpContext);
     }
     [Authorize]
-    [HttpDelete]
-    public async Task<IActionResult> Delete([FromQuery] DeleteBrandCommand deleteBrandCommand)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
-        var result = await Mediator.Send(deleteBrandCommand, HttpContext.RequestAborted);
+        var result = await Mediator.Send(new DeleteBrandCommand { Id = id }, HttpContext.RequestAborted);
         return result.ToEnvelopedActionResult(HttpContext);
     }
     [Authorize]

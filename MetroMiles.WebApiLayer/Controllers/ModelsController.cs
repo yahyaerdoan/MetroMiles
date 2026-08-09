@@ -42,18 +42,19 @@ public class ModelsController : BaseController
     }
 
     [Authorize]
-    [HttpPut]
-    public async Task<IActionResult> Update([FromBody] UpdateModelCommand updateModelCommand)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateModelCommand updateModelCommand)
     {
+        updateModelCommand.Id = id;
         var result = await Mediator.Send(updateModelCommand, HttpContext.RequestAborted);
         return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [Authorize]
-    [HttpDelete]
-    public async Task<IActionResult> Delete([FromQuery] DeleteModelCommand deleteModelCommand)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
-        var result = await Mediator.Send(deleteModelCommand, HttpContext.RequestAborted);
+        var result = await Mediator.Send(new DeleteModelCommand { Id = id }, HttpContext.RequestAborted);
         return result.ToEnvelopedActionResult(HttpContext);
     }
 

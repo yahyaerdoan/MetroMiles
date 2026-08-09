@@ -40,17 +40,18 @@ public class UsersController : BaseController
         return result.ToEnvelopedActionResult(HttpContext);
     }
 
-    [HttpPut]
-    public async Task<IActionResult> Update([FromBody] UpdateUserCommand updateUserCommand)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateUserCommand updateUserCommand)
     {
+        updateUserCommand.Id = id;
         var result = await Mediator.Send(updateUserCommand, HttpContext.RequestAborted);
         return result.ToEnvelopedActionResult(HttpContext);
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> Delete([FromQuery] DeleteUserCommand deleteUserCommand)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
-        var result = await Mediator.Send(deleteUserCommand, HttpContext.RequestAborted);
+        var result = await Mediator.Send(new DeleteUserCommand { Id = id }, HttpContext.RequestAborted);
         return result.ToEnvelopedActionResult(HttpContext);
     }
 

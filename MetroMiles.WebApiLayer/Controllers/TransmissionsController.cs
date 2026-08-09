@@ -41,18 +41,19 @@ public class TransmissionsController : BaseController
     }
 
     [Authorize]
-    [HttpPut]
-    public async Task<IActionResult> Update([FromBody] UpdateTransmissionCommand updateTransmissionCommand)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateTransmissionCommand updateTransmissionCommand)
     {
+        updateTransmissionCommand.Id = id;
         var result = await Mediator.Send(updateTransmissionCommand, HttpContext.RequestAborted);
         return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [Authorize]
-    [HttpDelete]
-    public async Task<IActionResult> Delete([FromQuery] DeleteTransmissionCommand deleteTransmissionCommand)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
-        var result = await Mediator.Send(deleteTransmissionCommand, HttpContext.RequestAborted);
+        var result = await Mediator.Send(new DeleteTransmissionCommand { Id = id }, HttpContext.RequestAborted);
         return result.ToEnvelopedActionResult(HttpContext);
     }
 
