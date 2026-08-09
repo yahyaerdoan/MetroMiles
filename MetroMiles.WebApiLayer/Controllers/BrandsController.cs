@@ -21,7 +21,7 @@ public class BrandsController : BaseController
     public async Task<IActionResult> Add([FromBody] CreateBrandCommand createBrandCommand)
     {
         var result = await Mediator.Send(createBrandCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
     [HttpGet]
     public async Task<IActionResult> GetList([FromQuery] PageRequest pageRequest)
@@ -35,27 +35,27 @@ public class BrandsController : BaseController
     {
         GetByIdBrandQuery getByIdBrandQuery = new() { Id = id };
         var result = await Mediator.Send(getByIdBrandQuery, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
     [Authorize]
     [HttpPut]
     public async Task<IActionResult> Update([FromBody] UpdateBrandCommand updateBrandCommand)
     {
         var result = await Mediator.Send(updateBrandCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
     [Authorize]
     [HttpDelete]
     public async Task<IActionResult> Delete([FromQuery] DeleteBrandCommand deleteBrandCommand)
     {
         var result = await Mediator.Send(deleteBrandCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
     [Authorize]
     [HttpPost("Restore")]
     public async Task<IActionResult> Restore([FromQuery] RestoreBrandCommand restoreBrandCommand)
     {
         var result = await Mediator.Send(restoreBrandCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 }

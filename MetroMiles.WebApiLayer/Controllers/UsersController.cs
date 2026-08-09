@@ -21,7 +21,7 @@ public class UsersController : BaseController
     public async Task<IActionResult> Add([FromBody] CreateUserCommand createUserCommand)
     {
         var result = await Mediator.Send(createUserCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [HttpGet]
@@ -29,7 +29,7 @@ public class UsersController : BaseController
     {
         GetListUserQuery getListUserQuery = new() { PageRequest = pageRequest };
         var result = await Mediator.Send(getListUserQuery, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [HttpGet("{id}")]
@@ -37,27 +37,27 @@ public class UsersController : BaseController
     {
         GetByIdUserQuery getByIdUserQuery = new() { Id = id };
         var result = await Mediator.Send(getByIdUserQuery, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [HttpPut]
     public async Task<IActionResult> Update([FromBody] UpdateUserCommand updateUserCommand)
     {
         var result = await Mediator.Send(updateUserCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [HttpDelete]
     public async Task<IActionResult> Delete([FromQuery] DeleteUserCommand deleteUserCommand)
     {
         var result = await Mediator.Send(deleteUserCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [HttpPost("Restore")]
     public async Task<IActionResult> Restore([FromQuery] RestoreUserCommand restoreUserCommand)
     {
         var result = await Mediator.Send(restoreUserCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 }

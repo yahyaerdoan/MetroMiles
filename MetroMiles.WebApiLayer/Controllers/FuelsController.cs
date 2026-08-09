@@ -21,7 +21,7 @@ public class FuelsController : BaseController
     public async Task<IActionResult> Add([FromBody] CreateFuelCommand createFuelCommand)
     {
         var result = await Mediator.Send(createFuelCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [HttpGet]
@@ -29,7 +29,7 @@ public class FuelsController : BaseController
     {
         GetListFuelQuery getListFuelQuery = new() { PageRequest = pageRequest };
         var result = await Mediator.Send(getListFuelQuery, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [HttpGet("{id}")]
@@ -37,7 +37,7 @@ public class FuelsController : BaseController
     {
         GetByIdFuelQuery getByIdFuelQuery = new() { Id = id };
         var result = await Mediator.Send(getByIdFuelQuery, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [Authorize]
@@ -45,7 +45,7 @@ public class FuelsController : BaseController
     public async Task<IActionResult> Update([FromBody] UpdateFuelCommand updateFuelCommand)
     {
         var result = await Mediator.Send(updateFuelCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [Authorize]
@@ -53,7 +53,7 @@ public class FuelsController : BaseController
     public async Task<IActionResult> Delete([FromQuery] DeleteFuelCommand deleteFuelCommand)
     {
         var result = await Mediator.Send(deleteFuelCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [Authorize]
@@ -61,6 +61,6 @@ public class FuelsController : BaseController
     public async Task<IActionResult> Restore([FromQuery] RestoreFuelCommand restoreFuelCommand)
     {
         var result = await Mediator.Send(restoreFuelCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 }

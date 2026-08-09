@@ -1,79 +1,82 @@
 ### MetroMiles API - manual test requests
-### Requires the "REST Client" extension in VS Code (or similar .http runner).
-### Run requests top to bottom - each depends on data created by the ones above it.
+### Works in Visual Studio 2022 (17.8+, built-in) and VS Code (REST Client extension).
+### Run top to bottom - each request reads ids straight out of the previous response, no manual
+### copy/pasting of Guids required.
+### Note: response-chaining expressions ({{requestName.response.body...}}) are written inline at
+### the point of use, not assigned to a standalone @variable — some .http editors (Visual Studio's
+### built-in one included) evaluate @variable assignments eagerly for the whole file, which fails
+### before the referenced request has ever run. Inline references are evaluated lazily instead.
+### Every endpoint returns the same enveloped shape: {"resultData": {...}, "isSuccessful": true, ...}
+### - so every chained reference below goes through ".resultData.".
 
-@baseUrl = https://localhost:7102
+@baseUrl = https://localhost:44366
 @contentType = application/json
 
-### 1) Login with the seeded admin user (see UserConfiguration.cs)
-# Copy the "token" value from the response and paste it into @token below,
-# then re-run the requests that need Authorization.
+### 1) Login with the admin user seeded by IdentitySeeder.cs
+# @name login
 POST {{baseUrl}}/api/Auths/Login
 Content-Type: {{contentType}}
 
 {
   "email": "admin@metromiles.com",
-  "password": "Passw0rd"
+  "password": "Admin123!"
 }
 
-### 2) Paste the access token from step 1 here
-@token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJlbWFpbCI6ImFkbWluQG1ldHJvbWlsZXMuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6IkFkbWluIE1ldHJvTWlsZXMiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsIm5iZiI6MTc4NjA3OTI0OSwiZXhwIjoxNzg2MDgyODQ5LCJpc3MiOiJNZXRyb01pbGVzSXNzdWVyIiwiYXVkIjoiTWV0cm9NaWxlc0F1ZGllbmNlIn0.l8TDIlHn5NOayQiypGVHcrZUrFQTPrsMQkR9c6Dtq1YD3oiHfioF8JK2XbUa6p0PyNNPq2gTLSTHxRrYHzP02g
-
-### 3) Create a Brand
+### 2) Create a Brand
 # @name createBrand
 POST {{baseUrl}}/api/Brands
 Content-Type: {{contentType}}
-Authorization: Bearer {{token}}
+Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 {
   "name": "Toyota",
   "description": "Japanese automobile manufacturer"
 }
 
-### 4) Create a Fuel
+### 3) Create a Fuel
 # @name createFuel
 POST {{baseUrl}}/api/Fuels
 Content-Type: {{contentType}}
-Authorization: Bearer {{token}}
+Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 {
   "name": "Gasoline"
 }
 
-### 5) Create a Transmission
+### 4) Create a Transmission
 # @name createTransmission
 POST {{baseUrl}}/api/Transmissions
 Content-Type: {{contentType}}
-Authorization: Bearer {{token}}
+Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 {
   "name": "Automatic"
 }
 
-### 6) Create a Model
-# Replace brandId / fuelId / transmissionId with the Id values returned by steps 3-5.
+### 5) Create a Model (brandId/fuelId/transmissionId pulled straight from steps 2-4)
+# @name createModel
 POST {{baseUrl}}/api/Models
 Content-Type: {{contentType}}
-Authorization: Bearer {{token}}
+Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 {
-  "brandId": "PASTE_BRAND_ID_HERE",
-  "fuelId": "PASTE_FUEL_ID_HERE",
-  "transmissionId": "PASTE_TRANSMISSION_ID_HERE",
+  "brandId": "{{createBrand.response.body.$.resultData.id}}",
+  "fuelId": "{{createFuel.response.body.$.resultData.id}}",
+  "transmissionId": "{{createTransmission.response.body.$.resultData.id}}",
   "name": "Corolla",
   "dailyPrice": 1200.50,
   "imageUrl": "https://example.com/images/corolla.jpg"
 }
 
-### 7) Create a Car
-# Replace modelId with the Id value returned by step 6.
+### 6) Create a Car (modelId pulled straight from step 5)
 # Status: 1 = Available, 2 = Rented, 3 = UnderMaintenance
+# @name createCar
 POST {{baseUrl}}/api/Cars
 Content-Type: {{contentType}}
-Authorization: Bearer {{token}}
+Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 {
-  "modelId": "PASTE_MODEL_ID_HERE",
+  "modelId": "{{createModel.response.body.$.resultData.id}}",
   "kilometer": 0,
   "mile": 0,
   "modelYear": 2026,
@@ -82,10 +85,10 @@ Authorization: Bearer {{token}}
   "status": 1
 }
 
-### 8) Create another user
+### 7) Create another user
 POST {{baseUrl}}/api/Users
 Content-Type: {{contentType}}
-Authorization: Bearer {{token}}
+Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 {
   "firstName": "Jane",
@@ -98,44 +101,109 @@ Authorization: Bearer {{token}}
 
 ### Get Brands
 GET {{baseUrl}}/api/Brands
-Authorization: Bearer {{token}}
+Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 ### Get Fuels
 GET {{baseUrl}}/api/Fuels
-Authorization: Bearer {{token}}
+Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 ### Get Transmissions
 GET {{baseUrl}}/api/Transmissions
-Authorization: Bearer {{token}}
+Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 ### Get Models (paged)
 GET {{baseUrl}}/api/Models?PageIndex=0&PageSize=10
-Authorization: Bearer {{token}}
+Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 ### Get Cars (paged)
 GET {{baseUrl}}/api/Cars?PageIndex=0&PageSize=10
-Authorization: Bearer {{token}}
+Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 ### Get Users (paged)
 GET {{baseUrl}}/api/Users?PageIndex=0&PageSize=10
-Authorization: Bearer {{token}}
+Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 ### --- Auth token lifecycle ---
 
-### Refresh token (paste the refreshToken from the Login response)
+### Refresh rotates (revokes) the token it's given and returns a brand new one - resending the SAME
+### token a second time correctly fails with 401 ("already revoked"). To refresh again, chain off
+### the previous refresh's own response, not off login's original token - see the second request below.
+
+### Refresh token (1st hop - uses the refreshToken captured at login)
+# @name refresh1
 POST {{baseUrl}}/api/Auths/RefreshToken
 Content-Type: {{contentType}}
 
 {
-  "refreshToken": "PASTE_REFRESH_TOKEN_HERE"
+  "token": "{{login.response.body.$.resultData.refreshToken}}"
 }
 
-### Revoke token
+### Refresh token again (2nd hop - uses the NEW refreshToken from the 1st hop, proving rotation chains correctly)
+
+
+
+POST {{baseUrl}}/api/Auths/RefreshToken
+Content-Type: {{contentType}}
+
+{
+  "token": "{{refresh1.response.body.$.resultData.refreshToken}}"
+}
+
+### Revoke token (uses login's original refreshToken - only works if neither Refresh request above was run first)
 POST {{baseUrl}}/api/Auths/RevokeToken
 Content-Type: {{contentType}}
 
 {
-  "refreshToken": "PASTE_REFRESH_TOKEN_HERE"
+  "token": "{{login.response.body.$.resultData.refreshToken}}"
+}
+
+### Change password
+POST {{baseUrl}}/api/Auths/ChangePassword
+Content-Type: {{contentType}}
+Authorization: Bearer {{login.response.body.$.resultData.token}}
+
+{
+  "currentPassword": "Admin123!",
+  "newPassword": "Admin123!New"
+}
+
+### --- Sessions ---
+
+### Get full session history (paged)
+GET {{baseUrl}}/api/Auths/Sessions?PageIndex=0&PageSize=10
+Authorization: Bearer {{login.response.body.$.resultData.token}}
+
+### Get only active sessions (paged)
+GET {{baseUrl}}/api/Auths/Sessions/Active?PageIndex=0&PageSize=10
+Authorization: Bearer {{login.response.body.$.resultData.token}}
+
+### Revoke a specific session by id (replace with an id from one of the two lists above)
+DELETE {{baseUrl}}/api/Auths/Sessions/PASTE_SESSION_ID_HERE
+Authorization: Bearer {{login.response.body.$.resultData.token}}
+
+### --- Roles ---
+
+### List roles (with their permission claims)
+GET {{baseUrl}}/api/Roles
+Authorization: Bearer {{login.response.body.$.resultData.token}}
+
+### Create a role
+# @name createRole
+POST {{baseUrl}}/api/Roles
+Content-Type: {{contentType}}
+Authorization: Bearer {{login.response.body.$.resultData.token}}
+
+{
+  "name": "BrandManager"
+}
+
+### Add a permission claim to the role (roleId pulled straight from the create above)
+POST {{baseUrl}}/api/Roles/{{createRole.response.body.$.resultData.id}}/claims
+Content-Type: {{contentType}}
+Authorization: Bearer {{login.response.body.$.resultData.token}}
+
+{
+  "claimValue": "brands.delete"
 }
 
 ### Health check

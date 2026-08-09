@@ -21,7 +21,7 @@ public class CarsController : BaseController
     public async Task<IActionResult> Add([FromBody] CreateCarCommand createCarCommand)
     {
         var result = await Mediator.Send(createCarCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [HttpGet]
@@ -29,7 +29,7 @@ public class CarsController : BaseController
     {
         GetListCarQuery getListCarQuery = new() { PageRequest = pageRequest };
         var result = await Mediator.Send(getListCarQuery, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [HttpGet("{id}")]
@@ -37,7 +37,7 @@ public class CarsController : BaseController
     {
         GetByIdCarQuery getByIdCarQuery = new() { Id = id };
         var result = await Mediator.Send(getByIdCarQuery, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [Authorize]
@@ -45,7 +45,7 @@ public class CarsController : BaseController
     public async Task<IActionResult> Update([FromBody] UpdateCarCommand updateCarCommand)
     {
         var result = await Mediator.Send(updateCarCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [Authorize]
@@ -53,7 +53,7 @@ public class CarsController : BaseController
     public async Task<IActionResult> Delete([FromQuery] DeleteCarCommand deleteCarCommand)
     {
         var result = await Mediator.Send(deleteCarCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [Authorize]
@@ -61,6 +61,6 @@ public class CarsController : BaseController
     public async Task<IActionResult> Restore([FromQuery] RestoreCarCommand restoreCarCommand)
     {
         var result = await Mediator.Send(restoreCarCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 }

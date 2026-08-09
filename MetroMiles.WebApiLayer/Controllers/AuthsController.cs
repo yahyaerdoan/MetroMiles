@@ -36,7 +36,7 @@ public class AuthsController : BaseController
     {
         refreshTokenCommand.IpAddress = GetIpAddress();
         var result = await Mediator.Send(refreshTokenCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [HttpPost("RevokeToken")]
@@ -44,7 +44,7 @@ public class AuthsController : BaseController
     {
         revokeTokenCommand.IpAddress = GetIpAddress();
         var result = await Mediator.Send(revokeTokenCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [HttpPost("ChangePassword")]
@@ -56,7 +56,7 @@ public class AuthsController : BaseController
         // authenticated user can't change another user's password.
         changePasswordCommand.UserId = HttpContext.User.GetUserId<Guid>();
         var result = await Mediator.Send(changePasswordCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [HttpGet("Sessions")]
@@ -65,7 +65,7 @@ public class AuthsController : BaseController
     {
         GetSessionHistoryQuery query = new() { PageRequest = pageRequest, UserId = HttpContext.User.GetUserId<Guid>() };
         var result = await Mediator.Send(query, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [HttpGet("Sessions/Active")]
@@ -74,7 +74,7 @@ public class AuthsController : BaseController
     {
         GetActiveSessionsQuery query = new() { PageRequest = pageRequest, UserId = HttpContext.User.GetUserId<Guid>() };
         var result = await Mediator.Send(query, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [HttpDelete("Sessions/{sessionId:guid}")]
@@ -88,7 +88,7 @@ public class AuthsController : BaseController
             IpAddress = GetIpAddress(),
         };
         var result = await Mediator.Send(command, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     private string GetIpAddress() => HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";

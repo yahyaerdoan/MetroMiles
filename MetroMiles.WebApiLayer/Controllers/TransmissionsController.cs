@@ -21,7 +21,7 @@ public class TransmissionsController : BaseController
     public async Task<IActionResult> Add([FromBody] CreateTransmissionCommand createTransmissionCommand)
     {
         var result = await Mediator.Send(createTransmissionCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [HttpGet]
@@ -29,7 +29,7 @@ public class TransmissionsController : BaseController
     {
         GetListTransmissionQuery getListTransmissionQuery = new() { PageRequest = pageRequest };
         var result = await Mediator.Send(getListTransmissionQuery, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [HttpGet("{id}")]
@@ -37,7 +37,7 @@ public class TransmissionsController : BaseController
     {
         GetByIdTransmissionQuery getByIdTransmissionQuery = new() { Id = id };
         var result = await Mediator.Send(getByIdTransmissionQuery, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [Authorize]
@@ -45,7 +45,7 @@ public class TransmissionsController : BaseController
     public async Task<IActionResult> Update([FromBody] UpdateTransmissionCommand updateTransmissionCommand)
     {
         var result = await Mediator.Send(updateTransmissionCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [Authorize]
@@ -53,7 +53,7 @@ public class TransmissionsController : BaseController
     public async Task<IActionResult> Delete([FromQuery] DeleteTransmissionCommand deleteTransmissionCommand)
     {
         var result = await Mediator.Send(deleteTransmissionCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [Authorize]
@@ -61,6 +61,6 @@ public class TransmissionsController : BaseController
     public async Task<IActionResult> Restore([FromQuery] RestoreTransmissionCommand restoreTransmissionCommand)
     {
         var result = await Mediator.Send(restoreTransmissionCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 }

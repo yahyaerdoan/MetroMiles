@@ -23,7 +23,7 @@ public class ModelsController : BaseController
     public async Task<IActionResult> Add([FromBody] CreateModelCommand createModelCommand)
     {
         var result = await Mediator.Send(createModelCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [HttpGet]
@@ -31,14 +31,14 @@ public class ModelsController : BaseController
     {
         GetListModelQuery getListModelQuery = new() { PageRequest = pageRequest };
         var result = await Mediator.Send(getListModelQuery, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
         GetByIdModelQuery getByIdModelQuery = new() { Id = id };
         var result = await Mediator.Send(getByIdModelQuery, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [Authorize]
@@ -46,7 +46,7 @@ public class ModelsController : BaseController
     public async Task<IActionResult> Update([FromBody] UpdateModelCommand updateModelCommand)
     {
         var result = await Mediator.Send(updateModelCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [Authorize]
@@ -54,7 +54,7 @@ public class ModelsController : BaseController
     public async Task<IActionResult> Delete([FromQuery] DeleteModelCommand deleteModelCommand)
     {
         var result = await Mediator.Send(deleteModelCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [Authorize]
@@ -62,7 +62,7 @@ public class ModelsController : BaseController
     public async Task<IActionResult> Restore([FromQuery] RestoreModelCommand restoreModelCommand)
     {
         var result = await Mediator.Send(restoreModelCommand, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 
     [HttpPost("GetList/ByDynamic")]
@@ -70,6 +70,6 @@ public class ModelsController : BaseController
     {
         GetListByDynamicModelQuery getListByDynamicModelQuery = new() { PageRequest = pageRequest, DynamicQuery = dynamicQuery };
         var result = await Mediator.Send(getListByDynamicModelQuery, HttpContext.RequestAborted);
-        return result.ToActionResult(HttpContext);
+        return result.ToEnvelopedActionResult(HttpContext);
     }
 }
