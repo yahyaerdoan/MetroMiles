@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Hateoas.AspNetCore;
 using MetroMiles.ApplicationLayer.Common;
 using MetroMiles.WebApiLayer.Controllers.BaseControllers;
@@ -7,7 +8,8 @@ using ResultHandler.Facade;
 
 namespace MetroMiles.WebApiLayer.Controllers;
 
-[Route("api")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}")]
 [ApiController]
 public class RootController : BaseController
 {

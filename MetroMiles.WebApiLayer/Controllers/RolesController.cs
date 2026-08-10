@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using MetroMiles.ApplicationLayer.Features.Roles.Commands.AddClaim;
 using MetroMiles.ApplicationLayer.Features.Roles.Commands.AssignUser;
 using MetroMiles.ApplicationLayer.Features.Roles.Commands.Create;
@@ -12,7 +13,8 @@ using ResultHandler.AspNetCore.Extensions;
 
 namespace MetroMiles.WebApiLayer.Controllers;
 
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 [ApiController]
 [Authorize]
 public class RolesController : BaseController

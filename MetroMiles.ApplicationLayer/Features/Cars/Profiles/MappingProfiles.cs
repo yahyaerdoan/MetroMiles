@@ -24,6 +24,16 @@ public class MappingProfiles : Profile
             .ForMember(destinationMember: d => d.BrandName, memberOptions: opt => opt.MapFrom((c, _) => c.Model.EnsureLoaded("Car.Model").Brand.EnsureLoaded("Car.Model.Brand").Name))
             .ReverseMap();
 
+        CreateMap<Car, GetByIdCarResponseV2>()
+            .ForMember(destinationMember: d => d.ModelName, memberOptions: opt => opt.MapFrom((c, _) => c.Model.EnsureLoaded("Car.Model").Name))
+            .ForMember(destinationMember: d => d.BrandName, memberOptions: opt => opt.MapFrom((c, _) => c.Model.EnsureLoaded("Car.Model").Brand.EnsureLoaded("Car.Model.Brand").Name))
+            .ForMember(destinationMember: d => d.MileageCategory, memberOptions: opt => opt.MapFrom((c, _) => c.Kilometer switch
+            {
+                < 50_000 => "Low",
+                < 150_000 => "Medium",
+                _ => "High",
+            }));
+
         CreateMap<Car, GetListCarListItemResponse>()
             .ForMember(destinationMember: d => d.ModelName, memberOptions: opt => opt.MapFrom((c, _) => c.Model.EnsureLoaded("Car.Model").Name))
             .ForMember(destinationMember: d => d.BrandName, memberOptions: opt => opt.MapFrom((c, _) => c.Model.EnsureLoaded("Car.Model").Brand.EnsureLoaded("Car.Model.Brand").Name))

@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Core.ApplicationLayer.Requests.Page;
 using Hateoas;
 using Hateoas.AspNetCore;
@@ -14,7 +15,8 @@ using ResultHandler.AspNetCore.Extensions;
 
 namespace MetroMiles.WebApiLayer.Controllers;
 
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 [ApiController]
 [Authorize]
 public class UsersController : BaseController

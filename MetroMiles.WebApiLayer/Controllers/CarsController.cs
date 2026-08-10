@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Core.ApplicationLayer.Requests.Page;
 using Hateoas;
 using Hateoas.AspNetCore;
@@ -14,12 +15,15 @@ using ResultHandler.AspNetCore.Extensions;
 
 namespace MetroMiles.WebApiLayer.Controllers;
 
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[ApiVersion("2.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 [ApiController]
 public class CarsController : BaseController
 {
     internal const string GetListRouteName = "GetCarsList";
     private const string GetByIdRouteName = "GetCarById";
+    private const string GetByIdV2RouteName = "GetCarByIdV2";
     private const string UpdateRouteName = "UpdateCar";
     private const string DeleteRouteName = "DeleteCar";
     private const string RestoreRouteName = "RestoreCar";
@@ -53,11 +57,27 @@ public class CarsController : BaseController
         return result.ToEnvelopedActionResult(HttpContext);
     }
 
+    [MapToApiVersion("1.0")]
     [HttpGet("{id}", Name = GetByIdRouteName)]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
         GetByIdCarQuery getByIdCarQuery = new() { Id = id };
         var result = await Mediator.Send(getByIdCarQuery, HttpContext.RequestAborted);
+        if (result.IsSuccessful)
+        {
+            result.Data.Links = BuildLinks(id, isDeleted: result.Data.DeletedDate is not null);
+        }
+        return result.ToEnvelopedActionResult(HttpContext);
+    }
+
+    // v2.0 adds "MileageCategory" to the response - computed and mapped in the application layer,
+    // same as every other query, so the controller stays a thin Mediator.Send + Links wrapper.
+    [MapToApiVersion("2.0")]
+    [HttpGet("{id}", Name = GetByIdV2RouteName)]
+    public async Task<IActionResult> GetByIdV2([FromRoute] Guid id)
+    {
+        GetByIdCarQueryV2 getByIdCarQueryV2 = new() { Id = id };
+        var result = await Mediator.Send(getByIdCarQueryV2, HttpContext.RequestAborted);
         if (result.IsSuccessful)
         {
             result.Data.Links = BuildLinks(id, isDeleted: result.Data.DeletedDate is not null);

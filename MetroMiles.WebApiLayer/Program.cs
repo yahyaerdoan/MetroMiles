@@ -1,4 +1,5 @@
 using System.Threading.RateLimiting;
+using Asp.Versioning;
 using Core.CrossCuttingConcernLayer.ExceptionHandlings.Extensions;
 using Core.SecurityLayer.Encryptions;
 using Core.SecurityLayer.Extensions;
@@ -102,11 +103,19 @@ if (!string.IsNullOrWhiteSpace(redisConnection))
 }
 
 
-builder.Services.AddControllers();
-builder.Services.AddConfigureCustomModelValidation();
-builder.Services.AddOpenApi(options =>
+builder.Services.AddApiVersioning(options =>
 {
-    options.AddDocumentTransformer((document, context, cancellationToken) =>
+    options.DefaultApiVersion = new ApiVersion(1.0);
+    options.ReportApiVersions = true;
+    options.ApiVersionReader = new UrlSegmentApiVersionReader();
+}).AddMvc().AddApiExplorer(options =>
+{
+    // Produces "v1", "v2" ... group names, consumed by AddOpenApi() below to generate one document per version.
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true;
+}).AddOpenApi(options =>
+{
+    options.Document.AddDocumentTransformer((document, context, cancellationToken) =>
     {
         document.Components ??= new OpenApiComponents();
         document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
@@ -118,7 +127,7 @@ builder.Services.AddOpenApi(options =>
         };
         return Task.CompletedTask;
     });
-    options.AddOperationTransformer((operation, context, cancellationToken) =>
+    options.Document.AddOperationTransformer((operation, context, cancellationToken) =>
     {
         var metadata = context.Description.ActionDescriptor.EndpointMetadata;
         var requiresAuth = metadata.OfType<AuthorizeAttribute>().Any() && !metadata.OfType<IAllowAnonymous>().Any();
@@ -134,6 +143,9 @@ builder.Services.AddOpenApi(options =>
     });
 });
 
+builder.Services.AddControllers();
+builder.Services.AddConfigureCustomModelValidation();
+
 
 var app = builder.Build();
 using (var migrationScope = app.Services.CreateScope())
@@ -148,8 +160,8 @@ app.UseConfigureCustomExceptionMiddleware();
 if (app.Environment.IsDevelopment())
 {
     app.UseCors(DevelopmentCorsPolicy);
-    app.MapOpenApi();
-    app.MapScalarApiReference();
+    app.MapOpenApi().WithDocumentPerVersion();
+    app.MapScalarApiReference(options => options.AddDocuments(["v1", "v2"]));
 }
 
 app.UseHttpsRedirection();

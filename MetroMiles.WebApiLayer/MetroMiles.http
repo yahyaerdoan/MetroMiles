@@ -14,7 +14,7 @@
 
 ### 1) Login with the admin user seeded by IdentitySeeder.cs
 # @name login
-POST {{baseUrl}}/api/Auths/Login
+POST {{baseUrl}}/api/v1/Auths/Login
 Content-Type: {{contentType}}
 
 {
@@ -24,7 +24,7 @@ Content-Type: {{contentType}}
 
 ### 2) Create a Brand
 # @name createBrand
-POST {{baseUrl}}/api/Brands
+POST {{baseUrl}}/api/v1/Brands
 Content-Type: {{contentType}}
 Authorization: Bearer {{login.response.body.$.resultData.token}}
 
@@ -35,7 +35,7 @@ Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 ### 3) Create a Fuel
 # @name createFuel
-POST {{baseUrl}}/api/Fuels
+POST {{baseUrl}}/api/v1/Fuels
 Content-Type: {{contentType}}
 Authorization: Bearer {{login.response.body.$.resultData.token}}
 
@@ -45,7 +45,7 @@ Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 ### 4) Create a Transmission
 # @name createTransmission
-POST {{baseUrl}}/api/Transmissions
+POST {{baseUrl}}/api/v1/Transmissions
 Content-Type: {{contentType}}
 Authorization: Bearer {{login.response.body.$.resultData.token}}
 
@@ -55,7 +55,7 @@ Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 ### 5) Create a Model (brandId/fuelId/transmissionId pulled straight from steps 2-4)
 # @name createModel
-POST {{baseUrl}}/api/Models
+POST {{baseUrl}}/api/v1/Models
 Content-Type: {{contentType}}
 Authorization: Bearer {{login.response.body.$.resultData.token}}
 
@@ -71,7 +71,7 @@ Authorization: Bearer {{login.response.body.$.resultData.token}}
 ### 6) Create a Car (modelId pulled straight from step 5)
 # Status: 1 = Available, 2 = Rented, 3 = UnderMaintenance
 # @name createCar
-POST {{baseUrl}}/api/Cars
+POST {{baseUrl}}/api/v1/Cars
 Content-Type: {{contentType}}
 Authorization: Bearer {{login.response.body.$.resultData.token}}
 
@@ -86,7 +86,7 @@ Authorization: Bearer {{login.response.body.$.resultData.token}}
 }
 
 ### 7) Create another user
-POST {{baseUrl}}/api/Users
+POST {{baseUrl}}/api/v1/Users
 Content-Type: {{contentType}}
 Authorization: Bearer {{login.response.body.$.resultData.token}}
 
@@ -100,27 +100,27 @@ Authorization: Bearer {{login.response.body.$.resultData.token}}
 ### --- Read/list endpoints ---
 
 ### Get Brands
-GET {{baseUrl}}/api/Brands
+GET {{baseUrl}}/api/v1/Brands
 Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 ### Get Fuels
-GET {{baseUrl}}/api/Fuels
+GET {{baseUrl}}/api/v1/Fuels
 Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 ### Get Transmissions
-GET {{baseUrl}}/api/Transmissions
+GET {{baseUrl}}/api/v1/Transmissions
 Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 ### Get Models (paged)
-GET {{baseUrl}}/api/Models?PageIndex=0&PageSize=10
+GET {{baseUrl}}/api/v1/Models?PageIndex=0&PageSize=10
 Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 ### Get Cars (paged)
-GET {{baseUrl}}/api/Cars?PageIndex=0&PageSize=10
+GET {{baseUrl}}/api/v1/Cars?PageIndex=0&PageSize=10
 Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 ### Get Users (paged)
-GET {{baseUrl}}/api/Users?PageIndex=0&PageSize=10
+GET {{baseUrl}}/api/v1/Users?PageIndex=0&PageSize=10
 Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 ### --- Auth token lifecycle ---
@@ -131,7 +131,7 @@ Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 ### Refresh token (1st hop - uses the refreshToken captured at login)
 # @name refresh1
-POST {{baseUrl}}/api/Auths/RefreshToken
+POST {{baseUrl}}/api/v1/Auths/RefreshToken
 Content-Type: {{contentType}}
 
 {
@@ -142,7 +142,7 @@ Content-Type: {{contentType}}
 
 
 
-POST {{baseUrl}}/api/Auths/RefreshToken
+POST {{baseUrl}}/api/v1/Auths/RefreshToken
 Content-Type: {{contentType}}
 
 {
@@ -150,7 +150,7 @@ Content-Type: {{contentType}}
 }
 
 ### Revoke token (uses login's original refreshToken - only works if neither Refresh request above was run first)
-POST {{baseUrl}}/api/Auths/RevokeToken
+POST {{baseUrl}}/api/v1/Auths/RevokeToken
 Content-Type: {{contentType}}
 
 {
@@ -158,7 +158,7 @@ Content-Type: {{contentType}}
 }
 
 ### Change password
-POST {{baseUrl}}/api/Auths/ChangePassword
+POST {{baseUrl}}/api/v1/Auths/ChangePassword
 Content-Type: {{contentType}}
 Authorization: Bearer {{login.response.body.$.resultData.token}}
 
@@ -170,26 +170,26 @@ Authorization: Bearer {{login.response.body.$.resultData.token}}
 ### --- Sessions ---
 
 ### Get full session history (paged)
-GET {{baseUrl}}/api/Auths/Sessions?PageIndex=0&PageSize=10
+GET {{baseUrl}}/api/v1/Auths/Sessions?PageIndex=0&PageSize=10
 Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 ### Get only active sessions (paged)
-GET {{baseUrl}}/api/Auths/Sessions/Active?PageIndex=0&PageSize=10
+GET {{baseUrl}}/api/v1/Auths/Sessions/Active?PageIndex=0&PageSize=10
 Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 ### Revoke a specific session by id (replace with an id from one of the two lists above)
-DELETE {{baseUrl}}/api/Auths/Sessions/PASTE_SESSION_ID_HERE
+DELETE {{baseUrl}}/api/v1/Auths/Sessions/PASTE_SESSION_ID_HERE
 Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 ### --- Roles ---
 
 ### List roles (with their permission claims)
-GET {{baseUrl}}/api/Roles
+GET {{baseUrl}}/api/v1/Roles
 Authorization: Bearer {{login.response.body.$.resultData.token}}
 
 ### Create a role
 # @name createRole
-POST {{baseUrl}}/api/Roles
+POST {{baseUrl}}/api/v1/Roles
 Content-Type: {{contentType}}
 Authorization: Bearer {{login.response.body.$.resultData.token}}
 
@@ -198,7 +198,7 @@ Authorization: Bearer {{login.response.body.$.resultData.token}}
 }
 
 ### Add a permission claim to the role (roleId pulled straight from the create above)
-POST {{baseUrl}}/api/Roles/{{createRole.response.body.$.resultData.id}}/claims
+POST {{baseUrl}}/api/v1/Roles/{{createRole.response.body.$.resultData.id}}/claims
 Content-Type: {{contentType}}
 Authorization: Bearer {{login.response.body.$.resultData.token}}
 
