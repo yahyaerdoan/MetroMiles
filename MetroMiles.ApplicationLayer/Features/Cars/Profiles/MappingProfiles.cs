@@ -3,6 +3,7 @@ using Core.ApplicationLayer.Responses.GetList;
 using Core.PersistenceLayer.Pagings.Paging;
 using MetroMiles.ApplicationLayer.Extensions.Mappings;
 using MetroMiles.ApplicationLayer.Features.Cars.Commands.Create;
+using MetroMiles.ApplicationLayer.Features.Cars.Common;
 using MetroMiles.ApplicationLayer.Features.Cars.Commands.Delete;
 using MetroMiles.ApplicationLayer.Features.Cars.Commands.Restore;
 using MetroMiles.ApplicationLayer.Features.Cars.Commands.Update;
@@ -16,15 +17,14 @@ public class MappingProfiles : Profile
 {
     public MappingProfiles()
     {
-        CreateMap<Car, CreateCarCommand>().ReverseMap();
+        CreateMap<Car, CreateCarCommand>();
         CreateMap<Car, CreatedCarResponse>().ReverseMap();
 
-        CreateMap<Car, GetByIdCarResponse>()
-            .ForMember(destinationMember: d => d.ModelName, memberOptions: opt => opt.MapFrom((c, _) => c.Model.EnsureLoaded("Car.Model").Name))
-            .ForMember(destinationMember: d => d.BrandName, memberOptions: opt => opt.MapFrom((c, _) => c.Model.EnsureLoaded("Car.Model").Brand.EnsureLoaded("Car.Model.Brand").Name))
-            .ReverseMap();
+        CreateMap<CreateCarCommand, Car>()
+            .ForMember(destinationMember: d => d.Kilometer, memberOptions: opt => opt.MapFrom((c, _) => MileageConverter.ResolveKilometer(c.Kilometer, c.Mile)))
+            .ForMember(destinationMember: d => d.Mile, memberOptions: opt => opt.MapFrom((c, _) => MileageConverter.ResolveMile(c.Kilometer, c.Mile)));
 
-        CreateMap<Car, GetByIdCarResponseV2>()
+        CreateMap<Car, GetByIdCarResponse>()
             .ForMember(destinationMember: d => d.ModelName, memberOptions: opt => opt.MapFrom((c, _) => c.Model.EnsureLoaded("Car.Model").Name))
             .ForMember(destinationMember: d => d.BrandName, memberOptions: opt => opt.MapFrom((c, _) => c.Model.EnsureLoaded("Car.Model").Brand.EnsureLoaded("Car.Model.Brand").Name))
             .ForMember(destinationMember: d => d.MileageCategory, memberOptions: opt => opt.MapFrom((c, _) => c.Kilometer switch
@@ -32,7 +32,8 @@ public class MappingProfiles : Profile
                 < 50_000 => "Low",
                 < 150_000 => "Medium",
                 _ => "High",
-            }));
+            }))
+            .ReverseMap();
 
         CreateMap<Car, GetListCarListItemResponse>()
             .ForMember(destinationMember: d => d.ModelName, memberOptions: opt => opt.MapFrom((c, _) => c.Model.EnsureLoaded("Car.Model").Name))

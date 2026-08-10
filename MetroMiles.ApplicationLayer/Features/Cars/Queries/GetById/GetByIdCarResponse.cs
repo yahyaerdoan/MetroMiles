@@ -28,4 +28,6 @@ public class GetByIdCarResponse : LinkedResponse
     public DateTimeOffset? DeletedDate { get; set; }
 
     public byte[]? RowVersion { get; set; }
+
+    public required string MileageCategory { get; set; }
 }

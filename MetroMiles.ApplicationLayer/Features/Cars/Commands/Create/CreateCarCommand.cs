@@ -19,9 +19,11 @@ public class CreateCarCommand : SecuredRequest<CreatedCarResponse>, ITransaction
 {
     public Guid? ModelId { get; set; }
 
-    public int Kilometer { get; set; }
+    // Only one of the two is required - whichever is omitted is derived from the other, so the
+    // caller doesn't have to do the unit conversion themselves.
+    public int? Kilometer { get; set; }
 
-    public int Mile { get; set; }
+    public int? Mile { get; set; }
 
     public short ModelYear { get; set; }
 
