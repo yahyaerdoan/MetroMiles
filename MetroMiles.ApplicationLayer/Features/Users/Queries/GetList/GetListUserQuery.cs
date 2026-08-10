@@ -16,25 +16,25 @@ namespace MetroMiles.ApplicationLayer.Features.Users.Queries.GetList;
 
 // No ICacheAddRequest here (unlike GetListBrandQuery) — CreateUserCommand/UpdateUserCommand don't
 // implement ICacheRemoveRequest, so caching this list would go stale after every create/update.
-public class GetListUserQuery : IRequest<OperationDataResult<GetListResponse<GetListUserListItemDto>>>, ILogAddRequest, ISecureAddRequest
+public class GetListUserQuery : IRequest<OperationDataResult<GetListResponse<GetListUserListItemResponse>>>, ILogAddRequest, ISecureAddRequest
 {
     public required PageRequest PageRequest { get; set; }
 
     [JsonIgnore]
     public string[] Roles => [UsersOperationClaims.Admin, UsersOperationClaims.Read];
 
-    public class GetListUserQueryHandler(UserManager<User> userManager, IMapper mapper) : IRequestHandler<GetListUserQuery, OperationDataResult<GetListResponse<GetListUserListItemDto>>>
+    public class GetListUserQueryHandler(UserManager<User> userManager, IMapper mapper) : IRequestHandler<GetListUserQuery, OperationDataResult<GetListResponse<GetListUserListItemResponse>>>
     {
         private readonly UserManager<User> _userManager = userManager;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<OperationDataResult<GetListResponse<GetListUserListItemDto>>> Handle(GetListUserQuery request, CancellationToken cancellationToken)
+        public async Task<OperationDataResult<GetListResponse<GetListUserListItemResponse>>> Handle(GetListUserQuery request, CancellationToken cancellationToken)
         {
             var users = await _userManager.Users.OrderBy(u => u.UserName).ToPaginateAsync(
                 index: request.PageRequest.PageIndex,
                 size: request.PageRequest.PageSize,
                 cancellationToken: cancellationToken);
-            var response = _mapper.Map<GetListResponse<GetListUserListItemDto>>(users);
+            var response = _mapper.Map<GetListResponse<GetListUserListItemResponse>>(users);
             return Result.Success(response);
         }
     }

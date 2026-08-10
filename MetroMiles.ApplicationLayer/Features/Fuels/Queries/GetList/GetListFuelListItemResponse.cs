@@ -1,8 +1,8 @@
 using Hateoas;
 
-namespace MetroMiles.ApplicationLayer.Features.Transmissions.Queries.GetList;
+namespace MetroMiles.ApplicationLayer.Features.Fuels.Queries.GetList;
 
-public class GetListTransmissionListItemDto : LinkedResponse
+public class GetListFuelListItemResponse : LinkedResponse
 {
     public Guid Id { get; set; }
 

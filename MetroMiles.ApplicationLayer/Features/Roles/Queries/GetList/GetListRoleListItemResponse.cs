@@ -1,6 +1,6 @@
 namespace MetroMiles.ApplicationLayer.Features.Roles.Queries.GetList;
 
-public class GetListRoleListItemDto
+public class GetListRoleListItemResponse
 {
     public Guid Id { get; set; }
 

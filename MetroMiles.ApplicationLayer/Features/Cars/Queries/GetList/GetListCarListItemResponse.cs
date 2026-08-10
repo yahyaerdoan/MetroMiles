@@ -3,7 +3,7 @@ using MetroMiles.DomainLayer.Entities.Enums;
 
 namespace MetroMiles.ApplicationLayer.Features.Cars.Queries.GetList;
 
-public class GetListCarListItemDto : LinkedResponse
+public class GetListCarListItemResponse : LinkedResponse
 {
     public Guid Id { get; set; }
 

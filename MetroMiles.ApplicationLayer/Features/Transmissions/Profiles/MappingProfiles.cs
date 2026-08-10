@@ -20,8 +20,8 @@ public class MappingProfiles : Profile
 
         CreateMap<Transmission, GetByIdTransmissionResponse>().ReverseMap();
 
-        CreateMap<Transmission, GetListTransmissionListItemDto>().ReverseMap();
-        CreateMap<Paginate<Transmission>, GetListResponse<GetListTransmissionListItemDto>>().ReverseMap();
+        CreateMap<Transmission, GetListTransmissionListItemResponse>().ReverseMap();
+        CreateMap<Paginate<Transmission>, GetListResponse<GetListTransmissionListItemResponse>>().ReverseMap();
 
         CreateMap<Transmission, UpdateTransmissionCommand>().ReverseMap();
         CreateMap<Transmission, UpdatedTransmissionResponse>().ReverseMap();

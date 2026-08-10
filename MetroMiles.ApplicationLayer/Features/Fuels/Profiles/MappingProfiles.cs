@@ -20,8 +20,8 @@ public class MappingProfiles : Profile
 
         CreateMap<Fuel, GetByIdFuelResponse>().ReverseMap();
 
-        CreateMap<Fuel, GetListFuelListItemDto>().ReverseMap();
-        CreateMap<Paginate<Fuel>, GetListResponse<GetListFuelListItemDto>>().ReverseMap();
+        CreateMap<Fuel, GetListFuelListItemResponse>().ReverseMap();
+        CreateMap<Paginate<Fuel>, GetListResponse<GetListFuelListItemResponse>>().ReverseMap();
 
         CreateMap<Fuel, UpdateFuelCommand>().ReverseMap();
         CreateMap<Fuel, UpdatedFuelResponse>().ReverseMap();

@@ -11,7 +11,7 @@ using ResultHandler.Facade;
 
 namespace MetroMiles.ApplicationLayer.Features.Brands.Queries.GetList;
 
-public class GetListBrandQuery : IRequest<OperationDataResult<GetListResponse<GetListBrandListItemDto>>>, ICacheAddRequest, ILogAddRequest
+public class GetListBrandQuery : IRequest<OperationDataResult<GetListResponse<GetListBrandListItemResponse>>>, ICacheAddRequest, ILogAddRequest
 {
     // GetListBrandQuery & ICacheAddRequest Properties
     public required PageRequest PageRequest { get; set; }
@@ -28,18 +28,18 @@ public class GetListBrandQuery : IRequest<OperationDataResult<GetListResponse<Ge
     [JsonIgnore]
     public string? CacheGroupKey => "GetBrands";
 
-    public class GetListBrandQueryHandler(IBrandRepository brandRepository, IMapper mapper) : IRequestHandler<GetListBrandQuery, OperationDataResult<GetListResponse<GetListBrandListItemDto>>>
+    public class GetListBrandQueryHandler(IBrandRepository brandRepository, IMapper mapper) : IRequestHandler<GetListBrandQuery, OperationDataResult<GetListResponse<GetListBrandListItemResponse>>>
     {
         private readonly IBrandRepository _brandRepository = brandRepository;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<OperationDataResult<GetListResponse<GetListBrandListItemDto>>> Handle(GetListBrandQuery request, CancellationToken cancellationToken)
+        public async Task<OperationDataResult<GetListResponse<GetListBrandListItemResponse>>> Handle(GetListBrandQuery request, CancellationToken cancellationToken)
         {
             var brands = await _brandRepository.GetListAsync(
                 index: request.PageRequest.PageIndex,
                 size: request.PageRequest.PageSize,
                 cancellationToken: cancellationToken);
-            var response = _mapper.Map<GetListResponse<GetListBrandListItemDto>>(brands);
+            var response = _mapper.Map<GetListResponse<GetListBrandListItemResponse>>(brands);
             return Result.Success(response);
         }
     }

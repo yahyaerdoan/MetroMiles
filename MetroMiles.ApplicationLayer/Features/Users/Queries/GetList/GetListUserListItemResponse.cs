@@ -2,7 +2,7 @@ using Hateoas;
 
 namespace MetroMiles.ApplicationLayer.Features.Users.Queries.GetList;
 
-public class GetListUserListItemDto : LinkedResponse
+public class GetListUserListItemResponse : LinkedResponse
 {
     public Guid Id { get; set; }
 

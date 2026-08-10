@@ -23,8 +23,8 @@ public class MappingProfiles : Profile
 
         CreateMap<User, GetByIdUserResponse>().ReverseMap();
 
-        CreateMap<User, GetListUserListItemDto>().ReverseMap();
-        CreateMap<Paginate<User>, GetListResponse<GetListUserListItemDto>>().ReverseMap();
+        CreateMap<User, GetListUserListItemResponse>().ReverseMap();
+        CreateMap<Paginate<User>, GetListResponse<GetListUserListItemResponse>>().ReverseMap();
 
         CreateMap<User, DeleteUserCommand>().ReverseMap();
         CreateMap<User, DeletedUserResponse>().ReverseMap();

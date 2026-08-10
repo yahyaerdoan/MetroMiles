@@ -1,6 +1,6 @@
 namespace MetroMiles.ApplicationLayer.Features.Auths.Queries.GetSessionHistory;
 
-public class SessionHistoryItemDto
+public class SessionHistoryItemResponse
 {
     public Guid Id { get; set; }
 

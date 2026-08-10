@@ -9,7 +9,7 @@ using System.Text.Json.Serialization;
 
 namespace MetroMiles.ApplicationLayer.Features.Auths.Queries.GetSessionHistory;
 
-public class GetSessionHistoryQuery : IRequest<OperationDataResult<GetListResponse<SessionHistoryItemDto>>>
+public class GetSessionHistoryQuery : IRequest<OperationDataResult<GetListResponse<SessionHistoryItemResponse>>>
 {
     // Set by the controller from the caller's own JWT claims.
     [JsonIgnore]
@@ -18,9 +18,9 @@ public class GetSessionHistoryQuery : IRequest<OperationDataResult<GetListRespon
     public required PageRequest PageRequest { get; set; }
 
     public class GetSessionHistoryQueryHandler(IRefreshTokenRepository refreshTokenRepository)
-        : IRequestHandler<GetSessionHistoryQuery, OperationDataResult<GetListResponse<SessionHistoryItemDto>>>
+        : IRequestHandler<GetSessionHistoryQuery, OperationDataResult<GetListResponse<SessionHistoryItemResponse>>>
     {
-        public async Task<OperationDataResult<GetListResponse<SessionHistoryItemDto>>> Handle(GetSessionHistoryQuery request, CancellationToken cancellationToken)
+        public async Task<OperationDataResult<GetListResponse<SessionHistoryItemResponse>>> Handle(GetSessionHistoryQuery request, CancellationToken cancellationToken)
         {
             var sessions = await refreshTokenRepository.GetListAsync(
                 predicate: rt => rt.UserId == request.UserId,
@@ -29,9 +29,9 @@ public class GetSessionHistoryQuery : IRequest<OperationDataResult<GetListRespon
                 size: request.PageRequest.PageSize,
                 cancellationToken: cancellationToken);
 
-            GetListResponse<SessionHistoryItemDto> response = new()
+            GetListResponse<SessionHistoryItemResponse> response = new()
             {
-                Items = [.. sessions.Items.Select(ToDto)],
+                Items = [.. sessions.Items.Select(ToResponse)],
                 Index = sessions.Index,
                 Size = sessions.Size,
                 Count = sessions.Count,
@@ -43,7 +43,7 @@ public class GetSessionHistoryQuery : IRequest<OperationDataResult<GetListRespon
             return Result.Success(response);
         }
 
-        private static SessionHistoryItemDto ToDto(RefreshToken refreshToken) => new()
+        private static SessionHistoryItemResponse ToResponse(RefreshToken refreshToken) => new()
         {
             Id = refreshToken.Id,
             CreatedDate = refreshToken.CreatedDate,

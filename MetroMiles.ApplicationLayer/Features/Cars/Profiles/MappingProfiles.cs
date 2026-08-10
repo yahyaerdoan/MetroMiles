@@ -24,11 +24,11 @@ public class MappingProfiles : Profile
             .ForMember(destinationMember: d => d.BrandName, memberOptions: opt => opt.MapFrom((c, _) => c.Model.EnsureLoaded("Car.Model").Brand.EnsureLoaded("Car.Model.Brand").Name))
             .ReverseMap();
 
-        CreateMap<Car, GetListCarListItemDto>()
+        CreateMap<Car, GetListCarListItemResponse>()
             .ForMember(destinationMember: d => d.ModelName, memberOptions: opt => opt.MapFrom((c, _) => c.Model.EnsureLoaded("Car.Model").Name))
             .ForMember(destinationMember: d => d.BrandName, memberOptions: opt => opt.MapFrom((c, _) => c.Model.EnsureLoaded("Car.Model").Brand.EnsureLoaded("Car.Model.Brand").Name))
             .ReverseMap();
-        CreateMap<Paginate<Car>, GetListResponse<GetListCarListItemDto>>().ReverseMap();
+        CreateMap<Paginate<Car>, GetListResponse<GetListCarListItemResponse>>().ReverseMap();
 
         CreateMap<Car, UpdateCarCommand>().ReverseMap();
         CreateMap<Car, UpdatedCarResponse>().ReverseMap();

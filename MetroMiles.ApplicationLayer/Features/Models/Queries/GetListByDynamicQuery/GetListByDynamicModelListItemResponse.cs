@@ -2,7 +2,7 @@ using Hateoas;
 
 namespace MetroMiles.ApplicationLayer.Features.Models.Queries.GetListByDynamicQuery;
 
-public class GetListByDynamicModelListItemDto : LinkedResponse
+public class GetListByDynamicModelListItemResponse : LinkedResponse
 {
     public Guid Id { get; set; }
 
