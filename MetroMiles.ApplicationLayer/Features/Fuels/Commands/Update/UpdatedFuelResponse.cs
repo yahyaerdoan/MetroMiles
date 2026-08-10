@@ -1,6 +1,8 @@
+using Hateoas;
+
 namespace MetroMiles.ApplicationLayer.Features.Fuels.Commands.Update;
 
-public class UpdatedFuelResponse
+public class UpdatedFuelResponse : LinkedResponse
 {
     public Guid Id { get; set; }
 

@@ -1,6 +1,8 @@
+using Hateoas;
+
 namespace MetroMiles.ApplicationLayer.Features.Models.Queries.GetList;
 
-public class GetListModelListItemDto
+public class GetListModelListItemDto : LinkedResponse
 {
     public Guid Id { get; set; }
 
@@ -15,4 +17,6 @@ public class GetListModelListItemDto
     public decimal DailyPrice { get; set; }
 
     public required string ImageUrl { get; set; }
+
+    public DateTimeOffset? DeletedDate { get; set; }
 }

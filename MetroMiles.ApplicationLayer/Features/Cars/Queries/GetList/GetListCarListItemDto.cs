@@ -1,8 +1,9 @@
+using Hateoas;
 using MetroMiles.DomainLayer.Entities.Enums;
 
 namespace MetroMiles.ApplicationLayer.Features.Cars.Queries.GetList;
 
-public class GetListCarListItemDto
+public class GetListCarListItemDto : LinkedResponse
 {
     public Guid Id { get; set; }
 
@@ -17,4 +18,6 @@ public class GetListCarListItemDto
     public required string Plate { get; set; }
 
     public CarStatus Status { get; set; }
+
+    public DateTimeOffset? DeletedDate { get; set; }
 }

@@ -1,6 +1,8 @@
+using Hateoas;
+
 namespace MetroMiles.ApplicationLayer.Features.Users.Queries.GetById;
 
-public class GetByIdUserResponse
+public class GetByIdUserResponse : LinkedResponse
 {
     public Guid Id { get; set; }
 

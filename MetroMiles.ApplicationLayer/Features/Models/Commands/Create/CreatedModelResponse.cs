@@ -1,6 +1,8 @@
+using Hateoas;
+
 namespace MetroMiles.ApplicationLayer.Features.Models.Commands.Create;
 
-public class CreatedModelResponse
+public class CreatedModelResponse : LinkedResponse
 {
     public Guid Id { get; set; }
 

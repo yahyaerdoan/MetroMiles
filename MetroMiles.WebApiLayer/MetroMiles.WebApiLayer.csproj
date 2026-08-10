@@ -23,6 +23,7 @@
     <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="10.0.0" />
     <PackageReference Include="ResponseResultHandler" Version="12.0.0" />
     <PackageReference Include="ResponseResultHandler.AspNetCore" Version="12.0.0" />
+    <PackageReference Include="Hateoas.AspNetCore" Version="1.2.0" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.16.18" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.7.3" />
     <PackageReference Include="Core.ApplicationLayer" Version="2.0.0" />

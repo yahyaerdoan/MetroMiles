@@ -1,6 +1,8 @@
+using Hateoas;
+
 namespace MetroMiles.ApplicationLayer.Features.Users.Commands.Update;
 
-public class UpdatedUserResponse
+public class UpdatedUserResponse : LinkedResponse
 {
     public Guid Id { get; set; }
 

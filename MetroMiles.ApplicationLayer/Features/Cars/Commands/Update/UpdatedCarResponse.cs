@@ -1,8 +1,9 @@
+using Hateoas;
 using MetroMiles.DomainLayer.Entities.Enums;
 
 namespace MetroMiles.ApplicationLayer.Features.Cars.Commands.Update;
 
-public class UpdatedCarResponse
+public class UpdatedCarResponse : LinkedResponse
 {
     public Guid Id { get; set; }
 

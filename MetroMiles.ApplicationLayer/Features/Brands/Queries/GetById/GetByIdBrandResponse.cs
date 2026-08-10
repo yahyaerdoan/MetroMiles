@@ -1,6 +1,8 @@
+using Hateoas;
+
 namespace MetroMiles.ApplicationLayer.Features.Brands.Queries.GetById;
 
-public class GetByIdBrandResponse
+public class GetByIdBrandResponse : LinkedResponse
 {
     public Guid Id { get; set; }
 

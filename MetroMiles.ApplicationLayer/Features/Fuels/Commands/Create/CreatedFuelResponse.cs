@@ -1,6 +1,8 @@
+using Hateoas;
+
 namespace MetroMiles.ApplicationLayer.Features.Fuels.Commands.Create;
 
-public class CreatedFuelResponse
+public class CreatedFuelResponse : LinkedResponse
 {
     public Guid Id { get; set; }
 
